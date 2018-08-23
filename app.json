@@ -4,7 +4,8 @@
     "pages/section/section",
     "pages/my/my",
     "pages/logs/logs",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/profile/profile"
   ],
   "window": {
     "backgroundTextStyle": "dark",
