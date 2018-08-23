@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/my/my"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -29,7 +30,7 @@
         "selectedIconPath": "img/tab_profile.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/my/my",
         "text": "我的",
         "iconPath": "img/tab_profile_normal.png",
         "selectedIconPath": "img/tab_profile.png"
