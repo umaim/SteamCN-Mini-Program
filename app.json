@@ -1,9 +1,10 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/section/section",
+    "pages/my/my",
     "pages/logs/logs",
-    "pages/login/login",
-    "pages/my/my"
+    "pages/login/login"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -24,7 +25,7 @@
         "selectedIconPath": "img/tab_home.png"
       },
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/section/section",
         "text": "板块",
         "iconPath": "img/tab_profile_normal.png",
         "selectedIconPath": "img/tab_profile.png"
