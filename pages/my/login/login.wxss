@@ -8,18 +8,30 @@
   justify-content: space-between;
 }
 
-.backgroundImage {
+.backgroundWrapper {
+  position: relative;
+  height: 0;
   width: 100%;
+  padding-top: 70%;
+}
+
+.backgroundImage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .form view {
   border-radius: 4rpx;
   background: #fff;
+  margin-top: 15rpx;
 }
 
 .form input {
   width: 100%;
-  padding-left: 30rpx;
+  padding-left: 35rpx;
   box-sizing: border-box;
   height: 100rpx;
   border-radius: 4rpx;
@@ -31,13 +43,13 @@
 }
 
 .login {
-  width: 90%;
+  width: 85%;
   margin-top: 20rpx;
   color: #fff;
-  height: 90rpx;
-  line-height: 90rpx;
+  height: 75rpx;
+  line-height: 75rpx;
   text-align: center;
-  border-radius: 4rpx;
+  border-radius: 5rpx;
   background: #57bae8;
 }
 
