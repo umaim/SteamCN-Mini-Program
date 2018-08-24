@@ -1,7 +1,7 @@
 <!--pages/login.wxml-->
 <view class='wrapper'>
   <view class='top'>
-    <view>
+    <view class='backgroundWrapper'>
       <image src='{{backgroundImage}}' class='backgroundImage'></image>
     </view>
     <form class='form' bindsubmit='commit'>
