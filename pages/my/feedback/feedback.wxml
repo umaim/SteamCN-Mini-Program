@@ -1,0 +1,49 @@
+<!--pages/my/feedback/feedback.wxml-->
+<view class='container'>
+  <view class='content'>
+    <view class='item'>
+      <view class='title'>项目地址</view>
+      <view class='i' catchtap='copy' data-title='项目地址' data-content='{{projectAddress}}'>
+        <view class='icon'>
+          <image src='resources/icon/github.png'></image>
+        </view>
+        <view class='text'>
+          <view>暂时闭源 :P</view>
+          <view>{{projectAddress}}</view>
+        </view>
+      </view>
+    </view>
+    <view class='item'>
+      <view class='title'>反馈建议</view>
+
+      <view class='i' catchtap='copy' data-title='邮箱' data-content='{{email}}'>
+        <view class='icon'>
+          <image src='resources/icon/email.png'></image>
+        </view>
+        <view class='text'>
+          <view>Email</view>
+          <view>{{email}}</view>
+        </view>
+      </view>
+      <view class='i' catchtap='copy' data-title='Steam' data-content='{{steam}}'>
+        <view class='icon'>
+          <image src='resources/icon/steam.png'></image>
+        </view>
+        <view class='text'>
+          <view>Steam</view>
+          <view>{{steam}}</view>
+        </view>
+      </view>
+      <view class='i' catchtap='copy' data-title='SteamCN' data-content='{{steamcn}}'>
+        <view class='icon'>
+          <image src='resources/icon/steamcn.png'></image>
+        </view>
+        <view class='text'>
+          <view>SteamCN</view>
+          <view>{{steamcn}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='footer'>开发者 · Cloud</view>
+</view>

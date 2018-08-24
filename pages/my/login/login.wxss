@@ -1,0 +1,50 @@
+/* pages/login.wxss */
+
+.wrapper {
+  min-height: 100vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.backgroundImage {
+  width: 100%;
+}
+
+.form view {
+  border-radius: 4rpx;
+  background: #fff;
+}
+
+.form input {
+  width: 100%;
+  padding-left: 30rpx;
+  box-sizing: border-box;
+  height: 100rpx;
+  border-radius: 4rpx;
+  border-bottom: 1rpx solid #efefef;
+}
+
+.form input:last-child {
+  border-bottom: none;
+}
+
+.login {
+  width: 90%;
+  margin-top: 20rpx;
+  color: #fff;
+  height: 90rpx;
+  line-height: 90rpx;
+  text-align: center;
+  border-radius: 4rpx;
+  background: #57bae8;
+}
+
+.footer {
+  height: 120rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}

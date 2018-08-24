@@ -1,11 +1,18 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/new/new",
+    "pages/hot/hot",
     "pages/section/section",
     "pages/my/my",
-    "pages/logs/logs",
-    "pages/login/login",
-    "pages/profile/profile"
+    "pages/my/login/login",
+    "pages/my/profile/profile",
+    "pages/my/setting/setting",
+    "pages/my/feedback/feedback",
+    "pages/my/notification/notification",
+    "pages/my/collection/collection",
+    "pages/my/history/history",
+    "pages/my/about/about"
   ],
   "window": {
     "backgroundTextStyle": "dark",
@@ -21,21 +28,33 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "主页",
-        "iconPath": "img/tab_home_normal.png",
-        "selectedIconPath": "img/tab_home.png"
+        "text": "首页",
+        "iconPath": "img/tab_home.png",
+        "selectedIconPath": "img/tab_home_selected.png"
+      },
+      {
+        "pagePath": "pages/new/new",
+        "text": "最新",
+        "iconPath": "img/tab_new.png",
+        "selectedIconPath": "img/tab_new_selected.png"
+      },
+      {
+        "pagePath": "pages/hot/hot",
+        "text": "热门",
+        "iconPath": "img/tab_hot.png",
+        "selectedIconPath": "img/tab_hot_selected.png"
       },
       {
         "pagePath": "pages/section/section",
         "text": "板块",
-        "iconPath": "img/tab_profile_normal.png",
-        "selectedIconPath": "img/tab_profile.png"
+        "iconPath": "img/tab_section.png",
+        "selectedIconPath": "img/tab_section_selected.png"
       },
       {
         "pagePath": "pages/my/my",
         "text": "我的",
-        "iconPath": "img/tab_profile_normal.png",
-        "selectedIconPath": "img/tab_profile.png"
+        "iconPath": "img/tab_profile.png",
+        "selectedIconPath": "img/tab_profile_selected.png"
       }
     ]
   }
