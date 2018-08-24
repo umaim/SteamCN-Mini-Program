@@ -1,11 +1,14 @@
 // pages/my/my.js
+const utils = require('../../utils/utils.js')
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    userInfo: {},
+    userNotificationNum: 0,
+    auth: {},
   },
 
   /**
@@ -62,5 +65,9 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  navigatItem(e) {
+    return utils.navigatItem(e)
   }
 })

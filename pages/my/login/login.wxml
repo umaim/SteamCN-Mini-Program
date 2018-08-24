@@ -1,0 +1,16 @@
+<!--pages/login.wxml-->
+<view class='wrapper'>
+  <view class='top'>
+    <view>
+      <image src='{{backgroundImage}}' class='backgroundImage'></image>
+    </view>
+    <form class='form' bindsubmit='commit'>
+      <view>
+        <input name='username' placeholder='用户名' focus></input>
+        <input name='password' placeholder='密码' password='true' value='{{password}}'></input>
+      </view>
+      <button class='login' formType='submit'>登录</button>
+    </form>
+  </view>
+  <view class='footer'>蒸汽动力 · SteamCN.com</view>
+</view>

@@ -1,0 +1,62 @@
+<!--pages/my/about/about.wxml-->
+<view class='container'>
+  <view class='content'>
+    <view class='item'>
+      <view class='title'>作者</view>
+      <image src='resources/img/avatar.jpg' class='avatar'></image>
+      <view style='text-align: center;'>真的只是小埋啦 ♪(^∇^*)~</view>
+    </view>
+    <view class='item'>
+      <view class='title'>声明</view>
+      <view>本小程序完全为第三方开发者开发，仅用于学习交流。</view>
+    </view>
+    <view class='item'>
+      <view class='title'>项目地址</view>
+      <view class='i' catchtap='copy' data-title='项目地址' data-content='{{projectAddress}}'>
+        <view class='icon'>
+          <image src='resources/icon/github.png'></image>
+        </view>
+        <view class='text'>
+          <view>暂时闭源 :P</view>
+          <view>{{projectAddress}}</view>
+        </view>
+      </view>
+    </view>
+    <view class='item'>
+      <view class='title'>联系开发者</view>
+
+      <view class='i' catchtap='copy' data-title='邮箱' data-content='{{email}}'>
+        <view class='icon'>
+          <image src='resources/icon/email.png'></image>
+        </view>
+        <view class='text'>
+          <view>Email</view>
+          <view>{{email}}</view>
+        </view>
+      </view>
+      <view class='i' catchtap='copy' data-title='Steam' data-content='{{steam}}'>
+        <view class='icon'>
+          <image src='resources/icon/steam.png'></image>
+        </view>
+        <view class='text'>
+          <view>Steam</view>
+          <view>{{steam}}</view>
+        </view>
+      </view>
+      <view class='i' catchtap='copy' data-title='SteamCN' data-content='{{steamcn}}'>
+        <view class='icon'>
+          <image src='resources/icon/steamcn.png'></image>
+        </view>
+        <view class='text'>
+          <view>SteamCN</view>
+          <view>{{steamcn}}</view>
+        </view>
+      </view>
+    </view>
+    <view class='item'>
+      <view class='title'>小程序二维码</view>
+      <image src='resources/img/qrcode.jpg' class='qrcode'></image>
+    </view>
+  </view>
+  <view class='footer'>开发者 · Cloud</view>
+</view>
