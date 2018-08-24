@@ -46,5 +46,5 @@ let navigatItem = (e) => {
 module.exports = {
   formatTime,
   ifLogined,
-  navigatItem,
+  navigatItem
 }
