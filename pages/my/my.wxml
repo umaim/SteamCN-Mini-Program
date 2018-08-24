@@ -5,12 +5,11 @@
       <image class='avatar' src='{{userInfo.avatarLarge}}' wx:if='{{userInfo.avatarLarge}}'></image>
       <image class='avatar' src='resources/img/empty_avatar_user.png' wx:else></image>
       <view class='text'>
-        <view class='name'>{{userInfo.username || '登录/注册'}}</view>
+        <view class='name'>{{userInfo.username || '登录'}}</view>
         <view>一直未登录你怎么变强？</view>
       </view>
     </view>
     <view class='more'>
-      <view class='reddot' wx:if='{{auth}}'></view>
       <image src='resources/icon/arrow.png'></image>
     </view>
   </view>
