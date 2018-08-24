@@ -1,2 +1,16 @@
 <!--index.wxml-->
-<text>home</text>
+<wxs module='filters' src='../../lib/filter.wxs'></wxs>
+<view class='container'>
+  <swiper autoplay circular interval="4000" duration="500" wx:if='{{bannerImageList.length}}' style='height:450rpx'>
+    <block wx:for="{{bannerImageList}}" wx:key="{{index}}">
+      <swiper-item>
+        <image src='{{item}}' class="banner" mode='widthFix'></image>
+        <text class='title'>{{item}}</text>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <view class='hot card'>
+    <recommendItem list='{{rankList}}' graphics='{{false}}'></recommendItem>
+  </view>
+</view>
