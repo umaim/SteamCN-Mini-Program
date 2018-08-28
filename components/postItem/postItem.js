@@ -22,14 +22,11 @@ Component({
    * 组件的方法列表
    */
   methods: {
-    toPostDetail(e) {
-      utils.toPostDetail(e)
-    },
-    toPersonal(e) {
-      let item = e.currentTarget.dataset.item
+    toThreadDetail(e) {
+      let item = e.currentTarget.dataset.item;
       wx.navigateTo({
-        url: `/pages/personal/personal?thirduid=${item.user.objectId}`,
+        url: `/pages/thread/thread?url=${item.url}`
       })
-    },
+    }
   }
 })
