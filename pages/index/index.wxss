@@ -4,7 +4,7 @@ swiper-item .title {
   position: relative;
   top: -55rpx;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 580;
   margin: 35rpx;
 }

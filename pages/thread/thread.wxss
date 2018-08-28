@@ -1,1 +1,2 @@
 /* pages/thread/thread.wxss */
+@import '/wxParse/wxParse.wxss';

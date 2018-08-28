@@ -1,2 +1,5 @@
 <!--pages/thread/thread.wxml-->
-<text>{{url}}</text>
+<import src="../../wxParse/wxParse.wxml"/>
+<text>{{title}}: {{url}}</text>
+
+<template is="wxParse" data="{{wxParseData:article.nodes}}"/>
