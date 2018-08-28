@@ -1,5 +1,5 @@
 <!--components/postItem.wxml-->
-<view class='item card' hover-class='hover-class' wx:for='{{list}}' wx:key='{{index}}' data-item='{{item}}' catchtap='toPostDetail'>
+<view class='item card' hover-class='hover-class' wx:for='{{list}}' wx:key='{{index}}' data-item='{{item}}' catchtap='toThreadDetail'>
   <view class='header'>
     <view class='name' data-item='{{item}}'>
       <image mode='aspectFill' src='{{item.user.avatar}}'></image>

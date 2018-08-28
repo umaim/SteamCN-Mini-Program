@@ -12,7 +12,8 @@
     "pages/my/notification/notification",
     "pages/my/collection/collection",
     "pages/my/history/history",
-    "pages/my/about/about"
+    "pages/my/about/about",
+    "pages/thread/thread"
   ],
   "window": {
     "backgroundTextStyle": "dark",

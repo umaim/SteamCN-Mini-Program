@@ -1,0 +1,2 @@
+<!--pages/thread/thread.wxml-->
+<text>{{url}}</text>
