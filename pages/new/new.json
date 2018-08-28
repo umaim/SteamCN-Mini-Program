@@ -1,1 +1,4 @@
-{}
+{
+  "navigationBarTitleText": "最新回复",
+  "enablePullDownRefresh": true
+}
