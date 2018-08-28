@@ -3,9 +3,9 @@
 <view class='container'>
   <swiper autoplay circular interval="3500" duration="500" wx:if='{{bannerImageList.length}}' style='height:450rpx'>
     <block wx:for="{{bannerImageList}}" wx:key="{{index}}">
-      <swiper-item>
-        <image src='{{item}}' class="bannerImage" mode='scaleToFill'></image>
-        <text class='title'>{{item}}</text>
+      <swiper-item data-item='{{item}}' catchtap='toThreadDetail'>
+        <image src='{{item.imageUrl}}' class="bannerImage" mode='scaleToFill'></image>
+        <text class='title'>{{item.title}}</text>
       </swiper-item>
     </block>
   </swiper>
