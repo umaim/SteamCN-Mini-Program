@@ -1,2 +1,25 @@
 <!--components/postItem.wxml-->
-<text>components/postItem.wxml</text>
+<view class='item card' hover-class='hover-class' wx:for='{{list}}' wx:key='{{index}}' data-item='{{item}}' catchtap='toPostDetail'>
+  <view class='header'>
+    <view class='name' data-item='{{item}}'>
+      <image mode='aspectFill' src='{{item.user.avatar}}'></image>
+      <view>{{item.user.username}}</view>
+    </view>
+    <view class='type'>{{item.section}}</view>
+  </view>
+  <view class='content'>
+    <view class='text'>
+      <view class='title'>{{item.title}}</view>
+    </view>
+  </view>
+  <view class='footer'>
+    <view class='label'>
+      <image src='resources/icon/see.png'></image>
+      <view>{{item.stats.viewed || '-1'}}</view>
+    </view>
+    <view class='label'>
+      <image src='resources/icon/reply.png'></image>
+      <view>{{item.stats.replied || '-1'}}</view>
+    </view>
+  </view>
+</view>
