@@ -43,8 +43,16 @@ let navigatItem = (e) => {
   }
 }
 
+let toThreadDetail = (e) => {
+  let item = e.currentTarget.dataset.item;
+  wx.navigateTo({
+    url: `/pages/thread/thread?url=${item.url}&title=${item.title}`
+  })
+}
+
 module.exports = {
   formatTime,
   ifLogined,
-  navigatItem
+  navigatItem,
+  toThreadDetail
 }

@@ -23,10 +23,7 @@ Component({
    */
   methods: {
     toThreadDetail(e) {
-      let item = e.currentTarget.dataset.item;
-      wx.navigateTo({
-        url: `/pages/thread/thread?url=${item.url}`
-      })
+      utils.toThreadDetail(e);
     }
   }
 })

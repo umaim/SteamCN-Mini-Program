@@ -12,17 +12,17 @@ Page({
   onLoad: function() {
     this.setData({
       bannerImageList: [{
-        title:'[08.29]Humble Bundle 新主包 Humble Digital Tableto',
+          title: '[08.29]Humble Bundle 新主包 Humble Digital Tableto',
           url: 'https://steamcn.com/t419404-1-1',
           imageUrl: 'https://blob.steamcn.com/block/dc/dc42e0fd096fa9558967b35e981c90ff.jpg'
         },
         {
-          title:'【18-8-29】【特价促销】 Far Cry（孤岛惊魂）系列特',
+          title: '【18-8-29】【特价促销】 Far Cry（孤岛惊魂）系列特',
           url: 'https://steamcn.com/t419401-1-1',
           imageUrl: 'https://blob.steamcn.com/block/e6/e681511945bdd8fe38c083fa4cbe7031.jpg'
         },
         {
-          title:'记一次特别的GAMA站购物经历',
+          title: '记一次特别的GAMA站购物经历',
           url: 'https://steamcn.com/t419403-1-1',
           imageUrl: 'https://blob.steamcn.com/block/6f/6faf62af885ee59d993f605661599d3b.jpg'
         }
@@ -107,9 +107,6 @@ Page({
 
   },
   toThreadDetail(e) {
-    let item = e.currentTarget.dataset.item;
-    wx.navigateTo({
-      url: `/pages/thread/thread?url=${item.url}`
-    })
+    utils.toThreadDetail(e);
   }
 })
