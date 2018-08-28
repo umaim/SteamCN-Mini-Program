@@ -1,1 +1,4 @@
-{}
+{
+  "navigationBarTitleText": "热门主题",
+  "enablePullDownRefresh": true
+}
