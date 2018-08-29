@@ -122,6 +122,13 @@ Page({
           //console.log(this.data.threadContent);
           WxParse.wxParse('article', 'html', this.data.threadContent, this)
         }
+      },
+      fail: (res) => {
+        wx.showToast({
+          title: `网络开了个小差:P`,
+          duration: 1500,
+          icon: 'none'
+        })
       }
     })
   },
