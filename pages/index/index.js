@@ -2,6 +2,9 @@
 const urls = getApp().globalData.urls;
 const utils = require('../../utils/utils.js');
 Page({
+  /**
+   * 页面的初始数据
+   */
   data: {
     bannerImageList: [],
     postItemList: [],
@@ -9,22 +12,49 @@ Page({
     threadline: [],
     auth: {}
   },
-  onLoad: function() {
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function(options) {
     this.setData({
       bannerImageList: [{
+          user: {
+            username: 'wu360463231',
+            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
+          },
           title: '[08.29]Humble Bundle 新主包 Humble Digital Tableto',
           url: 'https://steamcn.com/t419404-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/dc/dc42e0fd096fa9558967b35e981c90ff.jpg'
+          imageUrl: 'https://blob.steamcn.com/block/dc/dc42e0fd096fa9558967b35e981c90ff.jpg',
+          stats: {
+            viewed: 1505166,
+            replied: 3189
+          },
         },
         {
+          user: {
+            username: 'wu360463231',
+            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
+          },
           title: '【18-8-29】【特价促销】 Far Cry（孤岛惊魂）系列特',
           url: 'https://steamcn.com/t419401-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/e6/e681511945bdd8fe38c083fa4cbe7031.jpg'
+          imageUrl: 'https://blob.steamcn.com/block/e6/e681511945bdd8fe38c083fa4cbe7031.jpg',
+          stats: {
+            viewed: 1505166,
+            replied: 3189
+          },
         },
         {
+          user: {
+            username: 'wu360463231',
+            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
+          },
           title: '记一次特别的GAMA站购物经历',
           url: 'https://steamcn.com/t419403-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/6f/6faf62af885ee59d993f605661599d3b.jpg'
+          imageUrl: 'https://blob.steamcn.com/block/6f/6faf62af885ee59d993f605661599d3b.jpg',
+          stats: {
+            viewed: 1505166,
+            replied: 3189
+          },
         }
       ],
       threadline: [{
@@ -79,6 +109,60 @@ Page({
     });
     this.init();
   },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function() {
+
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function() {
+
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function() {
+
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function() {
+
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function() {
+    return {
+      title: 'SteamCN 蒸汽动力',
+      desc: '分享自蒸汽动力 SteamCN 小程序第三方版',
+      path: `/pages/index/index`
+    };
+  },
+
   init() {
     /*wx.showLoading({
       title: '数据加载中...',
@@ -91,15 +175,6 @@ Page({
     this.getBannerImageList();
     this.getThreadLine(true);
   },
-  initSwiper() {
-    wx.getSystemInfo({
-      success: (res) => {
-        this.setData({
-          swiperHeight: `${(res.windowWidth || res.screenWidth) / 108 * 36}px`
-        })
-      },
-    })
-  },
   getBannerImageList() {
 
   },
@@ -109,4 +184,5 @@ Page({
   toThreadDetail(e) {
     utils.toThreadDetail(e);
   }
+
 })
