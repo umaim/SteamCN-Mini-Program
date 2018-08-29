@@ -46,7 +46,7 @@ let navigatItem = (e) => {
 let toThreadDetail = (e) => {
   let item = e.currentTarget.dataset.item;
   wx.navigateTo({
-    url: `/pages/thread/thread?url=${item.url}&title=${item.title}`
+    url: `/pages/thread/thread?url=${item.url}&title=${item.title}&username=${item.user.username || ''}&replied=${item.stats.replied}&viewed=${item.stats.viewed}`
   })
 }
 
