@@ -32,10 +32,10 @@ Page({
       viewed: options.viewed,
       threadContent: ``
     });
-    this.data.threadContent = this.normalizeHTML(this.data.threadContent);
-    //console.log(this.data.threadContent);
-    this.requestThread(this.data.url)
-
+    wx.showLoading({
+      title: '数据加载中...',
+    });
+    this.requestThread(this.data.url);
   },
 
   /**
@@ -121,14 +121,16 @@ Page({
           })
           //console.log(this.data.threadContent);
           WxParse.wxParse('article', 'html', this.data.threadContent, this)
+          wx.hideLoading();
         }
       },
       fail: (res) => {
+        wx.hideLoading();
         wx.showToast({
           title: `网络开了个小差:P`,
           duration: 1500,
           icon: 'none'
-        })
+        });
       }
     })
   },
@@ -144,7 +146,7 @@ Page({
     htmlStr = htmlStr.replace(/font size="7"/g, 'font size="6"'); // 最大字号为 6
     htmlStr = htmlStr.replace(/size=140x140/g, 'size=2000x550'); // 修改图片为全图
     htmlStr = htmlStr.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
-    htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转移实体符
+    htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转义实体符
     //console.log(htmlStr);
     return htmlStr;
   },
@@ -166,7 +168,7 @@ Page({
       data: url,
       success() {
         wx.showToast({
-          title: `已复制链接`,
+          title: `链接已复制`,
           duration: 1500,
           icon: 'success'
         })
