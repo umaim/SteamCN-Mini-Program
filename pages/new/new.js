@@ -135,6 +135,7 @@ Page({
       } else if (temp.nodeType === 3) { //Text
         title = temp.toString();
       }
+      title = title.replace(/&amp;/g, '&');
       result.push({
         user: {
           username: username,

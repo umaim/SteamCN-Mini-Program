@@ -1,5 +1,4 @@
 <!--index.wxml-->
-<wxs module='filters' src='../../lib/filter.wxs'></wxs>
 <view class='container'>
   <swiper autoplay circular interval="2500" duration="500" wx:if='{{bannerImageList.length}}' style='height:450rpx'>
     <block wx:for="{{bannerImageList}}" wx:key="{{index}}">
@@ -9,7 +8,6 @@
       </swiper-item>
     </block>
   </swiper>
-
   <view class='threadline'>
     <postItem list='{{threadline}}'></postItem>
   </view>

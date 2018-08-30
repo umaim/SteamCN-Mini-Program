@@ -138,6 +138,7 @@ Page({
       let viewed = titleLines[2].match(/: (\d*) \//)[1];
       let replied = titleLines[2].match(/回复: (\d*)/)[1];
       let title = nodelist[i].childNodes[1].childNodes["0"].data;
+      title = title.replace(/&amp;/g, '&');
       let url = `https://steamcn.com/${nodelist[i].childNodes["0"].attributes["0"].nodeValue}`;
       result.push({
         user: {
@@ -181,6 +182,7 @@ Page({
       } else if (temp.nodeType === 3) { //Text
         title = temp.toString();
       }
+      title = title.replace(/&amp;/g, '&');
       result.push({
         user: {
           username: username,
