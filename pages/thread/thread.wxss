@@ -1,32 +1,24 @@
 /* pages/thread/thread.wxss */
 @import '/lib/wxParse/wxParse.wxss';
 
-.container {
-  margin: 0 25rpx;
-  padding-bottom: 30rpx;
-  padding-top: 25rpx;
-  font-size: 25rpx;
-}
-
-.container .content {
-  padding: 30rpx 30rpx 0;
+.header{
+  margin: 15rpx 15rpx;
 }
 
 .title {
   font-size: 35rpx;
-  margin: 32rpx 0;
   font-weight: 700;
   line-height: 1.5;
 }
 
 .user {
   display: flex;
-  align-items: center;
+  margin: 15rpx 15rpx;
+  padding-left: 20rpx;
   padding-bottom: 10rpx;
+  align-items: center;
   border-radius: 5rpx;
   box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
-  margin: 0 10rpx;
-  padding-left: 20rpx;
   background: white;
 }
 
@@ -61,6 +53,13 @@
 
 .others .time {
   margin-right: 20rpx;
+}
+
+.content {
+  margin: 0 25rpx;
+  padding-bottom: 30rpx;
+  padding-top: 25rpx;
+  font-size: 25rpx;
 }
 
 .wxParse-p {
