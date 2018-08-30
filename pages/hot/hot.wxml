@@ -1,2 +1,6 @@
 <!--pages/hot/hot.wxml-->
-<text>pages/hot/hot.wxml</text>
+<view class='container'>
+  <view class='threadline'>
+    <postItem list='{{threadline}}'></postItem>
+  </view>
+</view>

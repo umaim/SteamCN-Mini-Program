@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "热门主题",
-  "enablePullDownRefresh": true
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "postItem": "/components/postItem/postItem"
+  }
 }

@@ -11,8 +11,8 @@ Page({
     title: '',
     username: '',
     avatar: '',
-    reply: '',
-    view: '',
+    replied: '',
+    viewed: '',
     postTime: '',
     threadContent: ''
   },
@@ -31,7 +31,7 @@ Page({
       threadContent: ``
     });
     wx.showLoading({
-      title: '数据加载中...',
+      title: '数据加载中',
     });
     this.requestThread(this.data.url);
   },
@@ -93,7 +93,11 @@ Page({
   requestThread(url) {
     wx.request({
       url: this.normalizeMobileThreadURL(url),
-      data: {},
+      data: '',
+      header: {},
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'text',
       success: (res) => {
         console.log(res.statusCode);
         if (res.statusCode === 200) {
@@ -132,19 +136,20 @@ Page({
               title: title
             });
             //console.log(this.data.threadContent);
-            WxParse.wxParse('article', 'html', this.data.threadContent, this);
-            wx.hideLoading();
-            wx.stopPullDownRefresh();
+            WxParse.wxParse('article', 'html', this.data.threadContent, this, 15);
           }
         }
       },
       fail: (res) => {
-        wx.hideLoading();
         wx.showToast({
           title: `网络开了个小差👻`,
           duration: 1500,
           icon: 'none'
         });
+      },
+      complete: (res) => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
       }
     });
   },

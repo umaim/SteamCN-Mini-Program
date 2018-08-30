@@ -1,6 +1,4 @@
 //index.js
-//const urls = getApp().globalData.urls;
-const utils = require('../../utils/utils.js');
 const DomParser = require('../../lib/xmldom/dom-parser.js');
 Page({
   /**
@@ -8,17 +6,14 @@ Page({
    */
   data: {
     bannerImageList: [],
-    postItemList: [],
-    COUNT: 9,
-    threadline: [],
-    auth: {}
+    threadline: []
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
     wx.showLoading({
-      title: '数据加载中...',
+      title: '数据加载中',
     });
     this.requestHome();
   },
@@ -93,8 +88,11 @@ Page({
     wx.request({
       url: 'https://steamcn.com/forum.php?mobile=no',
       data: {},
+      header: {},
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'text',
       success: (res) => {
-        console.log(res.statusCode);
         if (res.statusCode === 200) {
           //console.log(res.data);
           let data = res.data;
@@ -102,24 +100,25 @@ Page({
           let dom = Parser.parseFromString(data);
           // 解析 Swiper 数据
           let bannerImageList = this.parseImageList(dom);
-
+          // 解析 ThreadLine 数据
           let threadline = this.parseThreadLine(dom);
           this.setData({
             bannerImageList: bannerImageList,
             threadline: threadline
           })
-          wx.hideLoading();
-          wx.stopPullDownRefresh();
         }
       },
       fail: (res) => {
-        wx.hideLoading();
         wx.showToast({
           title: `网络开了个小差👻`,
           duration: 1500,
           icon: 'none'
         });
-      }
+      },
+      complete: (res) => {
+        wx.hideLoading();
+        wx.stopPullDownRefresh();
+      },
     });
   },
 
