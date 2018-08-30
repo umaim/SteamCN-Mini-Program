@@ -123,6 +123,7 @@ Page({
     for (let i = 0; i < items.length; i++) {
       console.log(items[i]);
       let title = items[i].childNodes[1].firstChild.data;
+      title = title.replace(/&amp;/g, '&');
       let url = items[i].childNodes[3].firstChild.data;
       let section = items[i].childNodes[7].firstChild.data;
       let desc = '';
