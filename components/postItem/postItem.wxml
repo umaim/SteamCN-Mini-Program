@@ -18,11 +18,11 @@
   <view class='footer'>
     <view class='label' wx:if='{{item.stats.viewed}}'>
       <image src='resources/icon/see.png'></image>
-      <view>{{item.stats.viewed || '-1'}}</view>
+      <view>{{item.stats.viewed}}</view>
     </view>
     <view class='label' wx:if='{{item.stats.replied}}'>
       <image src='resources/icon/reply.png'></image>
-      <view>{{item.stats.replied || '-1'}}</view>
+      <view>{{item.stats.replied}}</view>
     </view>
     <view class='label' wx:if='{{item.date}}'>
       <view>{{filter.timeBefore(item.date)}}</view>
