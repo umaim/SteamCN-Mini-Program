@@ -21,6 +21,9 @@ Page({
       desc: options.desc,
       fid: options.fid
     });
+    wx.setNavigationBarTitle({
+      title: this.data.title
+    })
     wx.showLoading({
       title: '数据加载中',
     });
