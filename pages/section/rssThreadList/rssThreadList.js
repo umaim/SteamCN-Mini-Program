@@ -76,7 +76,11 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    return {
+      title: `SteamCN 蒸汽动力 - ${this.data.title}`,
+      desc: '分享自蒸汽动力 SteamCN 小程序第三方版',
+      path: `/pages/section/rssThreadList/rssThreadList?title=${item.data.title}&desc=${item.data.desc}&fid=${item.data.fid}`
+    };
   },
 
   requestRSS() {

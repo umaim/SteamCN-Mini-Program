@@ -60,13 +60,6 @@ Page({
   
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  },
-
   navigatItem(e) {
     return utils.navigatItem(e)
   }
