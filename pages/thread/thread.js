@@ -98,7 +98,6 @@ Page({
       dataType: 'json',
       responseType: 'text',
       success: (res) => {
-        console.log(res.statusCode);
         if (res.statusCode === 200) {
           //console.log(res.data);
           let data = res.data;
