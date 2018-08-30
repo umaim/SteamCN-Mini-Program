@@ -9,7 +9,7 @@
       <view class='name'>{{username}}</view>
       <view class='others'>
         <text class='time'>{{postTime}}</text>
-        <text>阅读 {{viewed}} · 回复 {{replied}}</text>
+        <text wx:if='{{replied && viewed}}'>阅读 {{viewed}} · 回复 {{replied}}</text>
       </view>
     </view>
   </view>
