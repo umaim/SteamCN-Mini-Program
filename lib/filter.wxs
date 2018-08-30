@@ -1,17 +1,7 @@
-var join = function (arr, item, separator) {
-  arr = arr || [];
-  // 最多取前两个 tag
-  return arr.slice(0, 2).map(function(i, index){
-    return i[item];
-  }).join(separator);
-};
-
-var timeBefore = function (date) {
+var timeBefore = function(date) {
   if (!date) {
     return '';
   }
-  var rexp = getRegExp('TZ', 'g');
-  date = date.replace(rexp, ' ');
   var dvalue = parseInt(getDate().getTime()) - parseInt(getDate(date).getTime());
   var minTime = 60 * 1000;
   var hourTime = 60 * 60 * 1000;
@@ -33,21 +23,6 @@ var timeBefore = function (date) {
   }
 };
 
-var strToNumArr = function (str) {
-  var arr1 = (str + '').split('');
-  var arr = [];
-  for (i=0, len1 = arr1.length; i < len1; i++) {
-    var arr2 = []
-    for (j = 0, len2 = parseInt(arr1[i]); j <= len2; j++) {
-      arr2.push(j)
-    }
-    arr.push(arr2);
-  }
-  return arr;
-};
-
 module.exports = {
-  join: join,
-  timeBefore: timeBefore,
-  strToNumArr: strToNumArr,
+  timeBefore: timeBefore
 };
