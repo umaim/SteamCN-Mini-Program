@@ -68,5 +68,12 @@ Page({
    */
   onReachBottom: function() {
 
+  },
+  commit(e) {
+    wx.showToast({
+      title: 'QAQ 暂时无法变强👶',
+      icon: 'none',
+      duration: 3500
+    })
   }
 })
