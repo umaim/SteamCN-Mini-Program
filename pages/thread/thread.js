@@ -130,10 +130,11 @@ Page({
               postTime: postTime,
               avatar: avatar,
               title: title
-            })
+            });
             //console.log(this.data.threadContent);
-            WxParse.wxParse('article', 'html', this.data.threadContent, this)
+            WxParse.wxParse('article', 'html', this.data.threadContent, this);
             wx.hideLoading();
+            wx.stopPullDownRefresh();
           }
         }
       },
