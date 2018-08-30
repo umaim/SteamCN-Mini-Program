@@ -23,8 +23,9 @@
   display: flex;
   align-items: center;
   padding-bottom: 10rpx;
-  box-shadow: 2rpx 5rpx 2rpx 2rpx rgba(66, 66, 66, 0.3);
-  margin: 20rpx 10rpx;
+  border-radius: 5rpx;
+  box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
+  margin: 0 10rpx;
   padding-left: 20rpx;
   background: white;
 }
