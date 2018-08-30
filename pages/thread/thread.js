@@ -1,6 +1,6 @@
 // pages/thread/thread.js
-const WxParse = require('../../lib/wxParse/wxParse.js')
-const DomParser = require('../../lib/xmldom/dom-parser.js')
+const WxParse = require('../../lib/wxParse/wxParse.js');
+const DomParser = require('../../lib/xmldom/dom-parser.js');
 Page({
 
   /**
@@ -27,8 +27,7 @@ Page({
       title: options.title,
       username: options.username,
       replied: options.replied,
-      viewed: options.viewed,
-      threadContent: ``
+      viewed: options.viewed
     });
     wx.showLoading({
       title: '数据加载中',
@@ -113,12 +112,10 @@ Page({
               duration: 3500
             })
           } else { // 无需登录，可正常查看
-            console.log(dom.getElementsByTagName('body'));
             // 帖子内容
             let htmlStr = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[3].childNodes[3].childNodes.toString().split('<div class="plc cl"')[0];
             //let pid = dom.getElementsByTagName('body').toString().match(/id="pid(\d*)"/)[1];
             //let htmlStr = dom.getElementById(`pid${pid}`).childNodes[3].childNodes[3].childNodes.toString();
-            console.log(htmlStr);
             htmlStr = this.normalizeHTML(htmlStr);
 
             // 完整标题
@@ -154,7 +151,9 @@ Page({
     });
   },
 
-  // 将请求获取的内容标准化
+  /**
+   * 将请求获取的内容标准化
+   */
   normalizeHTML(htmlStr) {
     htmlStr = htmlStr.replace(/\sxmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''); // 去掉xmlns
     htmlStr = htmlStr.replace(/[\r\n]/g, ''); //去掉回车换行
@@ -171,7 +170,9 @@ Page({
     return htmlStr;
   },
 
-  // 将短URL转为触屏版URL
+  /**
+   * 将短URL转为触屏版URL
+   */
   normalizeMobileThreadURL(url) {
     //From: https://steamcn.com/t339527-1-1
     //To: https://steamcn.com/forum.php?mod=viewthread&tid=339527&mobile=2
@@ -181,7 +182,9 @@ Page({
     return mobileURL;
   },
 
-  // 点击链接事件
+  /**
+   * 点击链接事件
+   */
   wxParseTagATap(e) {
     let url = e.currentTarget.dataset.src;
     if (url.indexOf('https://steamcn.com/forum.php?mod=viewthread&tid') === -1) { // 防止点击图片触发剪切板事件
