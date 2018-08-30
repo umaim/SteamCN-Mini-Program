@@ -44,7 +44,7 @@ Component({
             data: history,
           });
         }
-      })
+      });
 
       wx.navigateTo({
         url: `/pages/thread/thread?url=${item.url}&title=${item.title}&username=${item.user.username || ''}&replied=${item.stats.replied}&viewed=${item.stats.viewed}`
