@@ -1,0 +1,5 @@
+/* pages/section/rssTheadList/rssThreadList.wxss */
+
+.threadline {
+  padding-top: 10rpx;
+}

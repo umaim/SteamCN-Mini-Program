@@ -49,9 +49,28 @@
   flex: 1;
 }
 
+.content .img {
+  width: 130rpx;
+  height: 130rpx;
+  margin-left: 20rpx;
+}
+
 .content .title {
-  font-size: 28rpx;
   margin-bottom: 5rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-size: 28rpx;
+  overflow: hidden;
+}
+
+.content .desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 22rpx;
+  color: #abb4bf;
 }
 
 .label {
