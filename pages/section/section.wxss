@@ -1,1 +1,20 @@
 /* pages/section/section.wxss */
+
+.container {
+  padding-top: 10rpx;
+}
+
+.group {
+  margin: 0 6rpx;
+  margin-top: 25rpx;
+  padding-bottom: 5rpx;
+  padding-top: 5rpx;
+  background: #fff;
+}
+
+.group .groupTitle {
+  margin-left: 40rpx;
+  font-size: 35rpx;
+  line-height: 35rpx;
+  color: #666;
+}
