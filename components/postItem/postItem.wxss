@@ -1,12 +1,5 @@
 /* components/postItem.wxss */
 
-.content .title {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-
 .item {
   padding: 0 30rpx;
   margin: 0 15rpx;
@@ -68,7 +61,7 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
+  overflow: hidden !important;
   font-size: 22rpx;
   color: #abb4bf;
 }
