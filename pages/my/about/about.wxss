@@ -15,8 +15,8 @@
 }
 
 .qrcode {
-  width: 256rpx;
-  height: 256rpx;
+  width: 420rpx;
+  height: 420rpx;
   display: block;
   margin: auto;
 }
