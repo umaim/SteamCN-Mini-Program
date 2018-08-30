@@ -1,1 +1,5 @@
 /* pages/my/history/history.wxss */
+
+.threadline {
+  padding-top: 10rpx;
+}
