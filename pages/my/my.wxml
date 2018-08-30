@@ -32,7 +32,7 @@
     <view class='item' hover-class='hover-class' catchtap='navigatItem' data-url='/pages/my/history/history' data-open='true'>
       <view class='title'>
         <image src='resources/icon/history.png'></image>
-        <view>阅读历史</view>
+        <view>浏览历史</view>
       </view>
       <view class='count'>{{historyCount || 0}}篇</view>
     </view>
