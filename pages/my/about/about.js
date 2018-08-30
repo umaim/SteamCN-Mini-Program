@@ -64,7 +64,11 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function() {
-
+    return {
+      title: '关于蒸汽动力 SteamCN 小程序第三方版',
+      desc: '分享自蒸汽动力 SteamCN 小程序第三方版',
+      path: `pages/my/about/about`
+    };
   },
 
   /**
