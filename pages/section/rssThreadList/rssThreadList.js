@@ -114,7 +114,7 @@ Page({
     let items = dom.getElementsByTagName('item');
     let result = [];
     for (let i = 0; i < items.length; i++) {
-      //console.log(items[i]);
+      console.log(items[i]);
       let title = items[i].childNodes[1].firstChild.data;
       let url = items[i].childNodes[3].firstChild.data;
       let section = items[i].childNodes[7].firstChild.data;
@@ -149,7 +149,7 @@ Page({
         }
       })
     }
-    //console.log(result);
+    console.log(result);
     return result;
   },
 
@@ -160,8 +160,9 @@ Page({
     desc = desc.replace(/\r\n/g, ''); //去除换行
     desc = desc.replace(/\[sframe\](\d*)\[\/sframe\]/g, ''); // 去除 sframe
     desc = desc.replace(/\[steamlink\]([\S\s]*)\[\/steamlink\]/g, ''); // 去除 steamlink
-    desc = desc.replace(/\[spoil\]|\[\/spoil\]/g,''); //去除 spoil
-    desc = desc.replace(/\[backcolor\]|\[\/backcolor\]/g, '') // 去除 backcolor
+    desc = desc.replace(/\[spoil\]|\[\/spoil\]/g, ''); //去除 spoil
+    desc = desc.replace(/\[backcolor\]|\[\/backcolor\]/g, ''); // 去除 backcolor
+    desc = desc.replace(/((http|https|ftp)?:\/\/)(\w|\/|\.|\?|=)*/g, ''); //去除链接，防止描述溢出
     return desc;
   }
 })
