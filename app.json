@@ -13,7 +13,8 @@
     "pages/my/collection/collection",
     "pages/my/history/history",
     "pages/my/about/about",
-    "pages/thread/thread"
+    "pages/thread/thread",
+    "pages/section/rssThreadList/rssThreadList"
   ],
   "window": {
     "backgroundTextStyle": "dark",

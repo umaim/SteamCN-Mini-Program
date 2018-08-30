@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "最新主题",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "postItem": "/components/postItem/postItem"
+  }
+}
