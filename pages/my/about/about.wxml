@@ -2,7 +2,7 @@
 <view class='container'>
   <view class='content'>
     <view class='item'>
-      <view class='title'>作者</view>
+      <view class='title'>开发者</view>
       <image src='resources/img/avatar.jpg' class='avatar'></image>
       <view style='text-align: center;'>真的只是小埋啦 ♪(^∇^*)~</view>
     </view>
