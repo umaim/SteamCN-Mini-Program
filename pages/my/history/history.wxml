@@ -1,2 +1,6 @@
 <!--pages/my/history/history.wxml-->
-<text>pages/my/history/history.wxml</text>
+<view class='container'>
+  <view class='threadline'>
+    <postItem list='{{threadline}}'></postItem>
+  </view>
+</view>

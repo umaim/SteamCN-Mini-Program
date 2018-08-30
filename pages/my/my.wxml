@@ -27,14 +27,14 @@
         <image src='resources/icon/collection.png'></image>
         <view>我的收藏</view>
       </view>
-      <view class='count'>{{userInfo.collectionSetCount || 0}}个</view>
+      <view class='count'>{{collectionSetCount || 0}}个</view>
     </view>
     <view class='item' hover-class='hover-class' catchtap='navigatItem' data-url='/pages/my/history/history' data-open='true'>
       <view class='title'>
         <image src='resources/icon/history.png'></image>
         <view>阅读历史</view>
       </view>
-      <view class='count'>{{userInfo.viewedEntriesCount || 0}}篇</view>
+      <view class='count'>{{historyCount || 0}}篇</view>
     </view>
   </view>
 

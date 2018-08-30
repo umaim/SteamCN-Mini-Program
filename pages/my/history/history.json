@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "阅读历史"
+  "navigationBarTitleText": "阅读历史",
+  "usingComponents": {
+    "postItem": "/components/postItem/postItem"
+  }
 }
