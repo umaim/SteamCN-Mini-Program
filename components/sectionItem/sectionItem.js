@@ -4,7 +4,10 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    list: {
+      type: Array,
+      value: []
+    }
   },
 
   /**
@@ -18,6 +21,9 @@ Component({
    * 组件的方法列表
    */
   methods: {
-
+    toSectionList(e) {
+      let item = e.currentTarget.dataset.item;
+      console.log(item);
+    }
   }
 })
