@@ -1,5 +1,4 @@
 // components/postItem.js
-let utils = require('../../utils/utils.js')
 Component({
   /**
    * 组件的属性列表
@@ -23,7 +22,10 @@ Component({
    */
   methods: {
     toThreadDetail(e) {
-      utils.toThreadDetail(e);
+      let item = e.currentTarget.dataset.item;
+      wx.navigateTo({
+        url: `/pages/thread/thread?url=${item.url}&title=${item.title}&username=${item.user.username || ''}&replied=${item.stats.replied}&viewed=${item.stats.viewed}`
+      });
     }
   }
 })

@@ -2,7 +2,7 @@
 <view class='item card' hover-class='hover-class' wx:for='{{list}}' wx:key='{{index}}' data-item='{{item}}' catchtap='toThreadDetail'>
   <view class='header'>
     <view class='name' data-item='{{item}}'>
-      <image mode='aspectFill' src='{{item.user.avatar}}'></image>
+      <image mode='aspectFill' src='{{item.user.avatar}}' wx:if='{{item.user.avatar}}'></image>
       <view>{{item.user.username}}</view>
     </view>
     <view class='type'>{{item.section}}</view>
@@ -10,16 +10,21 @@
   <view class='content'>
     <view class='text'>
       <view class='title'>{{item.title}}</view>
+      <view class='desc' wx:if='{{item.description}}'>{{item.description}}</view>
     </view>
+    <image mode='aspectFill' class='img' src='{{item.enclosure}}' wx:if='{{item.enclosure}}'></image>
   </view>
   <view class='footer'>
-    <view class='label'>
+    <view class='label' wx:if='{{item.stats}}'>
       <image src='resources/icon/see.png'></image>
       <view>{{item.stats.viewed || '-1'}}</view>
     </view>
-    <view class='label'>
+    <view class='label' wx:if='{{item.stats}}'>
       <image src='resources/icon/reply.png'></image>
       <view>{{item.stats.replied || '-1'}}</view>
+    </view>
+    <view class='label' wx:if='{{item.date}}'>
+      <view>{{item.date}}</view>
     </view>
   </view>
 </view>

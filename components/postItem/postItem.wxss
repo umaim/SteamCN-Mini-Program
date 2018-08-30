@@ -9,7 +9,10 @@
 
 .item {
   padding: 0 30rpx;
+  margin: 0 15rpx;
   margin-bottom: 20rpx;
+  border-radius: 5rpx;
+  box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
   box-sizing: border-box;
   background: #fff;
 }
