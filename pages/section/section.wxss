@@ -6,14 +6,14 @@
 
 .group {
   margin: 0 6rpx;
-  margin-top: 25rpx;
+  margin-bottom: 25rpx;
   padding-bottom: 5rpx;
   padding-top: 5rpx;
   background: #fff;
 }
 
-.group .groupTitle {
-  margin-left: 18rpx;
+.groupTitle {
+  margin: 20rpx 40rpx;
   font-size: 35rpx;
   line-height: 35rpx;
   color: #666;

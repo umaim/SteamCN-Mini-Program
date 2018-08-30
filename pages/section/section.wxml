@@ -1,27 +1,39 @@
 <!--pages/section/section.wxml-->
 <view class='container'>
   <view class='group'>
-    <text class='groupTitle'>· 平台周边</text>
+    <view class='groupTitle'>
+      <text>平台周边</text>
+    </view>
     <sectionItem list='{{sectionMeta.forum}}'></sectionItem>
   </view>
   <view class='group'>
-    <text class='groupTitle'>· 问题互助</text>
+    <view class='groupTitle'>
+      <text>问题互助</text>
+    </view>
     <sectionItem list='{{sectionMeta.problem}}'></sectionItem>
   </view>
   <view class='group'>
-    <text class='groupTitle'>· 游戏讨论</text>
+    <view class='groupTitle'>
+      <text>游戏讨论</text>
+    </view>
     <sectionItem list='{{sectionMeta.discussion}}'></sectionItem>
   </view>
   <view class='group'>
-    <text class='groupTitle'>· 论坛周边</text>
+    <view class='groupTitle'>
+      <text>论坛周边</text>
+    </view>
     <sectionItem list='{{sectionMeta.peripheral}}'></sectionItem>
   </view>
   <view class='group'>
-    <text class='groupTitle'>· 友商平台</text>
+    <view class='groupTitle'>
+      <text>友商平台</text>
+    </view>
     <sectionItem list='{{sectionMeta.platform}}'></sectionItem>
   </view>
   <view class='group'>
-    <text class='groupTitle'>· 社区服务</text>
+    <view class='groupTitle'>
+      <text>社区服务</text>
+    </view>
     <sectionItem list='{{sectionMeta.official}}'></sectionItem>
   </view>
 </view>
