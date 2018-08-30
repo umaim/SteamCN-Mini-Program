@@ -1,6 +1,7 @@
 //index.js
-const urls = getApp().globalData.urls;
+//const urls = getApp().globalData.urls;
 const utils = require('../../utils/utils.js');
+const DomParser = require('../../lib/xmldom/dom-parser.js');
 Page({
   /**
    * 页面的初始数据
@@ -16,98 +17,10 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.setData({
-      bannerImageList: [{
-          user: {
-            username: 'wu360463231',
-            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
-          },
-          title: '[08.29]Humble Bundle 新主包 Humble Digital Tableto',
-          url: 'https://steamcn.com/t419404-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/dc/dc42e0fd096fa9558967b35e981c90ff.jpg',
-          stats: {
-            viewed: 1505166,
-            replied: 3189
-          },
-        },
-        {
-          user: {
-            username: 'wu360463231',
-            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
-          },
-          title: '【18-8-29】【特价促销】 Far Cry（孤岛惊魂）系列特',
-          url: 'https://steamcn.com/t419401-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/e6/e681511945bdd8fe38c083fa4cbe7031.jpg',
-          stats: {
-            viewed: 1505166,
-            replied: 3189
-          },
-        },
-        {
-          user: {
-            username: 'wu360463231',
-            avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
-          },
-          title: '记一次特别的GAMA站购物经历',
-          url: 'https://steamcn.com/t419403-1-1',
-          imageUrl: 'https://blob.steamcn.com/block/6f/6faf62af885ee59d993f605661599d3b.jpg',
-          stats: {
-            viewed: 1505166,
-            replied: 3189
-          },
-        }
-      ],
-      threadline: [{
-        user: {
-          username: 'wu360463231',
-          avatar: 'https://steamcn.com/uc_server/avatar.php?uid=52394&size=small'
-        },
-        section: '平台研讨',
-        title: '【18-08-25 更新】Steamcommunity 302 Ver.6【修复Steam社区访问】',
-        stats: {
-          viewed: 1505166,
-          replied: 3189
-        },
-        url: 'https://steamcn.com/t339527-1-1'
-      }, {
-        user: {
-          username: '寒冬之握',
-          avatar: 'https://steamcn.com/uc_server/avatar.php?uid=206629&size=small'
-        },
-        section: '游戏互鉴',
-        title: '《Strange Brigade 奇异小队》——夺宝奇兵的埃及之旅',
-        stats: {
-          viewed: 83,
-          replied: 3
-        },
-        url: 'https://steamcn.com/t419388-1-1'
-      }, {
-        user: {
-          username: 'heroo945',
-          avatar: 'https://steamcn.com/uc_server/avatar.php?uid=224301&size=small'
-        },
-        section: '慈善包',
-        title: '[08.29]Humble Bundle 新主包 Humble Digital Tabletop Bundle 上线',
-        stats: {
-          viewed: 548,
-          replied: 54
-        },
-        url: 'https://steamcn.com/t419404-1-1'
-      }, {
-        user: {
-          username: 'zxrzy',
-          avatar: 'https://steamcn.com/uc_server/avatar.php?uid=300369&size=small'
-        },
-        section: '购物心得',
-        title: '【18-8-29】【特价促销】 Far Cry（孤岛惊魂）系列特惠',
-        stats: {
-          viewed: 157,
-          replied: 7
-        },
-        url: 'https://steamcn.com/t419401-1-1'
-      }]
+    wx.showLoading({
+      title: '数据加载中...',
     });
-    this.init();
+    this.requestHome();
   },
 
   /**
@@ -163,26 +76,126 @@ Page({
     };
   },
 
-  init() {
-    /*wx.showLoading({
-      title: '数据加载中...',
-    });*/
-    this.setData({
-      auth: {}
-    });
-    let auth = utils.ifLogined();
-    //this.initSwiper();
-    this.getBannerImageList();
-    this.getThreadLine(true);
-  },
-  getBannerImageList() {
-
-  },
-  getThreadLine(reload) {
-
-  },
+  /**
+   * 页面导航
+   */
   toThreadDetail(e) {
-    utils.toThreadDetail(e);
-  }
+    let item = e.currentTarget.dataset.item;
+    wx.navigateTo({
+      url: `/pages/thread/thread?url=${item.url}&title=${item.title}&username=${item.user.username || ''}&replied=${item.stats.replied}&viewed=${item.stats.viewed}`
+    })
+  },
 
+  /**
+   *  请求论坛主页，获取图片轮播及最新主题信息，并设置必要的参数
+   */
+  requestHome() {
+    wx.request({
+      url: 'https://steamcn.com/forum.php?mobile=no',
+      data: {},
+      success: (res) => {
+        console.log(res.statusCode);
+        if (res.statusCode === 200) {
+          //console.log(res.data);
+          let data = res.data;
+          let Parser = new DomParser.DOMParser();
+          let dom = Parser.parseFromString(data);
+          // 解析 Swiper 数据
+          let bannerImageList = this.parseImageList(dom);
+
+          let threadline = this.parseThreadLine(dom);
+          this.setData({
+            bannerImageList: bannerImageList,
+            threadline: threadline
+          })
+          wx.hideLoading();
+        }
+      },
+      fail: (res) => {
+        wx.hideLoading();
+        wx.showToast({
+          title: `网络开了个小差👻`,
+          duration: 1500,
+          icon: 'none'
+        });
+      }
+    });
+  },
+
+  /**
+   * 解析Swiper所需数据
+   */
+  parseImageList(dom) {
+    let imageListDom = dom.getElementById('portal_block_431_content');
+    let nodelist = imageListDom.childNodes["0"].childNodes[1].childNodes;
+    let result = [];
+    for (let i = 0; i < nodelist.length; i++) {
+      let imageUrl = nodelist[i].childNodes["0"].childNodes["0"].attributes["0"].nodeValue;
+      let wholeTitle = nodelist[i].childNodes["0"].childNodes["0"].attributes[3].nodeValue
+      let titleLines = wholeTitle.trim().split('\n');
+      let section = titleLines[0].substr(4);
+      let username = titleLines[1].match(/:([\S\s]*)\(/)[1];
+      let viewed = titleLines[2].match(/: (\d*) \//)[1];
+      let replied = titleLines[2].match(/回复: (\d*)/)[1];
+      let title = nodelist[i].childNodes[1].childNodes["0"].data;
+      let url = `https://steamcn.com/${nodelist[i].childNodes["0"].attributes["0"].nodeValue}`;
+      result.push({
+        user: {
+          username: username
+        },
+        section: section,
+        title: title,
+        stats: {
+          viewed: viewed,
+          replied: replied
+        },
+        url: url,
+        imageUrl: imageUrl
+      });
+    }
+    //console.log(result);
+    return result;
+  },
+
+  /**
+   * 解析 ThreadLine 数据
+   */
+  parseThreadLine(dom) {
+    let threadlineDom = dom.getElementById('portal_block_432_content');
+    let nodelist = threadlineDom.childNodes["0"].childNodes[1].childNodes;
+    let result = [];
+    for (let i = 0; i < nodelist.length; i++) {
+      let url = `https://steamcn.com/${nodelist[i].childNodes[1].attributes["0"].nodeValue}`
+      let username = nodelist[i].childNodes["0"].childNodes["0"].childNodes["0"].data;
+      let uid = nodelist[i].childNodes["0"].childNodes["0"].attributes["0"].value.substr(5);
+      let avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=small`;
+      let wholeTitle = nodelist[i].lastChild.attributes[1].value;
+      let titleLines = wholeTitle.trim().split('\n');
+      let section = titleLines[0].substr(4);
+      let viewed = titleLines[2].match(/: (\d*) \//)[1];
+      let replied = titleLines[2].match(/回复: (\d*)/)[1];
+      let temp = nodelist[i].childNodes[1].firstChild;
+      let title = '';
+      if (temp.nodeType === 1) { //Element
+        title = temp.childNodes.toString();
+      } else if (temp.nodeType === 3) { //Text
+        title = temp.toString();
+      }
+      result.push({
+        user: {
+          username: username,
+          avatar: avatar
+        },
+        section: section,
+        title: title,
+        stats: {
+          viewed: viewed,
+          replied: replied
+        },
+        url: url
+      });
+    }
+    //console.log(result);
+    return result;
+  }
 })

@@ -23,7 +23,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    console.log(options);
+    //console.log(options);
     this.setData({
       url: options.url,
       title: options.title,
@@ -103,36 +103,51 @@ Page({
           let data = res.data;
           let Parser = new DomParser.DOMParser();
           let dom = Parser.parseFromString(data);
-          //console.log(dom.getElementsByTagName('body'));
-          // 帖子内容
-          let htmlStr = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[3].childNodes[3].childNodes.toString();
-          htmlStr = this.normalizeHTML(htmlStr);
-          //console.log(htmlStr);
-          // 发帖时间
-          let time = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[3].childNodes[1].childNodes[3].childNodes[2].toString().trim().replace('&amp;nbsp;', ' ');
-          //console.log(postTime);
-          // 头像
-          let head = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[1].childNodes["0"].attributes["0"].nodeValue;
-          console.log(head);
-          this.setData({
-            threadContent: htmlStr,
-            postTime: time,
-            avatar: head
-          })
-          //console.log(this.data.threadContent);
-          WxParse.wxParse('article', 'html', this.data.threadContent, this)
-          wx.hideLoading();
+          if (dom.getElementsByTagName('body').toString().indexOf('安全提问(未设置请忽略)') > -1) { //需要登录才可查看
+            wx.hideLoading();
+            wx.showToast({
+              title: '本帖需要登录才可查看😭',
+              icon: 'none',
+              duration: 3500
+            })
+          } else { // 无需登录，可正常查看
+            console.log(dom.getElementsByTagName('body'));
+            // 帖子内容
+            let htmlStr = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[3].childNodes[3].childNodes.toString().split('<div class="plc cl"')[0];
+            //let pid = dom.getElementsByTagName('body').toString().match(/id="pid(\d*)"/)[1];
+            //let htmlStr = dom.getElementById(`pid${pid}`).childNodes[3].childNodes[3].childNodes.toString();
+            console.log(htmlStr);
+            htmlStr = this.normalizeHTML(htmlStr);
+
+            // 完整标题
+            let title = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[1].firstChild.data.split('\n').pop();
+
+            // 发帖时间
+            let postTime = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[3].childNodes[1].childNodes[3].childNodes[2].toString().trim().replace('&amp;nbsp;', ' ');
+
+            // 头像
+            let avatar = dom.getElementsByTagName('body')["0"].childNodes[9].childNodes[3].childNodes[1].childNodes["0"].attributes["0"].nodeValue;
+            this.setData({
+              threadContent: htmlStr,
+              postTime: postTime,
+              avatar: avatar,
+              title: title
+            })
+            //console.log(this.data.threadContent);
+            WxParse.wxParse('article', 'html', this.data.threadContent, this)
+            wx.hideLoading();
+          }
         }
       },
       fail: (res) => {
         wx.hideLoading();
         wx.showToast({
-          title: `网络开了个小差:P`,
+          title: `网络开了个小差👻`,
           duration: 1500,
           icon: 'none'
         });
       }
-    })
+    });
   },
 
   // 将请求获取的内容标准化
@@ -147,32 +162,35 @@ Page({
     htmlStr = htmlStr.replace(/size=140x140/g, 'size=2000x550'); // 修改图片为全图
     htmlStr = htmlStr.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
     htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转义实体符
+    htmlStr = htmlStr.trim();
     //console.log(htmlStr);
     return htmlStr;
   },
 
   // 将短URL转为触屏版URL
   normalizeMobileThreadURL(url) {
-    //https://steamcn.com/t339527-1-1
-    //https://steamcn.com/forum.php?mod=viewthread&tid=419522&mobile=2
+    //From: https://steamcn.com/t339527-1-1
+    //To: https://steamcn.com/forum.php?mod=viewthread&tid=339527&mobile=2
     let temp = url.split('/').pop();
     let tid = temp.substr(1, temp.indexOf('-') - 1);
     let mobileURL = `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&mobile=2`;
     return mobileURL;
   },
+
   // 点击链接事件
   wxParseTagATap(e) {
-    //console.log(e);
     let url = e.currentTarget.dataset.src;
-    wx.setClipboardData({
-      data: url,
-      success() {
-        wx.showToast({
-          title: `链接已复制`,
-          duration: 1500,
-          icon: 'success'
-        })
-      },
-    })
+    if (url.indexOf('https://steamcn.com/forum.php?mod=viewthread&tid') === -1) { // 防止点击图片触发剪切板事件
+      wx.setClipboardData({
+        data: url,
+        success() {
+          wx.showToast({
+            title: `链接已复制`,
+            duration: 1500,
+            icon: 'success'
+          })
+        },
+      });
+    }
   }
 })
