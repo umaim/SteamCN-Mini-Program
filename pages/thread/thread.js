@@ -1,6 +1,5 @@
 // pages/thread/thread.js
 const WxParse = require('../../lib/wxParse/wxParse.js')
-const utils = require('../../utils/utils.js')
 const DomParser = require('../../lib/xmldom/dom-parser.js')
 Page({
 
@@ -8,7 +7,6 @@ Page({
    * 页面的初始数据
    */
   data: {
-    //url=${item.url}&title=${item.title}&username=${item.user.username || ''}&avatar=${item.user.avatar || ''}&reply=${item.stats.replied || -1}&view=${item.stats.viewed || -1}
     url: '',
     title: '',
     username: '',
