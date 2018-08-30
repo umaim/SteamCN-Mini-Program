@@ -23,7 +23,6 @@ Component({
   methods: {
     toSectionList(e) {
       let item = e.currentTarget.dataset.item;
-      console.log(item);
       wx.navigateTo({
         url: `/pages/section/rssThreadList/rssThreadList?title=${item.title}&desc=${item.desc}&fid=${item.fid}`
       });
