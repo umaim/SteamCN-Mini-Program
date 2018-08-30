@@ -13,7 +13,7 @@
 }
 
 .group .groupTitle {
-  margin-left: 40rpx;
+  margin-left: 18rpx;
   font-size: 35rpx;
   line-height: 35rpx;
   color: #666;
