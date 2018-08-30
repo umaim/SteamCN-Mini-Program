@@ -28,7 +28,6 @@
 .section .icon image {
   width: 40rpx;
   height: 40rpx;
-  border-radius: 50%;
 }
 
 .section .info {
