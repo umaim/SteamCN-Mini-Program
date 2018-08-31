@@ -22,7 +22,7 @@
 </template>
 
 <template name="wxParseImg">
-  <image class="{{item.classStr}} wxParse-{{item.tag}}" data-from="{{item.from}}" data-src="{{item.attr.src}}" data-idx="{{item.imgIndex}}" src="{{item.attr.src}}" mode="aspectFit" bindload="wxParseImgLoad" bindtap="wxParseImgTap" mode="widthFix" style="width:{{item.width}}px;"
+  <image class="{{item.classStr}} wxParse-{{item.tag}}" data-from="{{item.from}}" data-src="{{item.attr.src}}" data-idx="{{item.imgIndex}}" src="{{item.attr.src}}" mode="aspectFit" bindload="wxParseImgLoad" bindtap="wxParseImgTap" mode="widthFix" style="width:{{item.width}}px;" lazy-load="true"
   />
 </template>
 
@@ -1116,7 +1116,7 @@
         <block wx:if="{{item.tag == 'button'}}">
             <button type="default" size="mini" >
                 <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
-                    <template is="wxParse13" data="{{item}}"/>
+                    <template is="wxParse14" data="{{item}}"/>
                 </block>
              </button>
         </block>
@@ -1129,7 +1129,7 @@
                     </view>
                     <view class="{{item.classStr}} wxParse-li-text">
                         <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
-                            <template is="wxParse13" data="{{item}}"/>
+                            <template is="wxParse14" data="{{item}}"/>
                         </block>
                     </view>
                 </view>
@@ -1155,7 +1155,7 @@
         <block wx:elif="{{item.tag == 'a'}}">
             <view bindtap="wxParseTagATap" class="wxParse-inline {{item.classStr}} wxParse-{{item.tag}}" data-src="{{item.attr.href}}"  style="{{item.styleStr}}">
                 <block wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">
-                    <template is="wxParse13" data="{{item}}"/>
+                    <template is="wxParse14" data="{{item}}"/>
                 </block>
             </view>
         </block>
@@ -1164,7 +1164,7 @@
         <block wx:elif="{{item.tagType == 'block'}}">
             <view class="{{item.classStr}} wxParse-{{item.tag}}" style="{{item.styleStr}}">
                 <block  wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">       
-                    <template is="wxParse13" data="{{item}}"/>                 
+                    <template is="wxParse14" data="{{item}}"/>                 
                 </block>
             </view>
         </block>
@@ -1172,7 +1172,7 @@
         <!--内联标签-->
         <view wx:else class="{{item.classStr}} wxParse-{{item.tag}} wxParse-{{item.tagType}}" style="{{item.styleStr}}">
             <block  wx:for="{{item.nodes}}" wx:for-item="item" wx:key="">       
-                <template is="wxParse13" data="{{item}}"/>                 
+                <template is="wxParse14" data="{{item}}"/>                 
             </block>
         </view>
 
