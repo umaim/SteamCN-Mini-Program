@@ -16,7 +16,7 @@ Page({
       key: 'history',
       success: (res) => {
         this.setData({
-          threadline: res.data
+          threadline: res.data.reverse()
         });
       },
       fail: (res) => {
