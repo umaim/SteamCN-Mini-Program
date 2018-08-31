@@ -106,7 +106,7 @@ Page({
           if (dom.getElementsByTagName('body').toString().indexOf('安全提问(未设置请忽略)') > -1) { //需要登录才可查看
             wx.hideLoading();
             wx.showToast({
-              title: '本帖需要登录才可查看😭',
+              title: '本帖需要登录才可查看😦',
               icon: 'none',
               duration: 3500
             })
@@ -133,10 +133,12 @@ Page({
             });
             //console.log(this.data.threadContent);
             WxParse.wxParse('article', 'html', this.data.threadContent, this, 15);
+            wx.hideLoading();
           }
         }
       },
       fail: (res) => {
+        wx.hideLoading();
         wx.showToast({
           title: `网络开了个小差👻`,
           duration: 1500,
@@ -144,7 +146,6 @@ Page({
         });
       },
       complete: (res) => {
-        wx.hideLoading();
         wx.stopPullDownRefresh();
       }
     });
@@ -157,15 +158,15 @@ Page({
     htmlStr = htmlStr.replace(/\sxmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''); // 去掉xmlns
     htmlStr = htmlStr.replace(/[\r\n]/g, ''); //去掉回车换行
     htmlStr = htmlStr.replace(/(<br\/>){2,}/g, '<br/><br/>'); //去多余换行
-    htmlStr = htmlStr.replace(/src="forum.php/g, 'src="https://steamcn.com/forum.php'); //相对地址添加域名
+    htmlStr = htmlStr.replace(/src="forum\.php/g, 'src="https://steamcn.com/forum.php'); //相对地址添加域名
     htmlStr = htmlStr.replace(/src="static/g, 'src="https://steamcn.com/static');
-    htmlStr = htmlStr.replace(/href="forum.php/g, 'href="https://steamcn.com/forum.php');
+    htmlStr = htmlStr.replace(/href="forum\.php/g, 'href="https://steamcn.com/forum.php');
     htmlStr = htmlStr.replace(/font size="7"/g, 'font size="6"'); // 最大字号为 6
     htmlStr = htmlStr.replace(/size=140x140/g, 'size=2000x550'); // 修改图片为全图
     htmlStr = htmlStr.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
     htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转义实体符
     htmlStr = htmlStr.trim();
-    //console.log(htmlStr);
+    console.log(htmlStr);
     return htmlStr;
   },
 
