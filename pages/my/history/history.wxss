@@ -1,5 +1,10 @@
 /* pages/my/history/history.wxss */
 
+.nohistory {
+  margin: 25rpx 25rpx;
+  text-align: center;
+}
+
 .threadline {
   padding-top: 10rpx;
 }

@@ -20,11 +20,7 @@ Page({
         });
       },
       fail: (res) => {
-        wx.showToast({
-          title: '先刷刷论坛吧 XD',
-          icon: 'none',
-          duration: 3500
-        });
+
       }
     });
   },
