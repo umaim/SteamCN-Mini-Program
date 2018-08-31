@@ -25,7 +25,12 @@ Page({
   onLoad: function(options) {
     this.setData({
       backgroundImage: this.data.backgroundList[Math.floor(Math.random() * 9)]
-    })
+    });
+    wx.showToast({
+      title: 'QAQ 暂时无法变强👶',
+      icon: 'none',
+      duration: 3500
+    });
   },
 
   /**
@@ -69,11 +74,11 @@ Page({
   onReachBottom: function() {
 
   },
+
+  /**
+   * 提交表单
+   */
   commit(e) {
-    wx.showToast({
-      title: 'QAQ 暂时无法变强👶',
-      icon: 'none',
-      duration: 3500
-    })
+
   }
 })
