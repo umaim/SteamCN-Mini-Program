@@ -1,5 +1,8 @@
 <!--pages/my/history/history.wxml-->
 <view class='container'>
+  <view class='nohistory' wx:if='{{!threadline.length}}'>
+    <text>无历史纪录</text>
+  </view>
   <view class='threadline'>
     <postItem list='{{threadline}}'></postItem>
   </view>
