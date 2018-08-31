@@ -6,7 +6,7 @@
     </view>
     <form class='form' bindsubmit='commit'>
       <view>
-        <input name='username' placeholder='用户名' focus></input>
+        <input name='username' placeholder='用户名'></input>
         <input name='password' placeholder='密码' password='true' value='{{password}}'></input>
       </view>
       <button class='login' formType='submit'>登录</button>
