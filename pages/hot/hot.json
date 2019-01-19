@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "热门主题",
-  "usingComponents": {
-    "postItem": "/components/postItem/postItem"
-  }
-}

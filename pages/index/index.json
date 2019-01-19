@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "SteamCN 蒸汽动力",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "postItem": "/components/postItem/postItem"
-  }
-}
