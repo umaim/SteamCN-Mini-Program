@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "postItem": "/components/postItem/postItem"
-  }
-}

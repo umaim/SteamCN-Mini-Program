@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "板块",
-  "usingComponents": {
-    "sectionItem": "/components/sectionItem/sectionItem"
-  }
-}

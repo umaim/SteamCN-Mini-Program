@@ -1,6 +1,0 @@
-<!--pages/section/rssTheadList/rssThreadList.wxml-->
-<view class='container'>
-  <view class='threadline'>
-    <postItem list='{{threadline}}'></postItem>
-  </view>
-</view>

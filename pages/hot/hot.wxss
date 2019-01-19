@@ -1,5 +1,0 @@
-/* pages/hot/hot.wxss */
-
-.threadline {
-  padding-top: 10rpx;
-}

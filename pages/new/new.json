@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "最新回复",
-  "enablePullDownRefresh": true,
-  "usingComponents": {
-    "postItem": "/components/postItem/postItem"
-  }
-}
