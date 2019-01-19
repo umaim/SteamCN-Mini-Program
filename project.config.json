@@ -11,8 +11,8 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.2.4",
-	"appid": "wx55a5a0eab124806d",
+	"libVersion": "2.5.0",
+	"appid": "wx3ab656ef5c5a5924",
 	"projectname": "SteamCN",
 	"isGameTourist": false,
 	"condition": {
