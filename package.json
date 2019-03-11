@@ -1,6 +1,6 @@
 {
-	"name": "SteamCN-Mini-Program",
-	"version": "1.0.0",
+	"name": "steamcn-mini-program",
+	"version": "0.0.1",
 	"private": true,
 	"description": "An Unofficial SteamCN Forum Mini Program",
 	"scripts": {
@@ -17,7 +17,7 @@
 		"dev:h5": "npm run build:h5 -- --watch",
 		"dev:rn": "npm run build:rn -- --watch"
 	},
-	"author": "",
+	"author": "Cloud",
 	"license": "MIT",
 	"dependencies": {
 		"@tarojs/async-await": "1.2.16",
