@@ -28,7 +28,7 @@
 		"@tarojs/taro": "1.2.17",
 		"@tarojs/taro-alipay": "1.2.17",
 		"@tarojs/taro-h5": "1.2.17",
-		"@tarojs/taro-swan": "1.2.17",
+		"@tarojs/taro-swan": "1.2.18",
 		"@tarojs/taro-tt": "1.2.17",
 		"@tarojs/taro-weapp": "1.2.17",
 		"nerv-devtools": "^1.3.9",
