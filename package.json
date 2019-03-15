@@ -43,7 +43,7 @@
 		"@tarojs/plugin-babel": "1.2.17",
 		"@tarojs/plugin-csso": "1.2.19",
 		"@tarojs/plugin-sass": "1.2.17",
-		"@tarojs/plugin-uglifyjs": "1.2.17",
+		"@tarojs/plugin-uglifyjs": "1.2.19",
 		"@tarojs/webpack-runner": "1.2.17",
 		"@types/react": "^16.4.8",
 		"@types/webpack-env": "^1.13.6",
