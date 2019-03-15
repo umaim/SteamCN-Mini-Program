@@ -39,7 +39,7 @@
 		"redux-thunk": "^2.3.0"
 	},
 	"devDependencies": {
-		"@tarojs/cli": "^1.2.17",
+		"@tarojs/cli": "^1.2.19",
 		"@tarojs/plugin-babel": "1.2.17",
 		"@tarojs/plugin-csso": "1.2.19",
 		"@tarojs/plugin-sass": "1.2.17",
