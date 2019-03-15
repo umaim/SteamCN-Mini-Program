@@ -57,7 +57,7 @@
 		"eslint-config-taro": "1.2.17",
 		"eslint-plugin-import": "^2.12.0",
 		"eslint-plugin-react": "^7.8.2",
-		"eslint-plugin-taro": "1.2.17",
+		"eslint-plugin-taro": "1.2.19",
 		"eslint-plugin-typescript": "^0.14.0",
 		"typescript": "^3.0.1"
 	}
