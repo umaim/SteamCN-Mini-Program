@@ -15,7 +15,8 @@
 		"dev:alipay": "npm run build:alipay -- --watch",
 		"dev:tt": "npm run build:tt -- --watch",
 		"dev:h5": "npm run build:h5 -- --watch",
-		"dev:rn": "npm run build:rn -- --watch"
+		"dev:rn": "npm run build:rn -- --watch",
+		"update": "taro update project"
 	},
 	"author": "Cloud",
 	"license": "MIT",
