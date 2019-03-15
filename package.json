@@ -21,7 +21,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@tarojs/async-await": "1.2.19",
-		"@tarojs/components": "1.2.17",
+		"@tarojs/components": "1.2.19",
 		"@tarojs/redux": "1.2.17",
 		"@tarojs/redux-h5": "1.2.17",
 		"@tarojs/router": "1.2.17",
