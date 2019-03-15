@@ -23,7 +23,7 @@
 		"@tarojs/async-await": "1.2.17",
 		"@tarojs/components": "1.2.17",
 		"@tarojs/redux": "1.2.17",
-		"@tarojs/redux-h5": "1.2.17",
+		"@tarojs/redux-h5": "1.2.18",
 		"@tarojs/router": "1.2.17",
 		"@tarojs/taro": "1.2.17",
 		"@tarojs/taro-alipay": "1.2.17",
