@@ -40,7 +40,7 @@
 	},
 	"devDependencies": {
 		"@tarojs/cli": "^1.2.17",
-		"@tarojs/plugin-babel": "1.2.17",
+		"@tarojs/plugin-babel": "1.2.18",
 		"@tarojs/plugin-csso": "1.2.17",
 		"@tarojs/plugin-sass": "1.2.17",
 		"@tarojs/plugin-uglifyjs": "1.2.17",
