@@ -40,7 +40,6 @@ class ThreadCard extends Component {
   }
   render() {
     const { title, url, section, author, stats } = this.props.threadMeta
-    console.log(this.props.threadMeta)
     return <View className='item card'>
       <View className='header'>
         <View className='author'>
