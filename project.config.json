@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "SteamCN-Mini-Program",
   "description": "An Unofficial SteamCN Forum Mini Program",
-  "appid": "touristappid",
+  "appid": "wx55a5a0eab124806d",
   "setting": {
     "urlCheck": true,
     "es6": false,
