@@ -26,18 +26,63 @@ class App extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
   config: Config = {
-    pages: [
-      'pages/index/index'
-    ],
     window: {
-      backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black'
+      backgroundTextStyle: 'dark',
+      navigationBarBackgroundColor: '#57bae8',
+      navigationBarTitleText: 'SteamCN 蒸汽动力',
+      navigationBarTextStyle: 'white'
+    },
+    pages: [
+      'pages/index/index',
+      'pages/new/new',
+      'pages/hot/hot',
+      'pages/section/section',
+      'pages/account/account'
+    ],
+    tabBar: {
+      custom: false,
+      color: '#abb4bf',
+      selectedColor: '#57bae8',
+      borderStyle: 'white',
+      backgroundColor: "#fff",
+      list: [
+        {
+          pagePath: 'pages/index/index',
+          text: '首页',
+          iconPath: './assets/images/tab_home.png',
+          selectedIconPath: './assets/images/tab_home_selected.png'
+        },
+        {
+          pagePath: 'pages/new/new',
+          text: '最新',
+          iconPath: './assets/images/tab_new.png',
+          selectedIconPath: './assets/images/tab_new_selected.png'
+        },
+        {
+          pagePath: 'pages/hot/hot',
+          text: '热门',
+          iconPath: './assets/images/tab_hot.png',
+          selectedIconPath: './assets/images/tab_hot_selected.png'
+        },
+        {
+          pagePath: 'pages/section/section',
+          text: '板块',
+          iconPath: './assets/images/tab_section.png',
+          selectedIconPath: './assets/images/tab_section_selected.png'
+        },
+        {
+          pagePath: 'pages/account/account',
+          text: '我的',
+          iconPath: './assets/images/tab_profile.png',
+          selectedIconPath: './assets/images/tab_profile_selected.png'
+        }
+      ]
     }
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.updateApp()
+  }
 
   componentDidShow () {}
 
@@ -46,6 +91,34 @@ class App extends Component {
   componentCatchError () {}
 
   componentDidCatchError () {}
+
+  /*更新小程序*/
+  updateApp() {
+    if (Taro.canIUse('getUpdateManager')) {
+      const updateManager = Taro.getUpdateManager()
+
+      updateManager.onCheckForUpdate((res) => {
+        // 请求完新版本信息的回调
+        console.log('hasUpdate', res.hasUpdate)
+      })
+
+      updateManager.onUpdateReady(() => {
+        Taro.showModal({
+          title: '更新提示',
+          content: '新版本已经准备好，是否重启应用？',
+          success(res) {
+            if (res.confirm) {
+              updateManager.applyUpdate()
+            }
+          }
+        })
+      })
+
+      updateManager.onUpdateFailed(() => {
+        // 新版本下载失败
+      })
+    }
+  }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
