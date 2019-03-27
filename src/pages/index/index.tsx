@@ -88,9 +88,6 @@ class Index extends Component {
       <View className='index'>
         <Swiper
           className='index-swiper'
-          indicatorDots={true}
-          indicatorColor='#999'
-          indicatorActiveColor='#333'
           autoplay
           interval={2500}
           duration={500}
