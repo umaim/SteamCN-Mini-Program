@@ -3,6 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
+import ThreadCard from '../../components/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
 import { fetchHome } from '../../actions/home'
 
@@ -73,17 +74,20 @@ class Index extends Component {
 
   componentDidHide() { }
 
-  onPullDownRefresh() {
-
-  }
+  onPullDownRefresh() { }
 
   render() {
-    const swiperItems = this.props.bannerThreadList.map(item => {
+    const { bannerThreadList, indexThreadList } = this.props
+    const swiperItems = bannerThreadList.map(item => {
       return <SwiperItem key={item.tid}>
-          <Image src={item.image || ''} className='swiper-item-image' mode='scaleToFill'></Image>
-          <Text className='swiper-item-title'>{item.title}</Text>
-        </SwiperItem>
+        <Image src={item.image || ''} className='swiper-item-image' mode='scaleToFill'></Image>
+        <Text className='swiper-item-title'>{item.title}</Text>
+      </SwiperItem>
     })
+    const threadCards = indexThreadList.map(item => {
+      return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
+    })
+
     return (
       <View className='index'>
         <Swiper
@@ -93,9 +97,11 @@ class Index extends Component {
           duration={500}
           circular
         >
-        {swiperItems}
+          {swiperItems}
         </Swiper>
-        <View className='thread-list'></View>
+        <View className='thread-list'>
+          {threadCards}
+        </View>
       </View>
     )
   }

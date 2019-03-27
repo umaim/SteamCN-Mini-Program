@@ -49,32 +49,32 @@ class App extends Component {
         {
           pagePath: 'pages/index/index',
           text: '首页',
-          iconPath: './assets/images/tab_home.png',
-          selectedIconPath: './assets/images/tab_home_selected.png'
+          iconPath: './assets/images/tab/home.png',
+          selectedIconPath: './assets/images/tab/home_selected.png'
         },
         {
           pagePath: 'pages/new/new',
           text: '最新',
-          iconPath: './assets/images/tab_new.png',
-          selectedIconPath: './assets/images/tab_new_selected.png'
+          iconPath: './assets/images/tab/new.png',
+          selectedIconPath: './assets/images/tab/new_selected.png'
         },
         {
           pagePath: 'pages/hot/hot',
           text: '热门',
-          iconPath: './assets/images/tab_hot.png',
-          selectedIconPath: './assets/images/tab_hot_selected.png'
+          iconPath: './assets/images/tab/hot.png',
+          selectedIconPath: './assets/images/tab/hot_selected.png'
         },
         {
           pagePath: 'pages/section/section',
           text: '板块',
-          iconPath: './assets/images/tab_section.png',
-          selectedIconPath: './assets/images/tab_section_selected.png'
+          iconPath: './assets/images/tab/section.png',
+          selectedIconPath: './assets/images/tab/section_selected.png'
         },
         {
           pagePath: 'pages/account/account',
           text: '我的',
-          iconPath: './assets/images/tab_profile.png',
-          selectedIconPath: './assets/images/tab_profile_selected.png'
+          iconPath: './assets/images/tab/profile.png',
+          selectedIconPath: './assets/images/tab/profile_selected.png'
         }
       ]
     }
