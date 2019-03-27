@@ -1,0 +1,26 @@
+.index-swiper {
+  height: 450rpx;
+}
+
+.swiper-item-image {
+  width: 100%;
+  height: 450rpx;
+  display: block;
+}
+
+.swiper-item-title {
+  position: absolute;
+  width: 100%;
+  height: 50rpx;
+  top: 400rpx;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.3);
+  font-size: 0.7rem;
+  font-weight: 580;
+  line-height: 50rpx;
+  text-align: center;
+}
+
+.thread-list {
+  padding-top: 10rpx;
+}
