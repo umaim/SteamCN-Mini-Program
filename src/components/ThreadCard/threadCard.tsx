@@ -2,11 +2,11 @@ import { ComponentClass } from 'react';
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components';
 
-import { IThreadMeta } from '../interfaces/thread'
+import { IThreadMeta } from '../../interfaces/thread'
 
 import './threadCard.scss'
-import see from '../assets/images/components/see.png'
-import reply from '../assets/images/components/reply.png'
+import see from './assets/see.png'
+import reply from './assets/reply.png'
 
 type PageStateProps = {}
 

@@ -3,7 +3,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
 
-import ThreadCard from '../../components/threadCard'
+import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
 import { fetchHome } from '../../actions/home'
 
