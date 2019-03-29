@@ -37,7 +37,8 @@ class App extends Component {
       'pages/new/new',
       'pages/hot/hot',
       'pages/section/section',
-      'pages/account/account'
+      'pages/account/account',
+      'pages/thread/thread'
     ],
     tabBar: {
       custom: false,
@@ -53,7 +54,7 @@ class App extends Component {
           selectedIconPath: './assets/images/tab/home_selected.png'
         },
         {
-          pagePath: 'pages/new/new',
+          pagePath: 'pages/thread/thread',
           text: '最新',
           iconPath: './assets/images/tab/new.png',
           selectedIconPath: './assets/images/tab/new_selected.png'
