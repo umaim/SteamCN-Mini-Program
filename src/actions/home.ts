@@ -1,5 +1,4 @@
 import Taro from '@tarojs/taro';
-import { parse, HTMLElement } from 'node-html-parser'
 
 import {
   REQUEST_HOME,
@@ -14,9 +13,8 @@ export const requestHome = () => {
   }
 }
 
-export const parseHome = (dom: HTMLElement) => {
-  const payload = homeParser(dom)
-  Taro.hideLoading()
+export const parseHome = (html: string) => {
+  const payload = homeParser(html)
   return {
     type: PARSE_HOME,
     payload: payload
@@ -42,8 +40,9 @@ export const fetchHome = () => {
       responseType: 'text'
     }).then(res => {
       if (res.statusCode === 200) {
-        const dom = parse(res.data as string)
-        dispatch(parseHome(dom as HTMLElement))
+        const html = res.data as string
+        dispatch(parseHome(html))
+        Taro.hideLoading()
       } else {
         dispatch(fetchHomeError(`Fail to fetch homepage with statusCode: ${res.statusCode}`))
       }

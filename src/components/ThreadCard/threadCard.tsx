@@ -28,19 +28,32 @@ class ThreadCard extends Component {
   static defaultProps = {
     threadMeta: {
       title: '',
-      tid: 0,
+      tid: 1,
       url: '',
       section: '',
-      author: { username: '' },
+      postTime: '',
+      author: {
+        username: '',
+        uid: 1,
+        avatar: ''
+      },
       stats: {
         viewed: 0,
         replied: 0
       }
     }
   }
+
+  toThread() {
+    const { tid } = this.props.threadMeta
+    Taro.navigateTo({
+      url: `/pages/thread/thread?tid=${tid}`
+    })
+  }
+
   render() {
-    const { title, url, section, author, stats } = this.props.threadMeta
-    return <View className='item card'>
+    const { title, section, author, stats } = this.props.threadMeta
+    return <View className='item card' onClick={this.toThread}>
       <View className='header'>
         <View className='author'>
           {author.avatar && <Image src={author.avatar} mode='aspectFill'></Image>}

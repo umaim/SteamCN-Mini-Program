@@ -1,19 +1,18 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
+import { View, Text, Image } from '@tarojs/components';
 
-import { IThreadMeta, IThread } from 'src/interfaces/thread';
-import WxmlifyRichText from '../../components/WxmlifyRichText/wxmlifyRichText'
+import { IThread } from 'src/interfaces/thread';
 import WxparseRichText from '../../components/WxParseRichText/wxParseRichText'
+import { threadParser } from '../../utils/parser'
+
 import './thread.scss'
-import { View, RichText } from '@tarojs/components';
 
 type PageStateProps = {}
 
 type PageDispatchProps = {}
 
-type PageOwnProps = {
-  threadMeta: IThreadMeta
-}
+type PageOwnProps = {}
 
 type PageState = {
   thread: IThread
@@ -32,31 +31,94 @@ class Thread extends Component {
 
   state = {
     thread: {
-      meta: {} as IThreadMeta,
+      title: '',
+      tid: 0,
+      time: '',
+      viewed: 0,
+      replied: 0,
       content: '',
-      replies: []
+      author: {
+        username: '',
+        uid: 0,
+        avatar: ''
+      },
+      replies: [{
+        user: {
+          username: '',
+          uid: 0,
+          avatar: ''
+        },
+        content: '',
+        time: ''
+      }]
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps)
+  componentWillReceiveProps() { }
+
+  componentDidMount() {
+    Taro.showLoading({
+      title: '正在加载'
+    })
+    this.fetchThread(this.$router.params.tid)
   }
-
-  componentWillUnmount() { }
-
-  componentDidMount() { }
 
   componentDidShow() { }
 
   componentDidHide() { }
 
-  render() {
-    return (
-      //<WxmlifyRichText html='<h1>Thread Test</h1>'></WxmlifyRichText>
-      // <WxparseRichText html='<h1>Thread Test</h1>'></WxparseRichText>
-      // <RichText nodes='<h1>Thread Test</h1>'></RichText>
-      <View>
+  componentWillUnmount() { }
 
+  fetchThread(tid: number) {
+    Taro.request({
+      url: `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&mobile=1`,
+      data: {},
+      header: {},
+      method: 'GET',
+      dataType: 'html',
+      responseType: 'text'
+    }).then(res => {
+      if (res.statusCode === 200) {
+        const html = res.data
+        const data = threadParser(html)
+        console.log(data)
+        this.setState({
+          thread: data
+        })
+        Taro.hideLoading()
+      } else {
+
+      }
+    })
+  }
+
+  render() {
+    console.log(this.state)
+    return (
+      // <WxmlifyRichText html={this.state.thread.content}></WxmlifyRichText> // 组件报错，不可用
+      // <WxparseRichText html={this.state.thread.content}></WxparseRichText> // 效果挺好
+      // <RichText nodes={this.state.thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
+      <View>
+        <View className='header'>
+          <Text className='title'>{this.state.thread.title}</Text>
+        </View>
+
+        <View className='user'>
+          <View className='avatar'>
+            <Image src={this.state.thread.author.avatar}></Image>
+          </View>
+          <View className='info'>
+            <Text className='name'>{this.state.thread.author.username}</Text>
+            <View className='others'>
+              <Text className='time'>{this.state.thread.time}</Text>
+              <Text>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View className='content'>
+          <WxparseRichText html={this.state.thread.content}></WxparseRichText>
+        </View>
       </View>
     )
   }

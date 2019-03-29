@@ -1,7 +1,9 @@
-import { HTMLElement } from "node-html-parser";
-import { IThreadMeta } from '../interfaces/thread'
+import { HTMLElement, parse, NodeType } from "node-html-parser";
+import { IThreadMeta, IThread } from '../interfaces/thread'
 
-export const homeParser = (dom: HTMLElement) => {
+export const homeParser = (html: string) => {
+  const dom = parse(html) as HTMLElement
+
   let bannerElems = dom.querySelectorAll('.slideshow li')
   let bannerThreadList = parseBannerThreadList(bannerElems)
 
@@ -14,7 +16,6 @@ export const homeParser = (dom: HTMLElement) => {
   let hotElems = dom.querySelectorAll('#portal_block_434_content li')
   let hotThreadList = parseHotThreadList(hotElems)
 
-  console.log({ bannerThreadList, indexThreadList, newThreadList, hotThreadList })
   return { bannerThreadList, indexThreadList, newThreadList, hotThreadList }
 }
 
@@ -128,4 +129,109 @@ const parseNewThreadList = (elems: HTMLElement[]) => {
 
 const parseHotThreadList = (elems: HTMLElement[]) => {
   return parseExtraThreadList(elems)
+}
+
+
+export const threadParser = (html: string): IThread => {
+  const dom = parse(html) as HTMLElement
+  const content = dom.querySelector('.bm')
+
+  const titleDom = content.querySelector('#thread_subject')
+  const title = titleDom.text
+  const tid = parseInt((titleDom.attributes.href.match(/tid=(\d+)/) as RegExpMatchArray)[1])
+
+  const statsDom = content.querySelector('.xg1')
+  const statsText = statsDom.rawText
+  const regArr = statsText.match(/看(\d+)\|回(\d+)/) as RegExpMatchArray
+  const viewed = parseInt(regArr[1])
+  const replied = parseInt(regArr[2])
+
+  type User = {
+    username: string,
+    uid: number,
+    avatar: string,
+    time: string
+  }
+  const usersInfo = Array<User>()
+  const userDoms = dom.querySelectorAll('.bm_user')
+  userDoms.forEach(dom => {
+    const userLinkTag = dom.querySelector('a')
+    const username = userLinkTag.text
+    const uid = parseInt((userLinkTag.attributes.href.match(/uid=(\d+)/) as RegExpMatchArray)[1])
+    const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+    const time = dom.querySelector('.xs0.xg1').text
+    usersInfo.push({
+      username,
+      uid,
+      avatar,
+      time
+    })
+  })
+
+  const postsContent = Array<string>()
+  const postDoms = dom.querySelectorAll('.postmessage')
+  postDoms.forEach(dom => {
+    // replace low res images with high res images
+    dom.querySelectorAll('a').forEach((link) => {
+      if (link.childNodes.length > 0 && link.firstChild.nodeType === NodeType.ELEMENT_NODE
+        && (link.firstChild as HTMLElement).tagName === 'img') {
+        const parent = link.parentNode as HTMLElement
+        const newNode = new HTMLElement('img', {}, `src=${link.attributes.href}`)
+        parent.exchangeChild(link, newNode)
+      }
+    })
+    postsContent.push(normalizeHTML(dom.innerHTML))
+  })
+
+  const replies = Array<{
+    user: {
+      username: string,
+      uid: number,
+      avatar: string
+    },
+    content: string
+    time: string
+  }>()
+
+  for (let i = 1; i < usersInfo.length && i < postsContent.length; i++) {
+    replies.push({
+      user: {
+        username: usersInfo[i].username,
+        uid: usersInfo[i].uid,
+        avatar: usersInfo[i].avatar
+      },
+      content: postsContent[i],
+      time: usersInfo[i].time
+    })
+  }
+
+  return {
+    title,
+    tid,
+    time: usersInfo[0].time,
+    viewed,
+    replied,
+    content: postsContent[0],
+    author: {
+      username: usersInfo[0].username,
+      uid: usersInfo[0].uid,
+      avatar: usersInfo[0].avatar
+    },
+    replies
+  }
+}
+
+const normalizeHTML = (htmlStr: string) => {
+  htmlStr = htmlStr.replace(/\sxmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''); // 去掉xmlns
+  htmlStr = htmlStr.replace(/[\r\n]/g, ''); //去掉回车换行
+  htmlStr = htmlStr.replace(/(<br \/>){2,}/g, '<br/><br/>'); //去多余换行
+  htmlStr = htmlStr.replace(/src="forum\.php/g, 'src="https://steamcn.com/forum.php'); //相对地址添加域名
+  htmlStr = htmlStr.replace(/src="static/g, 'src="https://steamcn.com/static');
+  htmlStr = htmlStr.replace(/href="forum\.php/g, 'href="https://steamcn.com/forum.php');
+  htmlStr = htmlStr.replace(/font size="7"/g, 'font size="6"'); // 最大字号为 6
+  htmlStr = htmlStr.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
+  // htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转义实体符
+  htmlStr = htmlStr.replace(/<iframe src="https:\/\/store.steampowered.com\/widget\/\d+\/" style="border:none;height:190px;width:100%;max-width:646px;"><\/iframe>/g, '') //去掉 Steam Widget
+  htmlStr = htmlStr.trim();
+  return htmlStr;
 }
