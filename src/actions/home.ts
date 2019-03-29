@@ -43,6 +43,7 @@ export const fetchHome = () => {
         const html = res.data as string
         dispatch(parseHome(html))
         Taro.hideLoading()
+        Taro.stopPullDownRefresh()
       } else {
         dispatch(fetchHomeError(`Fail to fetch homepage with statusCode: ${res.statusCode}`))
       }

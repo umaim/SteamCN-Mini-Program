@@ -56,7 +56,8 @@ class Index extends Component {
  * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
  */
   config: Config = {
-    navigationBarTitleText: 'SteamCN 蒸汽动力'
+    navigationBarTitleText: 'SteamCN 蒸汽动力',
+    enablePullDownRefresh: true
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,7 +75,9 @@ class Index extends Component {
 
   componentDidHide() { }
 
-  onPullDownRefresh() { }
+  onPullDownRefresh() {
+    this.props.fetchHome()
+  }
 
   toThread(tid: number) {
     Taro.navigateTo({
