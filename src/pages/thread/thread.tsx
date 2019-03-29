@@ -81,7 +81,6 @@ class Thread extends Component {
       if (res.statusCode === 200) {
         const html = res.data
         const data = threadParser(html)
-        console.log(data)
         this.setState({
           thread: data
         })
@@ -93,7 +92,6 @@ class Thread extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       // <WxmlifyRichText html={this.state.thread.content}></WxmlifyRichText> // 组件报错，不可用
       // <WxparseRichText html={this.state.thread.content}></WxparseRichText> // 效果挺好

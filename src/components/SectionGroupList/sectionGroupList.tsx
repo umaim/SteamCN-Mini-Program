@@ -33,10 +33,16 @@ class SectionGroupList extends Component {
     }]
   }
 
+  toSectionThreadList(fid: string, title: string) {
+    Taro.navigateTo({
+      url: `/pages/section/sectionThreadList?fid=${fid}&title=${title}`
+    })
+  }
+
   render() {
     const sections = this.props.list.map(item => {
       return (
-        <View className='item card' key={item.fid}>
+        <View className='item card' key={item.fid} onClick={this.toSectionThreadList.bind(this, item.fid, item.title)}>
           <View className='section'>
             <View className='icon'>
               <Image mode='aspectFill' src={`./assets/${item.fid}.png`}></Image>

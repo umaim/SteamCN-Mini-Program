@@ -37,6 +37,7 @@ class App extends Component {
       'pages/new/new',
       'pages/hot/hot',
       'pages/section/section',
+      'pages/section/sectionThreadList',
       'pages/account/account',
       'pages/thread/thread'
     ],
@@ -81,17 +82,17 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.updateApp()
   }
 
-  componentDidShow () {}
+  componentDidShow() { }
 
-  componentDidHide () {}
+  componentDidHide() { }
 
-  componentCatchError () {}
+  componentCatchError() { }
 
-  componentDidCatchError () {}
+  componentDidCatchError() { }
 
   /*更新小程序*/
   updateApp() {
@@ -123,7 +124,7 @@ class App extends Component {
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render () {
+  render() {
     return (
       <Provider store={store}>
         <Index />

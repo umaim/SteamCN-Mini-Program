@@ -221,17 +221,57 @@ export const threadParser = (html: string): IThread => {
   }
 }
 
-const normalizeHTML = (htmlStr: string) => {
-  htmlStr = htmlStr.replace(/\sxmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''); // 去掉xmlns
-  htmlStr = htmlStr.replace(/[\r\n]/g, ''); //去掉回车换行
-  htmlStr = htmlStr.replace(/(<br \/>){2,}/g, '<br/><br/>'); //去多余换行
-  htmlStr = htmlStr.replace(/src="forum\.php/g, 'src="https://steamcn.com/forum.php'); //相对地址添加域名
-  htmlStr = htmlStr.replace(/src="static/g, 'src="https://steamcn.com/static');
-  htmlStr = htmlStr.replace(/href="forum\.php/g, 'href="https://steamcn.com/forum.php');
-  htmlStr = htmlStr.replace(/font size="7"/g, 'font size="6"'); // 最大字号为 6
-  htmlStr = htmlStr.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
-  // htmlStr = htmlStr.replace(/&amp;/g, '&'); // 转义实体符
-  htmlStr = htmlStr.replace(/<iframe src="https:\/\/store.steampowered.com\/widget\/\d+\/" style="border:none;height:190px;width:100%;max-width:646px;"><\/iframe>/g, '') //去掉 Steam Widget
-  htmlStr = htmlStr.trim();
-  return htmlStr;
+const normalizeHTML = (html: string) => {
+  html = html.replace(/\sxmlns="http:\/\/www.w3.org\/1999\/xhtml"/g, ''); // 去掉xmlns
+  html = html.replace(/[\r\n]/g, ''); //去掉回车换行
+  html = html.replace(/(<br \/>){2,}/g, '<br/><br/>'); //去多余换行
+  html = html.replace(/src="forum\.php/g, 'src="https://steamcn.com/forum.php'); //相对地址添加域名
+  html = html.replace(/src="static/g, 'src="https://steamcn.com/static');
+  html = html.replace(/href="forum\.php/g, 'href="https://steamcn.com/forum.php');
+  html = html.replace(/font size="7"/g, 'font size="6"'); // 最大字号为 6
+  html = html.replace(/color="#ff00"/g, 'color=#ff0000'); // 更改红色Hex，否则无法显示
+  // html = html.replace(/&amp;/g, '&'); // 转义实体符
+  html = html.replace(/<iframe src="https:\/\/store.steampowered.com\/widget\/\d+\/" style="border:none;height:190px;width:100%;max-width:646px;"><\/iframe>/g, '') //去掉 Steam Widget
+  html = html.trim();
+  return html;
+}
+
+export const sectionParser = (html: string, sectionTitle: string) => {
+  let threadList = Array<IThreadMeta>()
+
+  const dom = parse(html) as HTMLElement
+  const threadListTableDom = dom.querySelector('#threadlisttableid')
+
+  threadListTableDom.childNodes.forEach(tbody => {
+    if ((tbody as HTMLElement).id && (tbody as HTMLElement).id.indexOf('normalthread') === 0) {
+      const titleElem = (tbody as HTMLElement).querySelector('a.s.xst')
+      const title = titleElem.text
+      const url = `https:steamcn.com/${titleElem.attributes.href}`
+      const tid = parseInt((titleElem.attributes.href.match(/t(\d+)/) as RegExpMatchArray)[1])
+      const replied = parseInt((tbody as HTMLElement).querySelector('a.xi2').text)
+      const viewed = parseInt((tbody as HTMLElement).querySelector('td.num em').text)
+      const userElem = (tbody as HTMLElement).querySelector('a.threadlist-blue-text')
+      const username = userElem.text
+      const uid = parseInt((userElem.attributes.href.match(/uid=(\d+)/) as RegExpMatchArray)[1])
+      const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+      const postTime = (tbody as HTMLElement).querySelector('td.by.by-author em').text.replace(' 发表', '')
+      threadList.push({
+        title,
+        url,
+        tid,
+        section: sectionTitle,
+        postTime,
+        author: {
+          username,
+          uid,
+          avatar
+        },
+        stats: {
+          viewed,
+          replied
+        }
+      })
+    }
+  })
+  return threadList
 }
