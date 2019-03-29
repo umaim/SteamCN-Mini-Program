@@ -76,19 +76,19 @@ class Section extends Component {
         title: '分享互赠',
         desc: '论坛会员间互赠/换游戏 ×禁止交易',
         fid: 'f254'
-      },*/
+      },
       {
         title: '资源载点',
         desc: '下载平台周边资源',
         fid: 'f189'
-      }
+      }*/
     ],
     problem: [ //问题互助
-      {
+      /*{
         title: '技术问题',
         desc: '程序、网络异常 | 账号帮助 | 技术问题',
         fid: 'f301'
-      },
+      },*/
       {
         title: '购物问题',
         desc: '跨区事宜 | 购物帮助 | 慈善包、促销询问',
@@ -168,7 +168,7 @@ class Section extends Component {
         desc: '水区 | 收藏 | 理财 | 健身 | 影音',
         fid: 'f148'
       },
-      {
+      /*{
         title: '旅游摄影',
         desc: '摄影作品 | 旅游图文',
         fid: 'f259'
@@ -182,7 +182,7 @@ class Section extends Component {
         title: '软硬兼施',
         desc: '软件硬件 | 苹果世界 | 安卓天地',
         fid: 'f200'
-      },
+      },*/
       {
         title: '开箱晒物',
         desc: '开箱分享',
