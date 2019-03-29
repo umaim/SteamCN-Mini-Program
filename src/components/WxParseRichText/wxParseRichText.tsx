@@ -26,39 +26,21 @@ class WxparseRichText extends Component {
   static defaultProps = {
     html: ''
   }
+
   state = {
     html: ''
   }
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      html: props.html
-    }
+  componentWillReceiveProps(nextProps: { html: string; }) {
+    this.setState({
+      html: nextProps.html
+    }, () => {
+      const article = this.state.html
+      WxParse.wxParse('article', 'html', article, this.$scope, 15)
+    })
   }
-
-  componentWillReceiveProps() { }
-
-  componentWillUpdate() { }
-
-  componentDidUpdate() { }
-
-  componentWillMount() {
-    console.log('componentWillMount::', this.state.html)
-    const article = this.state.html
-    WxParse.wxParse('article', 'html', article, this.$scope, 0)
-  }
-
-  componentDidMount() { }
-
-  componentWillUnmout() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   render() {
-
     return (
       <View>
         <import src='./wxParse/wxParse.wxml' />
