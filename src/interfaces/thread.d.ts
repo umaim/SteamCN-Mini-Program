@@ -23,8 +23,13 @@ export interface IThreadMeta {
    */
   section: string,
   /**
+   * Thread post time
+   */
+  postTime?: string,
+  /**
    * Thread author info
    */
+
   author: {
     /**
      * Author's username
@@ -58,17 +63,24 @@ export interface IThreadMeta {
  * Thread content type
  */
 export interface IThread {
-  /**
-   * Thread meta info
-   * @see IThreadMeta
-   */
-  meta: IThreadMeta,
-  /**
-   * Thread main content (the first floor)
-   */
+  title: string,
+  tid: number,
+  time: string,
+  viewed: number,
+  replied: number,
   content: string,
-  /**
-   * Thread reply content
-   */
-  replies: string[]
+  author: {
+    username: string,
+    uid: number,
+    avatar: string
+  },
+  replies: Array<{
+    user: {
+      username: string,
+      uid: number,
+      avatar: string
+    },
+    content: string,
+    time: string
+  }>
 }

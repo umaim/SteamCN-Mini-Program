@@ -54,7 +54,7 @@ class App extends Component {
           selectedIconPath: './assets/images/tab/home_selected.png'
         },
         {
-          pagePath: 'pages/thread/thread',
+          pagePath: 'pages/new/new',
           text: '最新',
           iconPath: './assets/images/tab/new.png',
           selectedIconPath: './assets/images/tab/new_selected.png'
