@@ -76,10 +76,16 @@ class Index extends Component {
 
   onPullDownRefresh() { }
 
+  toThread(tid: number) {
+    Taro.navigateTo({
+      url: `/pages/thread/thread?tid=${tid}`
+    })
+  }
+
   render() {
     const { bannerThreadList, indexThreadList } = this.props
     const swiperItems = bannerThreadList.map(item => {
-      return <SwiperItem key={item.tid}>
+      return <SwiperItem key={item.tid} onClick={this.toThread.bind(this, item.tid)}>
         <Image src={item.image || ''} className='swiper-item-image' mode='scaleToFill'></Image>
         <Text className='swiper-item-title'>{item.title}</Text>
       </SwiperItem>
