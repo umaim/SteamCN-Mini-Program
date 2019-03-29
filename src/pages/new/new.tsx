@@ -1,12 +1,21 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux';
 import Taro, { Component, Config } from '@tarojs/taro'
-import { Text } from '@tarojs/components'
+import { View } from '@tarojs/components'
+
+import ThreadCard from '../../components/ThreadCard/threadCard'
+import { IThreadMeta } from '../../interfaces/thread'
+import { fetchHome } from '../../actions/home'
 
 import './new.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  newThreadList: IThreadMeta[]
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  fetchHome: () => void
+}
 
 type PageOwnProps = {}
 
@@ -18,24 +27,40 @@ interface New {
   props: IProps;
 }
 
+@connect(({ home }) => ({
+  newThreadList: home.newThreadList
+}), (dispatch) => ({
+  fetchHome() {
+    dispatch(fetchHome())
+  }
+}))
 class New extends Component {
   config: Config = {
     navigationBarTitleText: '最新回复'
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps: any) {
     console.log(this.props, nextProps)
   }
 
-  componentWillUnmount () { }
+  componentDidMount() { }
 
-  componentDidShow () { }
+  componentWillUnmount() { }
 
-  componentDidHide () { }
+  componentDidShow() { }
 
-  render () {
-    return(
-      <Text>New</Text>
+  componentDidHide() { }
+
+  render() {
+    const { newThreadList } = this.props
+    console.log(newThreadList)
+    const threadCards = newThreadList.map(item => {
+      return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
+    })
+    return (
+      <View className='thread-list'>
+        {threadCards}
+      </View>
     )
   }
 }
