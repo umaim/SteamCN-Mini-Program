@@ -28,16 +28,23 @@ class WxmlifyRichText extends Component {
     html: ''
   }
 
-  componentWillMount() {
-    const html = this.props.html
-    console.log(html)
-    var wxmlify = new Wxmlify(html, this.$scope, {
-      dataKey: 'nodes',
-      onImageTap: (e) => {
-        console.log(e)
-      }
+  state = {
+    html: ''
+  }
+
+  componentWillReceiveProps(nextProps: { html: string; }) {
+    this.setState({
+      html: nextProps.html
+    }, () => {
+      const html = this.state.html
+      console.log(html)
+      var wxmlify = new Wxmlify(html, this.$scope, {
+        dataKey: 'nodes',
+        onImageTap: (e) => {
+          console.log(e)
+        }
+      })
     })
-    console.log(wxmlify.getFullNodes())
   }
 
   render() {
