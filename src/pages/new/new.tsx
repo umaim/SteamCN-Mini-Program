@@ -36,7 +36,8 @@ interface New {
 }))
 class New extends Component {
   config: Config = {
-    navigationBarTitleText: '最新回复'
+    navigationBarTitleText: '最新回复',
+    enablePullDownRefresh: true
   }
 
   componentWillReceiveProps(nextProps: any) {
@@ -51,9 +52,12 @@ class New extends Component {
 
   componentDidHide() { }
 
+  onPullDownRefresh() {
+    this.props.fetchHome()
+  }
+
   render() {
     const { newThreadList } = this.props
-    console.log(newThreadList)
     const threadCards = newThreadList.map(item => {
       return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
     })
