@@ -31,6 +31,11 @@ class WxparseRichText extends Component {
     html: ''
   }
 
+  constructor(props) {
+    super(props)
+    this.props.html = props.html
+  }
+
   componentWillReceiveProps(nextProps: { html: string; }) {
     this.setState({
       html: nextProps.html
@@ -38,6 +43,11 @@ class WxparseRichText extends Component {
       const article = this.state.html
       WxParse.wxParse('article', 'html', article, this.$scope, 15)
     })
+  }
+
+  componentDidMount() {
+    const article = this.props.html
+    WxParse.wxParse('article', 'html', article, this.$scope, 15)
   }
 
   render() {
