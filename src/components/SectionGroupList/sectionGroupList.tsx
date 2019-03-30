@@ -42,16 +42,14 @@ class SectionGroupList extends Component {
   render() {
     const sections = this.props.list.map(item => {
       return (
-        <View className='item card' key={item.fid} onClick={this.toSectionThreadList.bind(this, item.fid, item.title)}>
-          <View className='section'>
+        <View key={item.fid} onClick={this.toSectionThreadList.bind(this, item.fid, item.title)}>
+          <View className='section at-row at-row__align--center'>
             <View className='icon'>
               <Image mode='aspectFill' src={`./assets/${item.fid}.png`}></Image>
             </View>
-            <View className='info'>
-              <View className='title'>{item.title}</View>
-              <View className='others'>
-                <Text className='desc'>{item.desc}</Text>
-              </View>
+            <View className='info at-row'>
+              <Text className='title'>{item.title}</Text>
+              <Text className='desc'>{item.desc}</Text>
             </View>
           </View>
         </View>
