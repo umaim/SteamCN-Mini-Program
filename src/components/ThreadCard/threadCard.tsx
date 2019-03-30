@@ -53,27 +53,29 @@ class ThreadCard extends Component {
 
   render() {
     const { title, section, author, stats } = this.props.threadMeta
-    return <View className='item card' onClick={this.toThread}>
-      <View className='header'>
-        <View className='author'>
+    return <View className='item' onClick={this.toThread}>
+      <View className='header at-row at-row__justify--between'>
+        <View className='author at-col'>
           {author.avatar && <Image src={author.avatar} mode='aspectFill'></Image>}
           <Text>{author.username}</Text>
         </View>
         <Text className='type'>{section}</Text>
       </View>
-      <View className='content'>
-        <View className='text'>
-          <Text className='title'>{title}</Text>
-        </View>
+      <View className='at-row'>
+        <Text className='title at-col--wrap'>{title}</Text>
       </View>
-      <View className='footer'>
-        <View className='label'>
-          <Image src={see}></Image>
-          <Text>{stats.viewed}</Text>
+      <View className='footer at-row at-row__align--center at-row__justify--end'>
+        <View className='stats'>
+          <View className='at-row'>
+            <Image src={see}></Image>
+            <Text>{stats.viewed}</Text>
+          </View>
         </View>
-        <View className='label'>
-          <Image src={reply}></Image>
-          <Text>{stats.replied}</Text>
+        <View className='stats'>
+          <View className='at-row'>
+            <Image src={reply}></Image>
+            <Text>{stats.replied}</Text>
+          </View>
         </View>
       </View>
     </View>

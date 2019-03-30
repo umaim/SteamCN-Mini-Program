@@ -1,20 +1,16 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+
 .item {
   padding: 0 30rpx;
-  margin: 0 15rpx;
-  margin-bottom: 20rpx;
+  margin: 0rpx 10rpx 20rpx;
   border-radius: 5rpx;
   box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
   box-sizing: border-box;
-  background: #fff;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 80rpx;
-  font-size: 22rpx;
-  color: #abb4bf;
+  height: 65rpx;
 }
 
 .header image {
@@ -27,43 +23,30 @@
 .author {
   display: flex;
   align-items: center;
+  font-size: 22rpx;
   color: #333;
 }
 
-.content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.type {
+  font-size: 22rpx;
+  color: #abb4bf;
 }
 
-.content .text {
-  flex: 1;
-}
-
-.content .title {
-  margin-bottom: 5rpx;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+.title {
   font-size: 28rpx;
-  overflow: hidden;
 }
 
 .footer {
-  display: flex;
-  align-items: center;
-  height: 80rpx;
+  height: 60rpx;
 }
 
-.label {
-  display: flex;
-  align-items: center;
-  font-size: 26rpx;
+.stats {
+  margin-left: 15rpx;
+  font-size: 22rpx;
   color: #abb4bf;
-  margin-right: 40rpx;
 }
 
-.label image {
+.stats image {
   width: 30rpx;
   height: 30rpx;
   margin-right: 8rpx;
