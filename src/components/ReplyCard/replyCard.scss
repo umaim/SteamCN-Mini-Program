@@ -1,0 +1,42 @@
+.reply {
+  margin: 5rpx 7rpx;
+  padding-left: 20rpx;
+  align-items: center;
+  border-radius: 5rpx;
+  box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
+  background: white;
+}
+
+.user {
+  display: flex ;
+  align-items: center;
+}
+
+.name {
+  font-size: 27rpx;
+  font-weight: 700;
+  margin-bottom: 7rpx;
+}
+
+.info {
+  display: flex;
+  margin: 25rpx 2rpx 2rpx 15rpx;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.time {
+  margin-right: 20rpx;
+  font-size: 20rpx;
+  color: #666;
+}
+
+.floor {
+  float: right;
+}
+
+.content {
+  display: flex ;
+  margin: 10rpx 20rpx 20rpx 45rpx;
+  font-size: 25rpx;
+}
