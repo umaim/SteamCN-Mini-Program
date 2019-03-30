@@ -1,0 +1,39 @@
+.wrapper {
+  padding-top: 20rpx;
+}
+
+.profile {
+  display: flex;
+  height: 180rpx;
+  margin-bottom: 20rpx;
+  padding: 0 40rpx;
+  background: #fff;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile .avatar {
+  width: 90rpx;
+  height: 90rpx;
+  margin-right: 40rpx;
+}
+
+.profile .info {
+  display: flex;
+  font-size: 24rpx;
+  color: #abb4bf;
+}
+
+.profile .name {
+  font-size: 40rpx;
+  color: #333;
+}
+
+.profile .info .text {
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.forum-area {
+  margin-bottom: 20rpx;
+}
