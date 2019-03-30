@@ -1,49 +1,48 @@
 .header {
-  margin: 15rpx 15rpx;
+  margin: 15rpx 25rpx;
 }
 
 .title {
   font-size: 35rpx;
   font-weight: 700;
-  line-height: 1.5;
 }
 
-.user {
+.author {
   display: flex;
-  margin: 15rpx 15rpx;
-  padding-left: 20rpx;
+  margin: 15rpx;
   align-items: center;
   border-radius: 5rpx;
   box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
   background: white;
 }
 
-.user .name {
+.author .avatar {
+  margin-left: 25rpx;
+}
+
+.author .name {
   font-size: 27rpx;
   font-weight: 700;
   margin-bottom: 7rpx;
 }
 
-.user .info {
+.author .info {
   display: flex;
   margin: 35rpx 0rpx 35rpx 20rpx;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.user .time {
+.author .time {
   margin-right: 20rpx
 }
 
-.others {
-  display: flex;
+.author .others {
   font-size: 20rpx;
   color: #666;
 }
 
 .content {
   margin: 0rpx 22rpx;
-  padding-bottom: 30rpx;
-  padding-top: 25rpx;
   font-size: 25rpx;
 }

@@ -47,19 +47,20 @@ class ReplyCard extends Component {
   render() {
     return (
       <View className='reply'>
-        <View className='user'>
-          <AtAvatar circle image={this.props.reply.user.avatar} size='small'></AtAvatar>
-          <View className='info'>
-            <Text className='name'>{this.props.reply.user.username}</Text>
-            <Text className='time'>{this.props.reply.time}</Text>
+        <View className='at-row at-row__justify--between'>
+          <View className='user'>
+            <AtAvatar circle image={this.props.reply.user.avatar} size='small'></AtAvatar>
+            <View className='info'>
+              <Text className='name'>{this.props.reply.user.username}</Text>
+              <Text className='time'>{this.props.reply.time}</Text>
+            </View>
           </View>
-          <Text className='floor'>{this.props.reply.floor}</Text>
+          <Text className='floor'>{`#${this.props.reply.floor}`}</Text>
         </View>
         <View className='content'>
           <WxparseRichText html={this.props.reply.content}></WxparseRichText>
         </View>
       </View>
-
     )
   }
 }

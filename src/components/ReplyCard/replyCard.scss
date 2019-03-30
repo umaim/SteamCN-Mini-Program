@@ -1,42 +1,43 @@
+@import "~taro-ui/dist/style/components/flex.scss";
+
 .reply {
   margin: 5rpx 7rpx;
-  padding-left: 20rpx;
-  align-items: center;
   border-radius: 5rpx;
   box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
-  background: white;
 }
 
 .user {
+  height: 100rpx;
+  margin: 7rpx 25rpx;
   display: flex ;
   align-items: center;
 }
 
-.name {
-  font-size: 27rpx;
-  font-weight: 700;
-  margin-bottom: 7rpx;
-}
-
 .info {
   display: flex;
-  margin: 25rpx 2rpx 2rpx 15rpx;
+  margin-left: 15rpx;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.name {
+  font-size: 25rpx;
+  font-weight: 700;
+  margin-bottom: 7rpx;
+}
+
 .time {
-  margin-right: 20rpx;
   font-size: 20rpx;
   color: #666;
 }
 
 .floor {
-  float: right;
+  margin: 10rpx;
+  font-size: 25rpx;
+  color: #abb4bf;
 }
 
 .content {
-  display: flex ;
-  margin: 10rpx 20rpx 20rpx 45rpx;
+  margin: 15rpx 15rpx 25rpx 25rpx;
   font-size: 25rpx;
 }

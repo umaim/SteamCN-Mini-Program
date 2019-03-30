@@ -112,13 +112,13 @@ class Thread extends Component {
           <Text className='title'>{this.state.thread.title}</Text>
         </View>
 
-        <View className='user'>
-          <AtAvatar circle image={this.state.thread.author.avatar} size='small'></AtAvatar>
+        <View className='author'>
+          <AtAvatar circle image={this.state.thread.author.avatar} size='small' className='avatar'></AtAvatar>
           <View className='info'>
             <Text className='name'>{this.state.thread.author.username}</Text>
             <View className='others'>
               <Text className='time'>{this.state.thread.time}</Text>
-              <View>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</View>
+              <Text>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</Text>
             </View>
           </View>
         </View>
