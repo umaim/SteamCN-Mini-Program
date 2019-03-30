@@ -1,9 +1,11 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components';
+import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
 
 import { IThread } from 'src/interfaces/thread';
 import WxparseRichText from '../../components/WxParseRichText/wxParseRichText'
+import ReplyCard from '../../components/ReplyCard/replyCard'
 import { threadParser } from '../../utils/parser'
 
 import './thread.scss'
@@ -49,7 +51,8 @@ class Thread extends Component {
           avatar: ''
         },
         content: '',
-        time: ''
+        time: '',
+        floor: 0
       }]
     }
   }
@@ -84,6 +87,7 @@ class Thread extends Component {
         this.setState({
           thread: data
         })
+        console.log(data)
         Taro.hideLoading()
       } else {
 
@@ -92,6 +96,13 @@ class Thread extends Component {
   }
 
   render() {
+    const repliesArea = this.state.thread.replies.map(reply => {
+      return (
+        <View key={reply.floor}>
+          <ReplyCard reply={reply}></ReplyCard>
+        </View>
+      )
+    })
     return (
       // <WxmlifyRichText html={this.state.thread.content}></WxmlifyRichText> // 组件报错，不可用
       // <WxparseRichText html={this.state.thread.content}></WxparseRichText> // 效果挺好
@@ -102,14 +113,12 @@ class Thread extends Component {
         </View>
 
         <View className='user'>
-          <View className='avatar'>
-            <Image src={this.state.thread.author.avatar}></Image>
-          </View>
+          <AtAvatar circle image={this.state.thread.author.avatar} size='small'></AtAvatar>
           <View className='info'>
             <Text className='name'>{this.state.thread.author.username}</Text>
             <View className='others'>
               <Text className='time'>{this.state.thread.time}</Text>
-              <Text>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</Text>
+              <View>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</View>
             </View>
           </View>
         </View>
@@ -117,6 +126,12 @@ class Thread extends Component {
         <View className='content'>
           <WxparseRichText html={this.state.thread.content}></WxparseRichText>
         </View>
+
+        <AtDivider>
+          <AtIcon value='check-circle'></AtIcon>
+        </AtDivider>
+
+        {repliesArea}
       </View>
     )
   }

@@ -189,8 +189,9 @@ export const threadParser = (html: string): IThread => {
       uid: number,
       avatar: string
     },
-    content: string
-    time: string
+    content: string,
+    time: string,
+    floor: number
   }>()
 
   for (let i = 1; i < usersInfo.length && i < postsContent.length; i++) {
@@ -201,7 +202,8 @@ export const threadParser = (html: string): IThread => {
         avatar: usersInfo[i].avatar
       },
       content: postsContent[i],
-      time: usersInfo[i].time
+      time: usersInfo[i].time,
+      floor: i + 1
     })
   }
 
