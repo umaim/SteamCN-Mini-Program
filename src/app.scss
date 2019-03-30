@@ -5,3 +5,13 @@ $color-brand-dark: #4695ba;
 
 /* Default Theme*/
 @import "~taro-ui/dist/style/index.scss";
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+page {
+  -webkit-font-smoothing: antialiased;
+  font-family: "PingHei","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";
+  background: #F4F6F9;
+}
