@@ -39,6 +39,7 @@ class App extends Component {
       'pages/section/section',
       'pages/section/sectionThreadList',
       'pages/account/account',
+      'pages/account/about',
       'pages/thread/thread'
     ],
     tabBar: {
