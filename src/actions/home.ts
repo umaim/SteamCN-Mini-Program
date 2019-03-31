@@ -42,11 +42,26 @@ export const fetchHome = () => {
       if (res.statusCode === 200) {
         const html = res.data as string
         dispatch(parseHome(html))
-        Taro.hideLoading()
+
         Taro.stopPullDownRefresh()
+        Taro.atMessage({
+          message: '刷新成功😀',
+          type: 'success',
+          duration: 1500
+        })
       } else {
-        dispatch(fetchHomeError(`Fail to fetch homepage with statusCode: ${res.statusCode}`))
+        Taro.atMessage({
+          message: '刷新失败😱',
+          type: 'error',
+          duration: 1500
+        })
       }
+    }, () => {
+      Taro.atMessage({
+        message: '网络连接中断😭',
+        type: 'error',
+        duration: 1500
+      })
     })
   }
 }
