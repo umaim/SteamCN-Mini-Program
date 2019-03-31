@@ -1,0 +1,74 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 28rpx;
+}
+
+.logo {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 50%;
+  display: block;
+  margin: auto;
+}
+
+.item {
+  line-height: 2.2em;
+  background: #fff;
+  padding: 10rpx 30rpx 20rpx;
+  box-sizing: border-box;
+  margin-bottom: 20rpx;
+}
+
+.item .title {
+  font-size: 32rpx;
+  color: #57bae8;
+  margin: 26rpx 0;
+}
+
+.item .i {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
+  padding-bottom: 16rpx;
+}
+
+.i .icon {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 2.2em;
+}
+
+.i image {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 20rpx;
+}
+
+.item .text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.qrcode {
+  width: 420rpx;
+  height: 420rpx;
+  display: block;
+  margin: auto;
+}
+
+.footer {
+  height: 80rpx;
+  margin-top: 30rpx;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 24rpx;
+  color: #333;
+}

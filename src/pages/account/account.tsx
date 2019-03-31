@@ -36,6 +36,12 @@ class Account extends Component {
 
   componentDidHide() { }
 
+  navigator(addr) {
+    Taro.navigateTo({
+      url: `/pages/account/${addr}`
+    })
+  }
+
   render() {
     return (
       <View className='wrapper'>
@@ -80,6 +86,7 @@ class Account extends Component {
             <AtListItem
               title='关于'
               iconInfo={{ value: 'lightning-bolt', color: '#ABB4BF' }}
+              onClick={this.navigator.bind(this,'about')}
             />
           </AtList>
         </View>
