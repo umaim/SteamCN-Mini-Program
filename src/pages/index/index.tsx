@@ -1,7 +1,8 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
 import { connect } from '@tarojs/redux'
+import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
+import { AtMessage } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
@@ -65,7 +66,6 @@ class Index extends Component {
   }
 
   componentDidMount() {
-    Taro.showLoading({ title: '正在加载' })
     this.props.fetchHome()
   }
 
@@ -99,6 +99,7 @@ class Index extends Component {
 
     return (
       <View className='index'>
+        <AtMessage />
         <Swiper
           className='index-swiper'
           autoplay

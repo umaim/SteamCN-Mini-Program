@@ -2,6 +2,7 @@ import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux';
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
+import { AtMessage } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
@@ -59,9 +60,13 @@ class Hot extends Component {
       return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
     })
     return (
-      <View className='thread-list'>
-        {threadCards}
+      <View>
+        <AtMessage />
+        <View className='thread-list'>
+          {threadCards}
+        </View>
       </View>
+
     )
   }
 }
