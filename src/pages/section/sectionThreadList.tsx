@@ -72,7 +72,7 @@ class SectionThreadList extends Component {
 
   fetchSection(fid: string, page: number) {
     Taro.request({
-      url: `https://steamcn.com/${fid}-${page}?mobile=no`,
+      url: `https://steamcn.com/${fid}-${page}?mobile=no&orderby=dateline`,
       data: {},
       header: {},
       method: 'GET',
