@@ -54,6 +54,13 @@ class Hot extends Component {
     this.props.fetchHome()
   }
 
+  onShareAppMessage () {
+    return {
+      title: 'SteamCN 蒸汽动力 - 热门主题',
+      path: 'pages/hot/hot'
+    }
+  }
+
   render() {
     const { hotThreadList } = this.props
     const threadCards = hotThreadList.map(item => {

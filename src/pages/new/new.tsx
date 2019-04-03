@@ -57,6 +57,13 @@ class New extends Component {
     this.props.fetchHome()
   }
 
+  onShareAppMessage () {
+    return {
+      title: 'SteamCN 蒸汽动力 - 最新回复',
+      path: 'pages/new/new'
+    }
+  }
+
   render() {
     const { newThreadList } = this.props
     const threadCards = newThreadList.map(item => {

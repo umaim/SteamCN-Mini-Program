@@ -74,6 +74,13 @@ class Thread extends Component {
 
   componentWillUnmount() { }
 
+  onShareAppMessage () {
+    return {
+      title: `${this.state.thread.title} - SteamCN 蒸汽动力`,
+      path: `/pages/thread/thread?tid=${this.$router.params.tid}`
+    }
+  }
+
   fetchThread(tid: number) {
     Taro.request({
       url: `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&mobile=1`,
