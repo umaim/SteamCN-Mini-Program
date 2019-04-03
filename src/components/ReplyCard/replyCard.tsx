@@ -1,9 +1,7 @@
 import { ComponentClass } from 'react';
-import Taro, { Component } from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components';
 import { AtAvatar, AtDivider } from 'taro-ui'
-
-import WxparseRichText from '../WxParseRichText/wxParseRichText'
 
 import './replyCard.scss'
 
@@ -33,6 +31,12 @@ interface ReplyCard {
 }
 
 class ReplyCard extends Component {
+  config: Config = {
+    usingComponents: {
+      wxparse: '../wxParse/wxParse'
+    }
+  }
+
   static defaultProps = {
     user: {
       username: '',
@@ -58,7 +62,7 @@ class ReplyCard extends Component {
           <Text className='floor'>{`#${this.props.reply.floor}`}</Text>
         </View>
         <View className='content'>
-          <WxparseRichText html={this.props.reply.content}></WxparseRichText>
+          <wxparse data={this.props.reply.content} type='html' padding='15'></wxparse>
         </View>
       </View>
     )
