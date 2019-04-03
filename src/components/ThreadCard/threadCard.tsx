@@ -45,6 +45,23 @@ class ThreadCard extends Component {
   }
 
   toThread() {
+    Taro.getStorage({
+      key: 'history'
+    }).then((res) => {
+      let history = res.data as unknown as Array<IThreadMeta>
+      history.push(this.props.threadMeta)
+      Taro.setStorage({
+        key: 'history',
+        data: history
+      })
+    }, (res) => {
+      let history = Array<IThreadMeta>()
+      history.push(this.props.threadMeta)
+      Taro.setStorage({
+        key: 'history',
+        data: history
+      })
+    })
     const { tid } = this.props.threadMeta
     Taro.navigateTo({
       url: `/pages/thread/thread?tid=${tid}`
