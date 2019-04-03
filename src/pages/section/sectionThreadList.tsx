@@ -7,6 +7,7 @@ import ThreadCard from '../../components/ThreadCard/threadCard'
 import { sectionParser } from '../../utils/parser'
 
 import './sectionThreadList.scss'
+import { AtMessage } from 'taro-ui';
 
 type PageStateProps = {}
 
@@ -69,13 +70,23 @@ class SectionThreadList extends Component {
 
   componentDidHide() { }
 
-  onPullDownRefresh() { }
+  onPullDownRefresh() {
+    this.setState({
+      sectionThreadList: Array<IThreadMeta>(),
+      pageNum: 1
+    }, () => {
+      this.fetchSection(this.props.fid, this.state.pageNum)
+    })
+  }
 
   onReachBottom() {
     console.log('Reach Bottom')
     this.setState({
       pageNum: this.state.pageNum + 1
     }, () => {
+      Taro.showLoading({
+        title: '正在加载'
+      })
       this.fetchSection(this.props.fid, this.state.pageNum)
     })
   }
@@ -105,10 +116,26 @@ class SectionThreadList extends Component {
             sectionThreadList: this.state.sectionThreadList.concat(threadList)
           })
           Taro.hideLoading()
+          Taro.stopPullDownRefresh()
+          Taro.atMessage({
+            message: '刷新成功😀',
+            type: 'success',
+            duration: 1500
+          })
         }
       } else {
-
+        Taro.atMessage({
+          message: '刷新失败😱',
+          type: 'error',
+          duration: 1500
+        })
       }
+    }, () => {
+      Taro.atMessage({
+        message: '网络连接中断😭',
+        type: 'error',
+        duration: 1500
+      })
     })
   }
 
@@ -119,6 +146,7 @@ class SectionThreadList extends Component {
     })
     return (
       <View className='thread-list'>
+        <AtMessage />
         {threadCards}
       </View>
     )
