@@ -150,11 +150,13 @@ export const threadParser = (html: string): IThread => {
     username: string,
     uid: number,
     avatar: string,
-    time: string
+    time: string,
+    floor: number
   }
   const usersInfo = Array<User>()
   const userDoms = document.querySelectorAll('.bm_user')
   userDoms.forEach(dom => {
+    const floor = parseInt(dom.querySelector('em').text)
     const userLinkTag = dom.querySelector('a')
     const username = userLinkTag.text
     const uid = parseInt((userLinkTag.attributes.href.match(/uid=(\d+)/) as RegExpMatchArray)[1])
@@ -164,7 +166,8 @@ export const threadParser = (html: string): IThread => {
       username,
       uid,
       avatar,
-      time
+      time,
+      floor
     })
   })
 
@@ -191,7 +194,8 @@ export const threadParser = (html: string): IThread => {
     },
     content: string,
     time: string,
-    floor: number
+    floor: number,
+    hash: number
   }>()
 
   for (let i = 1; i < usersInfo.length && i < postsContent.length; i++) {
@@ -203,7 +207,8 @@ export const threadParser = (html: string): IThread => {
       },
       content: postsContent[i],
       time: usersInfo[i].time,
-      floor: i + 1
+      floor: usersInfo[i].floor,
+      hash: Math.random() + i
     })
   }
 
@@ -221,6 +226,78 @@ export const threadParser = (html: string): IThread => {
     },
     replies
   }
+}
+
+export const replyParser = (html: string) => {
+  const document = parse(html) as HTMLElement
+  type User = {
+    username: string,
+    uid: number,
+    avatar: string,
+    time: string,
+    floor: number
+  }
+  const usersInfo = Array<User>()
+  const userDoms = document.querySelectorAll('.bm_user')
+  console.log(userDoms.length)
+  userDoms.forEach(dom => {
+    const floor = parseInt(dom.querySelector('em').text)
+    const userLinkTag = dom.querySelector('a')
+    const username = userLinkTag.text
+    const uid = parseInt((userLinkTag.attributes.href.match(/uid=(\d+)/) as RegExpMatchArray)[1])
+    const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+    const time = dom.querySelector('.xs0.xg1').text
+    usersInfo.push({
+      username,
+      uid,
+      avatar,
+      time,
+      floor
+    })
+  })
+
+  const postsContent = Array<string>()
+  const postDoms = document.querySelectorAll('.mes')
+  postDoms.forEach(dom => {
+    // replace low res images with high res images
+    dom.querySelectorAll('a').forEach((link) => {
+      if (link.childNodes.length > 0 && link.firstChild.nodeType === NodeType.ELEMENT_NODE
+        && (link.firstChild as HTMLElement).tagName === 'img') {
+        const parent = link.parentNode as HTMLElement
+        const newNode = new HTMLElement('img', {}, `src=${link.attributes.href}`)
+        parent.exchangeChild(link, newNode)
+      }
+    })
+    postsContent.push(normalizeHTML(dom.innerHTML))
+  })
+
+  const replies = Array<{
+    user: {
+      username: string,
+      uid: number,
+      avatar: string
+    },
+    content: string,
+    time: string,
+    floor: number,
+    hash: number
+  }>()
+
+  for (let i = 0; i < usersInfo.length && i < postsContent.length; i++) {
+    replies.push({
+      user: {
+        username: usersInfo[i].username,
+        uid: usersInfo[i].uid,
+        avatar: usersInfo[i].avatar
+      },
+      content: postsContent[i],
+      time: usersInfo[i].time,
+      floor: usersInfo[i].floor,
+      hash: Math.random() + i
+    })
+  }
+
+  return replies
 }
 
 const normalizeHTML = (html: string) => {

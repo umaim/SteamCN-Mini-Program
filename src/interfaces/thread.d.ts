@@ -81,6 +81,8 @@ export interface IThread {
       avatar: string
     },
     content: string,
-    time: string
+    time: string,
+    floor: number,
+    hash: number
   }>
 }
