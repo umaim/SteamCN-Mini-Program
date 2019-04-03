@@ -145,6 +145,18 @@ export const threadParser = (html: string): IThread => {
   const regArr = statsText.match(/看(\d+)\|回(\d+)/) as RegExpMatchArray
   const viewed = parseInt(regArr[1])
   const replied = parseInt(regArr[2])
+  let maxPage = 0
+  const pageDom = document.querySelector('.pg')
+  if (pageDom === null) {
+    maxPage = 1
+  } else {
+    const lastDom = pageDom.querySelector('.last')
+    if (lastDom === null) {
+      maxPage = pageDom.querySelectorAll('a').length
+    } else {
+      maxPage = parseInt(lastDom.text.substr(3))
+    }
+  }
 
   type User = {
     username: string,
@@ -219,6 +231,7 @@ export const threadParser = (html: string): IThread => {
     viewed,
     replied,
     content: postsContent[0],
+    maxPage,
     author: {
       username: usersInfo[0].username,
       uid: usersInfo[0].uid,
@@ -239,7 +252,6 @@ export const replyParser = (html: string) => {
   }
   const usersInfo = Array<User>()
   const userDoms = document.querySelectorAll('.bm_user')
-  console.log(userDoms.length)
   userDoms.forEach(dom => {
     const floor = parseInt(dom.querySelector('em').text)
     const userLinkTag = dom.querySelector('a')

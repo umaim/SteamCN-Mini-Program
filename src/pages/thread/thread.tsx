@@ -46,6 +46,7 @@ class Thread extends Component {
       viewed: 0,
       replied: 0,
       content: '',
+      maxPage: 0,
       author: {
         username: '',
         uid: 0,
@@ -90,11 +91,13 @@ class Thread extends Component {
 
   onReachBottom() {
     console.log('Reach Bottom')
-    this.setState({
-      pageNum: this.state.pageNum + 1
-    }, () => {
-      this.fetchThread(this.props.tid, this.state.pageNum)
-    })
+    if (this.state.pageNum < this.state.thread.maxPage) {
+      this.setState({
+        pageNum: this.state.pageNum + 1
+      }, () => {
+        this.fetchThread(this.props.tid, this.state.pageNum)
+      })
+    }
   }
 
   fetchThread(tid: number, pageNum: number) {
@@ -138,8 +141,18 @@ class Thread extends Component {
           }
         }
       } else {
-
+        Taro.atMessage({
+          message: '获取帖子失败😱',
+          type: 'error',
+          duration: 1500
+        })
       }
+    }, () => {
+      Taro.atMessage({
+        message: '网络连接中断😭',
+        type: 'error',
+        duration: 1500
+      })
     })
   }
 
