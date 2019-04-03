@@ -69,6 +69,7 @@ export interface IThread {
   viewed: number,
   replied: number,
   content: string,
+  maxPage: number,
   author: {
     username: string,
     uid: number,
