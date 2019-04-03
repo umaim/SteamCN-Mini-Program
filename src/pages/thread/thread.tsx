@@ -4,7 +4,6 @@ import { View, Text, Image } from '@tarojs/components';
 import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
 
 import { IThread } from 'src/interfaces/thread';
-import WxparseRichText from '../../components/WxParseRichText/wxParseRichText'
 import ReplyCard from '../../components/ReplyCard/replyCard'
 import { threadParser } from '../../utils/parser'
 
@@ -28,7 +27,10 @@ interface Thread {
 
 class Thread extends Component {
   config: Config = {
-    navigationBarTitleText: '主题'
+    navigationBarTitleText: '主题',
+    usingComponents: {
+      wxparse: '../../components/wxParse/wxParse'
+    }
   }
 
   state = {
@@ -124,7 +126,7 @@ class Thread extends Component {
         </View>
 
         <View className='content'>
-          <WxparseRichText html={this.state.thread.content}></WxparseRichText>
+          <wxparse data={this.state.thread.content} type='html' padding='15'></wxparse>
         </View>
 
         <AtDivider>
