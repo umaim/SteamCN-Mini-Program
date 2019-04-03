@@ -56,10 +56,18 @@ class Account extends Component {
     })
   }
 
+  joking() {
+    Taro.showToast({
+      title: '暂时无法变强 QAQ',
+      icon: 'none',
+      duration: 1500
+    })
+  }
+
   render() {
     return (
       <View className='wrapper'>
-        <View className='profile'>
+        <View className='profile' onClick={this.joking}>
 
           <View className='info'>
             <Image className='avatar' src={emptyAvatar}></Image>
@@ -77,11 +85,13 @@ class Account extends Component {
             <AtListItem
               title='消息中心'
               iconInfo={{ value: 'bell', color: '#ABB4BF' }}
+              onClick={this.joking}
             />
             <AtListItem
               title='我的收藏'
               extraText='0 个'
-              iconInfo={{ value: 'star-2', color: '#ABB4BF' }}
+              iconInfo={{ value: 'star', color: '#ABB4BF' }}
+              onClick={this.joking}
             />
             <AtListItem
               title='浏览历史'

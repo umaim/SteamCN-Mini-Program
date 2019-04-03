@@ -1,6 +1,6 @@
 {
 	"name": "steamcn-mini-program",
-	"version": "0.0.1",
+	"version": "0.0.8",
 	"private": true,
 	"description": "An Unofficial SteamCN Forum Mini Program",
 	"scripts": {
