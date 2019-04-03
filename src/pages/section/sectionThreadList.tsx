@@ -80,12 +80,22 @@ class SectionThreadList extends Component {
       responseType: 'text'
     }).then(res => {
       if (res.statusCode === 200) {
-        const html = res.data
-        const data = sectionParser(html, this.props.title)
-        this.setState({
-          sectionThreadList: data
-        })
-        Taro.hideLoading()
+        const html = res.data as string
+
+        if (html.indexOf('您必须注册并登录后才能访问此版块') > -1) {
+          Taro.hideLoading()
+          Taro.showToast({
+            title: '本板块需要登录才可查看😦',
+            icon: 'none',
+            duration: 3500
+          })
+        } else {
+          const data = sectionParser(html, this.props.title)
+          this.setState({
+            sectionThreadList: data
+          })
+          Taro.hideLoading()
+        }
       } else {
 
       }

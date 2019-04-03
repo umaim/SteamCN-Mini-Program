@@ -84,13 +84,25 @@ class Thread extends Component {
       responseType: 'text'
     }).then(res => {
       if (res.statusCode === 200) {
-        const html = res.data
-        const data = threadParser(html)
-        this.setState({
-          thread: data
-        })
-        console.log(data)
-        Taro.hideLoading()
+        const html = res.data as string
+
+        if (html.indexOf('您必须注册并登录后才能访问此版块') > -1
+          || html.indexOf('抱歉，本帖要求阅读权限高于') > -1
+          || html.indexOf('您必须同时满足以下条件才能访问此版块') > -1) {
+          Taro.hideLoading()
+          Taro.showToast({
+            title: '本帖需要登录才可查看😦',
+            icon: 'none',
+            duration: 10000
+          })
+        } else {
+          const data = threadParser(html)
+          this.setState({
+            thread: data
+          })
+          console.log(data)
+          Taro.hideLoading()
+        }
       } else {
 
       }
