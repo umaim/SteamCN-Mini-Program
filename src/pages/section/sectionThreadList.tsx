@@ -14,12 +14,12 @@ type PageDispatchProps = {}
 
 type PageOwnProps = {
   fid: string,
-  title: string,
-  pageNum: number
+  title: string
 }
 
 type PageState = {
-  sectionThreadList: IThreadMeta[]
+  sectionThreadList: IThreadMeta[],
+  pageNum: number
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -31,22 +31,23 @@ interface SectionThreadList {
 class SectionThreadList extends Component {
   config: Config = {
     navigationBarTitleText: '板块',
-    enablePullDownRefresh: true
+    enablePullDownRefresh: true,
+    onReachBottomDistance: 150
   }
 
   static defaultProps = {
     fid: '',
-    title: '',
-    pageNum: 1
+    title: ''
   }
 
   state = {
-    sectionThreadList: Array<IThreadMeta>()
+    sectionThreadList: Array<IThreadMeta>(),
+    pageNum: 1
   }
 
   constructor(props) {
     super(props)
-    this.props.pageNum = 1
+    this.state.pageNum = 1
     this.props.fid = this.$router.params.fid
     this.props.title = this.$router.params.title
   }
@@ -59,7 +60,7 @@ class SectionThreadList extends Component {
     Taro.showLoading({
       title: '正在加载'
     })
-    this.fetchSection(this.$router.params.fid, this.props.pageNum)
+    this.fetchSection(this.$router.params.fid, this.state.pageNum)
   }
 
   componentWillUnmount() { }
@@ -69,6 +70,15 @@ class SectionThreadList extends Component {
   componentDidHide() { }
 
   onPullDownRefresh() { }
+
+  onReachBottom() {
+    console.log('Reach Bottom')
+    this.setState({
+      pageNum: this.state.pageNum + 1
+    }, () => {
+      this.fetchSection(this.props.fid, this.state.pageNum)
+    })
+  }
 
   fetchSection(fid: string, page: number) {
     Taro.request({
@@ -90,9 +100,9 @@ class SectionThreadList extends Component {
             duration: 3500
           })
         } else {
-          const data = sectionParser(html, this.props.title)
+          const threadList = sectionParser(html, this.props.title)
           this.setState({
-            sectionThreadList: data
+            sectionThreadList: this.state.sectionThreadList.concat(threadList)
           })
           Taro.hideLoading()
         }
