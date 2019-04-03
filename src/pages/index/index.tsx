@@ -79,6 +79,13 @@ class Index extends Component {
     this.props.fetchHome()
   }
 
+  onShareAppMessage () {
+    return {
+      title: 'SteamCN 蒸汽动力',
+      path: '/pages/index/index'
+    }
+  }
+
   toThread(tid: number) {
     Taro.navigateTo({
       url: `/pages/thread/thread?tid=${tid}`
