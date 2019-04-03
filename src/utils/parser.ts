@@ -133,14 +133,14 @@ const parseHotThreadList = (elems: HTMLElement[]) => {
 
 
 export const threadParser = (html: string): IThread => {
-  const dom = parse(html) as HTMLElement
-  const content = dom.querySelector('.bm')
+  const document = parse(html) as HTMLElement
+  // const content = dom.querySelector('.bm')
 
-  const titleDom = content.querySelector('#thread_subject')
+  const titleDom = document.querySelector('#thread_subject')
   const title = titleDom.text
   const tid = parseInt((titleDom.attributes.href.match(/tid=(\d+)/) as RegExpMatchArray)[1])
 
-  const statsDom = content.querySelector('.xg1')
+  const statsDom = document.querySelector('.xg1')
   const statsText = statsDom.rawText
   const regArr = statsText.match(/看(\d+)\|回(\d+)/) as RegExpMatchArray
   const viewed = parseInt(regArr[1])
@@ -153,7 +153,7 @@ export const threadParser = (html: string): IThread => {
     time: string
   }
   const usersInfo = Array<User>()
-  const userDoms = dom.querySelectorAll('.bm_user')
+  const userDoms = document.querySelectorAll('.bm_user')
   userDoms.forEach(dom => {
     const userLinkTag = dom.querySelector('a')
     const username = userLinkTag.text
@@ -169,7 +169,7 @@ export const threadParser = (html: string): IThread => {
   })
 
   const postsContent = Array<string>()
-  const postDoms = dom.querySelectorAll('.postmessage')
+  const postDoms = document.querySelectorAll('.mes')
   postDoms.forEach(dom => {
     // replace low res images with high res images
     dom.querySelectorAll('a').forEach((link) => {
