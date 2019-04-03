@@ -5,7 +5,7 @@ import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
 
 import { IThread } from 'src/interfaces/thread';
 import ReplyCard from '../../components/ReplyCard/replyCard'
-import { threadParser } from '../../utils/parser'
+import { threadParser, replyParser } from '../../utils/parser'
 
 import './thread.scss'
 
@@ -13,9 +13,12 @@ type PageStateProps = {}
 
 type PageDispatchProps = {}
 
-type PageOwnProps = {}
+type PageOwnProps = {
+  tid: number
+}
 
 type PageState = {
+  pageNum: number,
   thread: IThread
 }
 
@@ -30,10 +33,12 @@ class Thread extends Component {
     navigationBarTitleText: '主题',
     usingComponents: {
       wxparse: '../../components/wxParse/wxParse'
-    }
+    },
+    onReachBottomDistance: 300
   }
 
   state = {
+    pageNum: 1,
     thread: {
       title: '',
       tid: 0,
@@ -54,7 +59,8 @@ class Thread extends Component {
         },
         content: '',
         time: '',
-        floor: 0
+        floor: 0,
+        hash: 0
       }]
     }
   }
@@ -65,7 +71,8 @@ class Thread extends Component {
     Taro.showLoading({
       title: '正在加载'
     })
-    this.fetchThread(this.$router.params.tid)
+    this.props.tid = this.$router.params.tid as number
+    this.fetchThread(this.props.tid, this.state.pageNum)
   }
 
   componentDidShow() { }
@@ -74,16 +81,25 @@ class Thread extends Component {
 
   componentWillUnmount() { }
 
-  onShareAppMessage () {
+  onShareAppMessage() {
     return {
       title: `${this.state.thread.title} - SteamCN 蒸汽动力`,
       path: `/pages/thread/thread?tid=${this.$router.params.tid}`
     }
   }
 
-  fetchThread(tid: number) {
+  onReachBottom() {
+    console.log('Reach Bottom')
+    this.setState({
+      pageNum: this.state.pageNum + 1
+    }, () => {
+      this.fetchThread(this.props.tid, this.state.pageNum)
+    })
+  }
+
+  fetchThread(tid: number, pageNum: number) {
     Taro.request({
-      url: `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&mobile=1`,
+      url: `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&page=${pageNum}&mobile=1`,
       data: {},
       header: {},
       method: 'GET',
@@ -103,12 +119,23 @@ class Thread extends Component {
             duration: 10000
           })
         } else {
-          const data = threadParser(html)
-          this.setState({
-            thread: data
-          })
-          console.log(data)
-          Taro.hideLoading()
+          if (this.state.pageNum === 1) {
+            const thread = threadParser(html)
+            console.log(thread)
+            this.setState({
+              thread: thread
+            })
+            Taro.hideLoading()
+          } else {
+            const replies = replyParser(html)
+            console.log(replies)
+            this.setState({
+              thread: {
+                ...this.state.thread,
+                replies: this.state.thread.replies.concat(replies)
+              }
+            })
+          }
         }
       } else {
 
@@ -119,7 +146,7 @@ class Thread extends Component {
   render() {
     const repliesArea = this.state.thread.replies.map(reply => {
       return (
-        <View key={reply.floor}>
+        <View key={reply.hash}>
           <ReplyCard reply={reply}></ReplyCard>
         </View>
       )
