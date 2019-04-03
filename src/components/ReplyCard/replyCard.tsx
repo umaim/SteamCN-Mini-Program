@@ -62,7 +62,7 @@ class ReplyCard extends Component {
           <Text className='floor'>{`#${this.props.reply.floor}`}</Text>
         </View>
         <View className='content'>
-          <wxparse data={this.props.reply.content} type='html' padding='15'></wxparse>
+          <wxparse data={this.props.reply.content} type='html' padding='5'></wxparse>
         </View>
       </View>
     )
