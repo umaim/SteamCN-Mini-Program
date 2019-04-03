@@ -9,7 +9,6 @@ import steam from '../../assets/images/steam.png'
 import steamcn from '../../assets/images/steamcn.png'
 
 import './about.scss'
-import { AtList, AtListItem } from 'taro-ui';
 
 type PageStateProps = {}
 

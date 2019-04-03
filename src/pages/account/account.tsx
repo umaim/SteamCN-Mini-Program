@@ -13,7 +13,9 @@ type PageDispatchProps = {}
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  history: number
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
@@ -26,15 +28,27 @@ class Account extends Component {
     navigationBarTitleText: '我的'
   }
 
+  state = {
+    history: 0
+  }
+
   componentWillReceiveProps(nextProps) {
     console.log(this.props, nextProps)
   }
 
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
+  componentDidShow() {
+    Taro.getStorage({
+      key: 'history'
+    }).then((res) => {
+      this.setState({
+        history: res.data.length
+      })
+    }, () => {
+      this.setState({
+        history: 0
+      })
+    })
+  }
 
   navigator(addr) {
     Taro.navigateTo({
@@ -66,13 +80,14 @@ class Account extends Component {
             />
             <AtListItem
               title='我的收藏'
-              extraText='0个'
+              extraText='0 个'
               iconInfo={{ value: 'star-2', color: '#ABB4BF' }}
             />
             <AtListItem
               title='浏览历史'
-              extraText='0篇'
+              extraText={`${this.state.history} 篇`}
               iconInfo={{ value: 'clock', color: '#ABB4BF' }}
+              onClick={this.navigator.bind(this, 'history')}
             />
           </AtList>
         </View>
@@ -82,11 +97,12 @@ class Account extends Component {
             <AtListItem
               title='设置'
               iconInfo={{ value: 'settings', color: '#ABB4BF' }}
+              onClick={this.navigator.bind(this, 'setting')}
             />
             <AtListItem
               title='关于'
               iconInfo={{ value: 'lightning-bolt', color: '#ABB4BF' }}
-              onClick={this.navigator.bind(this,'about')}
+              onClick={this.navigator.bind(this, 'about')}
             />
           </AtList>
         </View>
