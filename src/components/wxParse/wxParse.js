@@ -148,16 +148,24 @@ Component({
      * 处理链接点击事件
      */
     wxParseTagATap: function (e) {
-      wx.setClipboardData({
-        data: e.currentTarget.dataset.src ,
-        success: () => {
-          wx.showToast({
-            title: '链接已复制',
-            icon: 'success',
-            duration: 600
-          })
-        }
-      });
+      let src = e.currentTarget.dataset.src
+      if(src.match(/^https?:\/\/steamcn.com\/t(\d+)-(\d+)-(\d+)/)){
+        let tid = src.match(/^https?:\/\/steamcn.com\/t(\d+)-(\d+)-(\d+)/)[1]
+        wx.navigateTo({
+          url: `/pages/thread/thread?tid=${tid}`
+        })
+      } else{
+        wx.setClipboardData({
+          data: e.currentTarget.dataset.src ,
+          success: () => {
+            wx.showToast({
+              title: '链接已复制',
+              icon: 'success',
+              duration: 600
+            })
+          }
+        });
+      }
     }
   }
 })
