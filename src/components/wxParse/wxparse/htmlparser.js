@@ -9,11 +9,11 @@ function HTMLParser(html, handler) {
 
 	while (html) {
     chars = true;
-
+    
 		// Make sure we're not in a script or style element
 		if (!stack.last() || !config.elements.special[stack.last()]) {
-
-			// Comment
+      
+			// Comment  
       if (html.indexOf("<!--") == 0) {
 				index = html.indexOf("-->");
 
@@ -80,7 +80,7 @@ function HTMLParser(html, handler) {
 	// Clean up any remaining tags
 	parseEndTag();
 
-  function parseStartTag(tag, tagName, rest, unary) {
+  function parseStartTag(tag, tagName, rest, unary) {   
 
 		tagName = tagName.toLowerCase();
 
