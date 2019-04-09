@@ -154,7 +154,17 @@ Component({
         wx.navigateTo({
           url: `/pages/thread/thread?tid=${tid}`
         })
-      } else{
+      } else if(src.match(/^https?:\/\/steamcn.com\/forum.php\?mod=viewthread&tid=(\d+)/)){
+        let tid = src.match(/^https?:\/\/steamcn.com\/forum.php\?mod=viewthread&tid=(\d+)/)[1]
+        wx.navigateTo({
+          url: `/pages/thread/thread?tid=${tid}`
+        })
+      } else if(src.match(/^https?:\/\/steamcn.com\/forum.php\?mod=redirect&goto=findpost&ptid=(\d+)/)){
+        let tid = src.match(/^https?:\/\/steamcn.com\/forum.php\?mod=redirect&goto=findpost&ptid=(\d+)/)[1]
+        wx.navigateTo({
+          url: `/pages/thread/thread?tid=${tid}`
+        })
+      } else {
         wx.setClipboardData({
           data: e.currentTarget.dataset.src ,
           success: () => {
