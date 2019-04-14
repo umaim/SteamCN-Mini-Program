@@ -13,8 +13,6 @@
 }
 
 .profile .avatar {
-  width: 90rpx;
-  height: 90rpx;
   margin-right: 40rpx;
 }
 
@@ -25,6 +23,7 @@
 }
 
 .profile .name {
+  margin-bottom: 8rpx;
   font-size: 40rpx;
   color: #333;
 }
@@ -36,4 +35,8 @@
 
 .forum-area {
   margin-bottom: 20rpx;
+}
+
+.logout {
+  margin: 25rpx 25rpx;
 }

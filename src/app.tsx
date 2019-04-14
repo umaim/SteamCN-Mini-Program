@@ -42,6 +42,7 @@ class App extends Component {
       'pages/account/about',
       'pages/account/setting',
       'pages/account/history',
+      'pages/account/login',
       'pages/thread/thread'
     ],
     tabBar: {
