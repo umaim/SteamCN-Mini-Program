@@ -1,0 +1,24 @@
+.wrapper {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.backgroundImage {
+  width: 100%
+}
+
+.login {
+  width: 80%;
+  margin-top: 25rpx
+}
+
+.footer {
+  display: flex;
+  margin-top: 350rpx;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 24rpx;
+}
