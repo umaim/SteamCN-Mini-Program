@@ -1,13 +1,12 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { Text, View, Image } from '@tarojs/components'
-import { AtList, AtListItem, AtAvatar, AtButton } from 'taro-ui'
+import { View } from '@tarojs/components'
+import { AtList, AtListItem, AtAvatar, AtButton, AtModal, AtMessage } from 'taro-ui'
 
 import { IAccount } from '../../interfaces/account'
 import emptyAvatar from '../../assets/images/empty_avatar_user.png'
 
 import './account.scss'
-
 
 type PageStateProps = {}
 
@@ -18,7 +17,8 @@ type PageOwnProps = {}
 type PageState = {
   history: number,
   auth: boolean,
-  account: IAccount
+  account: IAccount,
+  logoutConfirmModal: boolean
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -44,7 +44,8 @@ class Account extends Component {
       createdAt: '',
       UpdatedAt: '',
       accessToken: ''
-    }
+    },
+    logoutConfirmModal: false
   }
 
   componentDidShow() {
@@ -98,6 +99,72 @@ class Account extends Component {
     }
   }
 
+  logout() {
+    this.setState({
+      logoutConfirmModal: true
+    })
+  }
+
+  closeLogoutModal() {
+    this.setState({
+      logoutConfirmModal: false
+    })
+  }
+
+  closeLogoutModalConfirm() {
+    this.setState({
+      logoutConfirmModal: false
+    })
+    this.doLogout()
+  }
+
+  doLogout() {
+    Taro.request({
+      url: 'https://vnext.steamcn.com/v1/auth/logout',
+      data: {},
+      header: {
+        authorization: this.state.account.accessToken
+      },
+      method: 'POST',
+      dataType: 'json',
+      responseType: 'text'
+    }).then(res => {
+      if (res.statusCode === 200) {
+        const isSuccessful = res.data.success
+        if (isSuccessful) {
+          this.setState({
+            auth: false
+          })
+          Taro.setStorage({
+            key: 'auth',
+            data: false
+          })
+          Taro.removeStorage({
+            key: 'account'
+          })
+          Taro.atMessage({
+            message: '已退出登录ヾ(•ω•`)o',
+            type: 'success',
+            duration: 2000
+          })
+        }
+      } else {
+        const data = res.data
+        Taro.atMessage({
+          message: `登出失败😱，${data}`,
+          type: 'error',
+          duration: 2000
+        })
+      }
+    }, () => {
+      Taro.atMessage({
+        message: '网络连接中断😭',
+        type: 'error',
+        duration: 2000
+      })
+    })
+  }
+
   joking() {
     Taro.showToast({
       title: '这里还没抛瓦 QAQ',
@@ -109,6 +176,7 @@ class Account extends Component {
   render() {
     return (
       <View className='wrapper'>
+        <AtMessage />
         <View className='profile' onClick={this.handleProfile}>
           <View className='info'>
             <AtAvatar
@@ -164,6 +232,23 @@ class Account extends Component {
             />
           </AtList>
         </View>
+
+        {this.state.auth &&
+          <AtButton
+            className='logout'
+            type='secondary'
+            onClick={this.logout}
+          >退出登录 ヾ(•ω•`)o</AtButton>}
+
+        <AtModal
+          isOpened={this.state.logoutConfirmModal}
+          cancelText='我再想想'
+          confirmText='不需要了'
+          content='少年，你真的不渴望力量么？'
+          onClose={this.closeLogoutModal.bind(this)}
+          onCancel={this.closeLogoutModal.bind(this)}
+          onConfirm={this.closeLogoutModalConfirm.bind(this)}
+        />
       </View>
     )
   }
