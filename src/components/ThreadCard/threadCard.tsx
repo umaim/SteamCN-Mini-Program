@@ -1,6 +1,9 @@
 import { ComponentClass } from 'react';
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components';
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { IThreadMeta } from '../../interfaces/thread'
 
@@ -69,7 +72,10 @@ class ThreadCard extends Component {
   }
 
   render() {
-    const { title, section, author, stats } = this.props.threadMeta
+    dayjs.locale('zh-cn')
+    dayjs.extend(relativeTime)
+
+    const { title, section, timestamp, author, stats } = this.props.threadMeta
     return <View className='item' onClick={this.toThread}>
       <View className='header at-row at-row__justify--between'>
         <View className='author at-col'>
@@ -81,18 +87,15 @@ class ThreadCard extends Component {
       <View className='at-row'>
         <Text className='title at-col--wrap'>{title}</Text>
       </View>
-      <View className='footer at-row at-row__align--center at-row__justify--end'>
-        <View className='stats'>
-          <View className='at-row'>
-            <Image src={see}></Image>
-            <Text>{stats.viewed}</Text>
-          </View>
+      <View className='footer at-row at-row__justify--between at-row__align--center'>
+        <View className='timestamp at-row'>
+          <Text>{dayjs.unix(timestamp as number).fromNow()}</Text>
         </View>
-        <View className='stats'>
-          <View className='at-row'>
-            <Image src={reply}></Image>
-            <Text>{stats.replied}</Text>
-          </View>
+        <View className='stats at-row at-row__justify--end at-row__align--center'>
+          <Image src={see}></Image>
+          <Text>{stats.viewed}</Text>
+          <Image src={reply}></Image>
+          <Text>{stats.replied}</Text>
         </View>
       </View>
     </View>
