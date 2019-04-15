@@ -1,37 +1,24 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { connect } from '@tarojs/redux'
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
 import { AtMessage } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
-import { fetchHome } from '../../actions/home'
+import { HotThreadItem } from '../../interfaces/respond'
 
 import './index.scss'
 
-// #region 书写注意
-//
-// 目前 typescript 版本还无法在装饰器模式下将 Props 注入到 Taro.Component 中的 props 属性
-// 需要显示声明 connect 的参数类型并通过 interface 的方式指定 Taro.Component 子类的 props
-// 这样才能完成类型检查和 IDE 的自动提示
-// 使用函数模式则无此限制
-// ref: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20796
-//
-// #endregion
+type PageStateProps = {}
 
-type PageStateProps = {
-  bannerThreadList: IThreadMeta[]
-  indexThreadList: IThreadMeta[]
-}
-
-type PageDispatchProps = {
-  fetchHome: () => void
-}
+type PageDispatchProps = {}
 
 type PageOwnProps = {}
 
-type PageState = {}
+type PageState = {
+  bannerThreadList: IThreadMeta[]
+  indexThreadList: IThreadMeta[]
+}
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
@@ -39,47 +26,123 @@ interface Index {
   props: IProps;
 }
 
-@connect(({ home }) => ({
-  bannerThreadList: home.bannerThreadList,
-  indexThreadList: home.indexThreadList
-}), (dispatch) => ({
-  fetchHome() {
-    dispatch(fetchHome())
-  }
-}))
 class Index extends Component {
-
-  /**
- * 指定config的类型声明为: Taro.Config
- *
- * 由于 typescript 对于 object 类型推导只能推出 Key 的基本类型
- * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
- * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
- */
   config: Config = {
     navigationBarTitleText: 'SteamCN 蒸汽动力',
     enablePullDownRefresh: true
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps)
+  state = {
+    bannerThreadList: Array<IThreadMeta>(),
+    indexThreadList: Array<IThreadMeta>()
   }
 
   componentDidMount() {
-    this.props.fetchHome()
+    this.initHome()
   }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
 
   onPullDownRefresh() {
-    this.props.fetchHome()
+    this.initHome()
   }
 
-  onShareAppMessage () {
+  initHome() {
+    this.requestBannerThreadList()
+    this.requestIndexThreadList()
+  }
+
+  requestBannerThreadList() {
+    this.requestHot(431).then(res => {
+      if (res) {
+        this.setState({
+          bannerThreadList: res
+        }, this.isFinish)
+      }
+    })
+  }
+
+  requestIndexThreadList() {
+    this.requestHot(432).then(res => {
+      if (res) {
+        this.setState({
+          indexThreadList: res
+        }, this.isFinish)
+      }
+    })
+  }
+
+  requestHot(bid: number) {
+    return Taro.request({
+      url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
+      data: {},
+      header: {},
+      method: 'GET',
+      dataType: 'json',
+      responseType: 'text'
+    }).then(res => {
+      if (res.statusCode === 200) {
+        console.log(res.data)
+        const itemlist = res.data.itemlist as Array<HotThreadItem>
+        let thraedList = Array<IThreadMeta>()
+        itemlist.forEach(item => {
+          const title = item.title
+          const tid = parseInt(item.id)
+          const url = `https://steamcn.com/t${tid}-1-1`
+          const image = item.coverpath
+          const section = item.fields.forumname
+          const timestamp = parseInt(item.fields.dateline)
+          const username = item.fields.author
+          const uid = parseInt(item.fields.authorid)
+          const avatar = item.fields.avatar_middle
+          const viewed = parseInt(item.fields.views)
+          const replied = parseInt(item.fields.replies)
+          thraedList.push({
+            title,
+            tid,
+            url,
+            image,
+            section,
+            timestamp,
+            author: {
+              username,
+              uid,
+              avatar
+            },
+            stats: {
+              viewed,
+              replied
+            }
+          })
+        })
+        return thraedList
+      } else {
+        Taro.atMessage({
+          message: `刷新失败😱`,
+          type: 'error',
+          duration: 2000
+        })
+      }
+    }, () => {
+      Taro.atMessage({
+        message: '网络连接中断😭',
+        type: 'error',
+        duration: 2000
+      })
+    })
+  }
+
+  isFinish() {
+    if (this.state.bannerThreadList.length > 0
+      && this.state.indexThreadList.length > 0) {
+      Taro.stopPullDownRefresh()
+      Taro.atMessage({
+        message: `刷新成功😁`,
+        type: 'success',
+        duration: 1500
+      })
+    }
+  }
+
+  onShareAppMessage() {
     return {
       title: 'SteamCN 蒸汽动力',
       path: '/pages/index/index'
@@ -93,7 +156,7 @@ class Index extends Component {
   }
 
   render() {
-    const { bannerThreadList, indexThreadList } = this.props
+    const { bannerThreadList, indexThreadList } = this.state
     const swiperItems = bannerThreadList.map(item => {
       return <SwiperItem key={item.tid} onClick={this.toThread.bind(this, item.tid)}>
         <Image src={item.image || ''} className='swiper-item-image' mode='scaleToFill'></Image>
@@ -123,12 +186,5 @@ class Index extends Component {
     )
   }
 }
-
-// #region 导出注意
-//
-// 经过上面的声明后需要将导出的 Taro.Component 子类修改为子类本身的 props 属性
-// 这样在使用这个子类时 Ts 才不会提示缺少 JSX 类型参数错误
-//
-// #endregion
 
 export default Index as ComponentClass<PageOwnProps, PageState>
