@@ -37,7 +37,7 @@ class Setting extends Component {
 
   componentDidShow() {
     this.setState({
-      background: `../../assets/images/login/background${Math.floor(Math.random() * 9)}.jpg`
+      background: `cloud://steamcn.7374-steamcn/assets/img/background${Math.floor(Math.random() * 9)}.jpg`
     })
   }
 
