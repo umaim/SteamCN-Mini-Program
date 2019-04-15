@@ -39,3 +39,48 @@ export interface IHotThreadItemRespond {
     monthviews: string
   }
 }
+
+export interface IThreadRespond {
+  floors: Array<{
+    pid: string,
+    fid: string,
+    tid: string,
+    author: string,
+    authorid: string,
+    subject: string,
+    dateline: string,
+    message: string,
+    avatar: string,
+    uid: string,
+    position: string,
+    views: number,
+    groupid: string,
+    number: string,
+    dbdateline: string,
+    authortitle: string,
+    ratelog?: {},
+    ratelogextcredits?: {
+      '1'?: number,
+      '3'?: number,
+      '4'?: number
+    },
+    totalrate: string[]
+  }>,
+  thread: {
+    tid: string,
+    fid: string,
+    author: string,
+    authorid: string,
+    subject: string,
+    dateline: string,
+    lastpost: string,
+    lastposter: string,
+    views: number,
+    replies: number,
+    displayorder: string,
+    heats: string,
+    favtimes: string,
+    maxposition: string
+  },
+  replyadd: boolean
+}

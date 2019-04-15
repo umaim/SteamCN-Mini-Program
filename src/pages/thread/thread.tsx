@@ -1,11 +1,15 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text } from '@tarojs/components'
 import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
-import { IThread } from 'src/interfaces/thread';
+import { IThread, IReply } from '../../interfaces/thread'
+import { IThreadRespond } from '../../interfaces/respond'
 import ReplyCard from '../../components/ReplyCard/replyCard'
-import { threadParser, replyParser } from '../../utils/parser'
+import { contentCleaner } from '../../utils/cleaner'
 
 import './thread.scss'
 
@@ -19,6 +23,7 @@ type PageOwnProps = {
 
 type PageState = {
   pageNum: number,
+  loadedPosition: number,
   thread: IThread
 }
 
@@ -39,14 +44,15 @@ class Thread extends Component {
 
   state = {
     pageNum: 1,
+    loadedPosition: 0,
     thread: {
       title: '',
       tid: 0,
-      time: '',
+      timestamp: 0,
       viewed: 0,
       replied: 0,
       content: '',
-      maxPage: 0,
+      maxPosition: 0,
       author: {
         username: '',
         uid: 0,
@@ -59,9 +65,8 @@ class Thread extends Component {
           avatar: ''
         },
         content: '',
-        time: '',
-        floor: 0,
-        hash: 0
+        timestamp: 0,
+        position: 0
       }]
     }
   }
@@ -91,7 +96,7 @@ class Thread extends Component {
 
   onReachBottom() {
     console.log('Reach Bottom')
-    if (this.state.pageNum < this.state.thread.maxPage) {
+    if (this.state.loadedPosition < this.state.thread.maxPosition) {
       this.setState({
         pageNum: this.state.pageNum + 1
       }, () => {
@@ -102,64 +107,125 @@ class Thread extends Component {
 
   fetchThread(tid: number, pageNum: number) {
     Taro.request({
-      url: `https://steamcn.com/forum.php?mod=viewthread&tid=${tid}&page=${pageNum}&mobile=1`,
+      url: `https://vnext.steamcn.com/v1/forum/thread/${tid}?page=${pageNum}`,
       data: {},
       header: {},
       method: 'GET',
-      dataType: 'html',
+      dataType: 'json',
       responseType: 'text'
     }).then(res => {
       if (res.statusCode === 200) {
-        const html = res.data as string
+        const threadData = res.data as IThreadRespond
 
-        if (html.indexOf('您必须注册并登录后才能访问此版块') > -1
-          || html.indexOf('抱歉，本帖要求阅读权限高于') > -1
-          || html.indexOf('您必须同时满足以下条件才能访问此版块') > -1) {
-          Taro.hideLoading()
-          Taro.showToast({
-            title: '本帖需要登录才可查看😦',
-            icon: 'none',
-            duration: 10000
-          })
-        } else {
-          if (this.state.pageNum === 1) {
-            const thread = threadParser(html)
-            console.log(thread)
-            this.setState({
-              thread: thread
-            })
-            Taro.hideLoading()
-          } else {
-            const replies = replyParser(html)
-            console.log(replies)
-            this.setState({
-              thread: {
-                ...this.state.thread,
-                replies: this.state.thread.replies.concat(replies)
-              }
+        if (this.state.pageNum === 1) {
+          const floors = threadData.floors
+          const title = threadData.thread.subject
+          const tid = parseInt(threadData.thread.tid)
+          const timestamp = parseInt(threadData.thread.dateline)
+          const viewed = threadData.thread.views
+          const replied = threadData.thread.replies
+          const content = contentCleaner(threadData.floors[0].message)
+          const maxPosition = parseInt(threadData.thread.maxposition)
+          const username = threadData.thread.author
+          const uid = parseInt(threadData.thread.authorid)
+          const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+
+          console.log(content)
+
+          let replies = Array<IReply>()
+          for (let i = 1; i < floors.length; i++) {
+            const floor = floors[i]
+            const username = floor.author
+            const uid = parseInt(floor.authorid)
+            const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+            const content = contentCleaner(floor.message)
+            const timestamp = parseInt(floor.dbdateline)
+            const position = parseInt(floor.position)
+            replies.push({
+              user: {
+                username,
+                uid,
+                avatar
+              },
+              content,
+              timestamp,
+              position
             })
           }
+          this.setState({
+            loadedPosition: this.state.loadedPosition + floors.length,
+            thread: {
+              title,
+              tid,
+              timestamp,
+              viewed,
+              replied,
+              content,
+              maxPosition,
+              author: {
+                username,
+                uid,
+                avatar
+              },
+              replies
+            }
+          })
+          Taro.hideLoading()
+        } else {
+          const floors = threadData.floors
+
+          let replies = Array<IReply>()
+          for (let i = 0; i < floors.length; i++) {
+            const floor = floors[i]
+            const username = floor.author
+            const uid = parseInt(floor.authorid)
+            const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+            const content = contentCleaner(floor.message)
+            const timestamp = parseInt(floor.dbdateline)
+            const position = parseInt(floor.position)
+            replies.push({
+              user: {
+                username,
+                uid,
+                avatar
+              },
+              content,
+              timestamp,
+              position
+            })
+          }
+          this.setState({
+            loadedPosition: this.state.loadedPosition + floors.length,
+            thread: {
+              ...this.state.thread,
+              replies: this.state.thread.replies.concat(replies)
+            }
+          })
         }
       } else {
+        let message = res.data.message as string
+        message = message.replace('</p></div><div><p>', '')
         Taro.atMessage({
-          message: '获取帖子失败😱',
+          message: `无法查看帖子😱，${message}`,
           type: 'error',
-          duration: 1500
+          duration: 2000
         })
       }
     }, () => {
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
-        duration: 1500
+        duration: 2000
       })
     })
   }
 
   render() {
+    dayjs.locale('zh-cn')
+    dayjs.extend(relativeTime)
     const repliesArea = this.state.thread.replies.map(reply => {
       return (
-        <View key={reply.hash}>
+        <View key={reply.position}>
           <ReplyCard reply={reply}></ReplyCard>
         </View>
       )
@@ -178,7 +244,7 @@ class Thread extends Component {
           <View className='info'>
             <Text className='name'>{this.state.thread.author.username}</Text>
             <View className='others'>
-              <Text className='time'>{this.state.thread.time}</Text>
+              <Text className='time'>{dayjs.unix(this.state.thread.timestamp as number).fromNow()}</Text>
               <Text>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</Text>
             </View>
           </View>
