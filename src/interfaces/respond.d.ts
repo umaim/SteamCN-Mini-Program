@@ -1,4 +1,4 @@
-export interface HotThreadItem {
+export interface IHotThreadItem {
   itemid: string,
   id: string,
   idtype: string,
