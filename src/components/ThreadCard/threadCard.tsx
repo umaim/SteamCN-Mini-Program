@@ -34,7 +34,7 @@ class ThreadCard extends Component {
       tid: 1,
       url: '',
       section: '',
-      postTime: '',
+      timestamp: 0,
       author: {
         username: '',
         uid: 1,
@@ -89,7 +89,7 @@ class ThreadCard extends Component {
       </View>
       <View className='footer at-row at-row__justify--between at-row__align--center'>
         <View className='timestamp at-row'>
-          <Text>{dayjs.unix(timestamp as number).fromNow()}</Text>
+          <Text>{dayjs.unix(timestamp).fromNow()}</Text>
         </View>
         <View className='stats at-row at-row__justify--end at-row__align--center'>
           <Image src={see}></Image>

@@ -25,7 +25,7 @@ export interface IThreadMeta {
   /**
    * Thread post time
    */
-  timestamp?: number,
+  timestamp: number,
   /**
    * Thread author info
    */
@@ -65,25 +65,26 @@ export interface IThreadMeta {
 export interface IThread {
   title: string,
   tid: number,
-  time: string,
+  timestamp: number,
   viewed: number,
   replied: number,
   content: string,
-  maxPage: number,
+  maxPosition: number,
   author: {
     username: string,
     uid: number,
     avatar: string
   },
-  replies: Array<{
-    user: {
-      username: string,
-      uid: number,
-      avatar: string
-    },
-    content: string,
-    time: string,
-    floor: number,
-    hash: number
-  }>
+  replies: Array<IReply>
+}
+
+export interface IReply {
+  user: {
+    username: string,
+    uid: number,
+    avatar: string
+  },
+  content: string,
+  timestamp: number,
+  position: number
 }
