@@ -1,12 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { Text, View, Image } from '@tarojs/components'
-
-import logo from '../../assets/images/logo.jpg'
-import qrcode from '../../assets/images/qrcode.jpg'
-import github from '../../assets/images/github.png'
-import steam from '../../assets/images/steam.png'
-import steamcn from '../../assets/images/steamcn.png'
+import { View, Image } from '@tarojs/components'
 
 import './about.scss'
 
@@ -43,7 +37,7 @@ class About extends Component {
     return (
       <View className='container'>
         <View className='item header'>
-          <Image src={logo} className='logo'></Image>
+          <Image src='cloud://steamcn.7374-steamcn/assets/img/logo.jpg' className='logo'></Image>
           <View style='text-align: center;'>蒸汽动力 SteamCN.com</View>
           <View style='text-align: center;'>Version 0.1.0</View>
         </View>
@@ -52,7 +46,7 @@ class About extends Component {
           <View className='title'>项目地址</View>
           <View className='i'>
             <View className='icon'>
-              <Image src={github}></Image>
+              <Image src='cloud://steamcn.7374-steamcn/assets/img/github.png'></Image>
             </View>
             <View className='text'>
               <View>GayHub</View>
@@ -66,7 +60,7 @@ class About extends Component {
 
           <View className='i'>
             <View className='icon'>
-              <Image src={steamcn}></Image>
+              <Image src='cloud://steamcn.7374-steamcn/assets/img/steamcn.png'></Image>
             </View>
             <View className='text'>
               <View>SteamCN</View>
@@ -76,7 +70,7 @@ class About extends Component {
 
           <View className='i'>
             <View className='icon'>
-              <Image src={steam}></Image>
+              <Image src='cloud://steamcn.7374-steamcn/assets/img/steam.png'></Image>
             </View>
             <View className='text'>
               <View>Steam</View>
@@ -87,7 +81,7 @@ class About extends Component {
 
         <View className='item'>
           <View className='title'>小程序二维码</View>
-          <Image src={qrcode} className='qrcode'></Image>
+          <Image src='cloud://steamcn.7374-steamcn/assets/img/qrcode.jpg' className='qrcode'></Image>
         </View>
         <View className='footer'>蒸汽动力 · SteamCN</View>
       </View>

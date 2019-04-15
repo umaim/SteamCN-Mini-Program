@@ -4,7 +4,6 @@ import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtAvatar, AtButton, AtModal, AtMessage } from 'taro-ui'
 
 import { IAccount } from '../../interfaces/account'
-import emptyAvatar from '../../assets/images/empty_avatar_user.png'
 
 import './account.scss'
 
@@ -182,7 +181,7 @@ class Account extends Component {
             <AtAvatar
               className='avatar'
               circle
-              image={this.state.auth ? this.state.account.avatar : emptyAvatar}
+              image={this.state.auth ? this.state.account.avatar : 'cloud://steamcn.7374-steamcn/assets/img/empty_avatar_user.png'}
               size='normal'
             ></AtAvatar>
             <View className='text'>
