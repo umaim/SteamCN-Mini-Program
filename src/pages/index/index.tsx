@@ -5,7 +5,7 @@ import { AtMessage } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
-import { HotThreadItem } from '../../interfaces/respond'
+import { IHotThreadItem } from '../../interfaces/respond'
 
 import './index.scss'
 
@@ -81,7 +81,7 @@ class Index extends Component {
     }).then(res => {
       if (res.statusCode === 200) {
         console.log(res.data)
-        const itemlist = res.data.itemlist as Array<HotThreadItem>
+        const itemlist = res.data.itemlist as Array<IHotThreadItem>
         let thraedList = Array<IThreadMeta>()
         itemlist.forEach(item => {
           const title = item.title
