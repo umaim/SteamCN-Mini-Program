@@ -25,7 +25,7 @@ export interface IThreadMeta {
   /**
    * Thread post time
    */
-  postTime?: string,
+  timestamp?: number,
   /**
    * Thread author info
    */
