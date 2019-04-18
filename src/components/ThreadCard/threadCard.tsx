@@ -47,6 +47,12 @@ class ThreadCard extends Component {
     }
   }
 
+  constructor(args) {
+    super(args)
+    dayjs.locale('zh-cn')
+    dayjs.extend(relativeTime)
+  }
+
   toThread() {
     Taro.getStorage({
       key: 'history'
@@ -57,7 +63,7 @@ class ThreadCard extends Component {
         key: 'history',
         data: history
       })
-    }, (res) => {
+    }, () => {
       let history = Array<IThreadMeta>()
       history.push(this.props.threadMeta)
       Taro.setStorage({
@@ -72,9 +78,6 @@ class ThreadCard extends Component {
   }
 
   render() {
-    dayjs.locale('zh-cn')
-    dayjs.extend(relativeTime)
-
     const { title, section, timestamp, author, stats } = this.props.threadMeta
     return <View className='item' onClick={this.toThread}>
       <View className='header at-row at-row__justify--between'>
