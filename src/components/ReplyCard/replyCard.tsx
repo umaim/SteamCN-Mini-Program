@@ -33,33 +33,40 @@ class ReplyCard extends Component {
   }
 
   static defaultProps = {
-    user: {
-      username: '',
-      uid: 0,
-      avatar: ''
-    },
-    content: '',
-    timestamp: 0,
-    position: 0
+    reply: {
+      user: {
+        username: '',
+        uid: 0,
+        avatar: ''
+      },
+      content: '',
+      timestamp: 0,
+      position: 0
+    }
+  }
+
+  constructor(args) {
+    super(args)
+    dayjs.locale('zh-cn')
+    dayjs.extend(relativeTime)
   }
 
   render() {
-    dayjs.locale('zh-cn')
-    dayjs.extend(relativeTime)
+    const { user, content, timestamp, position } = this.props.reply
     return (
       <View className='reply'>
         <View className='at-row at-row__justify--between'>
           <View className='user'>
-            <AtAvatar circle image={this.props.reply.user.avatar} size='small'></AtAvatar>
+            <AtAvatar circle image={user.avatar} size='small'></AtAvatar>
             <View className='info'>
-              <Text className='name'>{this.props.reply.user.username}</Text>
-              <Text className='time'>{dayjs.unix(this.props.reply.timestamp).fromNow()}</Text>
+              <Text className='name'>{user.username}</Text>
+              <Text className='time'>{dayjs.unix(timestamp).fromNow()}</Text>
             </View>
           </View>
-          <Text className='floor'>{`#${this.props.reply.position}`}</Text>
+          <Text className='floor'>{`#${position}`}</Text>
         </View>
         <View className='content'>
-          <wxparse data={this.props.reply.content} type='html' padding='5'></wxparse>
+          <wxparse data={content} type='html' padding='5'></wxparse>
         </View>
       </View>
     )
