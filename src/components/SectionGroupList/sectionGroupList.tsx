@@ -12,7 +12,7 @@ type PageOwnProps = {
   list: Array<{
     title: string,
     desc: string,
-    fid: string
+    fid: number
   }>
 }
 
@@ -29,11 +29,11 @@ class SectionGroupList extends Component {
     list: [{
       title: '',
       desc: '',
-      fid: ''
+      fid: 0
     }]
   }
 
-  toSectionThreadList(fid: string, title: string) {
+  toSectionThreadList(fid: number, title: string) {
     Taro.navigateTo({
       url: `/pages/section/sectionThreadList?fid=${fid}&title=${title}`
     })
@@ -45,7 +45,7 @@ class SectionGroupList extends Component {
         <View key={item.fid} onClick={this.toSectionThreadList.bind(this, item.fid, item.title)}>
           <View className='section at-row at-row__align--center'>
             <View className='icon'>
-              <Image mode='aspectFill' src={`./assets/${item.fid}.png`}></Image>
+              <Image mode='aspectFill' src={`./assets/f${item.fid}.png`}></Image>
             </View>
             <View className='info at-row'>
               <Text className='title'>{item.title}</Text>

@@ -84,3 +84,26 @@ export interface IThreadRespond {
   },
   replyadd: boolean
 }
+
+export interface ISectionThreadListItem {
+  tid: string,
+  fid: string,
+  author: string,
+  authorid: string,
+  subject: string,
+  dateline: string,
+  lastpost: string,
+  lastposter: string,
+  views: number,
+  replies: string,
+  displayorder: string,
+  heats: string,
+  favtimes: string,
+  maxposition: string,
+  typename: string,
+  dbdateline: string,
+  coverpath: string,
+  content: string,
+  forumname: string,
+  hasAuth: boolean
+}
