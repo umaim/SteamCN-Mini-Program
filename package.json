@@ -41,7 +41,7 @@
 		"redux": "^4.0.0",
 		"redux-logger": "^3.0.6",
 		"redux-thunk": "^2.3.0",
-		"taro-ui": "^2.0.2"
+		"taro-ui": "^2.1.0"
 	},
 	"devDependencies": {
 		"@tarojs/cli": "1.2.26",

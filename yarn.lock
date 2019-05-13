@@ -8986,10 +8986,10 @@ tar@^4:
     safe-buffer "^5.1.2"
     yallist "^3.0.2"
 
-taro-ui@^2.0.2:
-  version "2.0.2"
-  resolved "http://registry.npm.taobao.org/taro-ui/download/taro-ui-2.0.2.tgz#178112e81066a77135d7b0da6d68137cff5ddb5c"
-  integrity sha1-F4ES6BBmp3E117DabWgTfP9d21w=
+taro-ui@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.npm.taobao.org/taro-ui/download/taro-ui-2.1.0.tgz#fb2774d6261db75311ac6ce7be243c412c65a322"
+  integrity sha1-+yd01iYdt1MRrGznviQ8QSxloyI=
   dependencies:
     "@types/react" "^16.7.3"
     bind-decorator "^1.0.11"
