@@ -112,6 +112,7 @@ class Account extends Component {
   }
 
   doLogout() {
+    this.props.logout()
     Taro.request({
       url: 'https://vnext.steamcn.com/v1/auth/logout',
       data: {},
