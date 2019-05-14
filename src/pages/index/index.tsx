@@ -1,4 +1,5 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
 import { AtMessage } from 'taro-ui'
@@ -6,12 +7,19 @@ import { AtMessage } from 'taro-ui'
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
 import { IHotThreadItemRespond } from '../../interfaces/respond'
+import { IAccount } from '../../interfaces/account'
+import { initCredential } from '../../actions/account'
 
 import './index.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void
+}
 
 type PageOwnProps = {}
 
@@ -26,6 +34,14 @@ interface Index {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  }
+}))
 class Index extends Component {
   config: Config = {
     navigationBarTitleText: 'SteamCN 蒸汽动力',
@@ -35,6 +51,10 @@ class Index extends Component {
   state = {
     bannerThreadList: Array<IThreadMeta>(),
     indexThreadList: Array<IThreadMeta>()
+  }
+
+  componentDidShow() {
+    this.props.initCredential()
   }
 
   componentDidMount() {
@@ -74,7 +94,9 @@ class Index extends Component {
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
-      header: {},
+      header: {
+        authorization: this.props.account.accessToken
+      },
       method: 'GET',
       dataType: 'json',
       responseType: 'text'

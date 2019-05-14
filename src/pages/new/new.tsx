@@ -1,4 +1,5 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtMessage } from 'taro-ui'
@@ -6,12 +7,19 @@ import { AtMessage } from 'taro-ui'
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
 import { IHotThreadItemRespond } from '../../interfaces/respond'
+import { IAccount } from '../../interfaces/account'
+import { initCredential } from '../../actions/account'
 
 import './new.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void
+}
 
 type PageOwnProps = {}
 
@@ -25,6 +33,14 @@ interface New {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  }
+}))
 class New extends Component {
   config: Config = {
     navigationBarTitleText: '最新回复',
@@ -40,6 +56,10 @@ class New extends Component {
       title: 'SteamCN 蒸汽动力 - 最新回复',
       path: 'pages/new/new'
     }
+  }
+
+  componentDidShow() {
+    this.props.initCredential()
   }
 
   componentDidMount() {
@@ -68,7 +88,9 @@ class New extends Component {
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
-      header: {},
+      header: {
+        authorization: this.props.account.accessToken
+      },
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
