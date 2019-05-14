@@ -109,7 +109,7 @@ class Index extends Component {
           const title = item.title
           const tid = parseInt(item.id)
           const url = `https://steamcn.com/t${tid}-1-1`
-          const image = item.coverpath
+          const image = `https://blob.steamcn.com/${item.pic}`
           const section = item.fields.forumname
           const timestamp = parseInt(item.fields.dateline)
           const username = item.fields.author
