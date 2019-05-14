@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
+import { AtDivider, AtIcon, AtAvatar, AtMessage } from 'taro-ui'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -223,12 +223,13 @@ class Thread extends Component {
           })
         }
       } else {
+        Taro.hideLoading()
         let message = res.data.message as string
         message = message.replace('</p></div><div><p>', '')
         Taro.atMessage({
           message: `无法查看帖子😱，${message}`,
           type: 'error',
-          duration: 2000
+          duration: 3000
         })
       }
     }, () => {
@@ -255,6 +256,7 @@ class Thread extends Component {
       // <WxparseRichText html={this.state.thread.content}></WxparseRichText> // 效果挺好
       // <RichText nodes={this.state.thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
       <View>
+        <AtMessage />
         <View className='header'>
           <Text className='title'>{this.state.thread.title}</Text>
         </View>
