@@ -1,18 +1,25 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtMessage } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
+import { IAccount } from '../../interfaces/account'
 import { IThreadMeta } from '../../interfaces/thread'
 import { IHotThreadItemRespond } from '../../interfaces/respond'
+import { initCredential } from '../../actions/account'
 
 import './hot.scss'
 
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount
+}
 
-type PageStateProps = {}
-
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void
+}
 
 type PageOwnProps = {}
 
@@ -26,6 +33,14 @@ interface Hot {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  }
+}))
 class Hot extends Component {
   config: Config = {
     navigationBarTitleText: '热门主题',
@@ -41,6 +56,10 @@ class Hot extends Component {
       title: 'SteamCN 蒸汽动力 - 热门主题',
       path: 'pages/hot/hot'
     }
+  }
+
+  componentDidShow() {
+    this.props.initCredential()
   }
 
   componentDidMount() {
@@ -69,7 +88,9 @@ class Hot extends Component {
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
-      header: {},
+      header: {
+        authorization: this.props.account.accessToken
+      },
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
