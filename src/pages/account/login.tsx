@@ -1,14 +1,21 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 import { AtInput, AtButton, AtMessage } from 'taro-ui'
 
 import './login.scss'
+import { initCredential, login, loginSuccess, loginError } from '../../actions/account'
 import { IAccount } from 'src/interfaces/account';
 
 type PageStateProps = {}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void,
+  login: () => void,
+  loginSuccess: (account: IAccount) => void,
+  loginError: () => void
+}
 
 type PageOwnProps = {}
 
@@ -20,11 +27,25 @@ type PageState = {
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
 
-interface Setting {
+interface Login {
   props: IProps;
 }
 
-class Setting extends Component {
+@connect(() => ({}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  },
+  login() {
+    dispatch(login())
+  },
+  loginSuccess(account: IAccount) {
+    dispatch(loginSuccess(account))
+  },
+  loginError() {
+    dispatch(loginError())
+  }
+}))
+class Login extends Component {
   config: Config = {
     navigationBarTitleText: '登录'
   }
@@ -46,20 +67,18 @@ class Setting extends Component {
   handleUsernameChange(value: string) {
     this.setState({
       username: value
-    }, () => {
-      console.log(this.state)
     })
   }
 
   handlePasswordChange(value: string) {
     this.setState({
       password: value
-    }, () => {
-      console.log(this.state)
     })
   }
 
   login() {
+    this.props.login()
+
     const username = this.state.username
     const password = this.state.password
 
@@ -97,12 +116,12 @@ class Setting extends Component {
         const account: IAccount = res.data
         console.log(account)
 
-        Taro.setStorageSync('auth', true)
-        Taro.setStorageSync('account', account)
-        Taro.navigateBack()
+        this.props.loginSuccess(account)
 
+        Taro.navigateBack()
       } else {
         const data = res.data
+        this.props.loginError()
         Taro.atMessage({
           message: `登录失败😱，${data.message}`,
           type: 'error',
@@ -110,6 +129,7 @@ class Setting extends Component {
         })
       }
     }, () => {
+      this.props.loginError()
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
@@ -161,4 +181,4 @@ class Setting extends Component {
   }
 }
 
-export default Setting as ComponentClass<PageOwnProps, PageState>
+export default Login as ComponentClass<PageOwnProps, PageState>
