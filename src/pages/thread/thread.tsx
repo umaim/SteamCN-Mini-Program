@@ -1,4 +1,5 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtDivider, AtIcon, AtAvatar } from 'taro-ui'
@@ -8,14 +9,21 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 import { IThread, IReply } from '../../interfaces/thread'
 import { IThreadRespond } from '../../interfaces/respond'
+import { IAccount } from '../../interfaces/account'
 import ReplyCard from '../../components/ReplyCard/replyCard'
 import { contentCleaner } from '../../utils/cleaner'
+import { initCredential } from '../../actions/account'
 
 import './thread.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void
+}
 
 type PageOwnProps = {
   tid: number
@@ -33,6 +41,14 @@ interface Thread {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  }
+}))
 class Thread extends Component {
   config: Config = {
     navigationBarTitleText: '主题',
@@ -81,7 +97,9 @@ class Thread extends Component {
     this.fetchThread(this.props.tid, this.state.pageNum)
   }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this.props.initCredential()
+  }
 
   componentDidHide() { }
 
@@ -109,7 +127,9 @@ class Thread extends Component {
     Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/thread/${tid}?page=${pageNum}`,
       data: {},
-      header: {},
+      header: {
+        authorization: this.props.account.accessToken
+      },
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
