@@ -1,22 +1,30 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem, AtAvatar, AtButton, AtModal, AtMessage } from 'taro-ui'
 
 import { IAccount } from '../../interfaces/account'
+import { initCredential, logout, logoutSuccess, logoutError } from '../../actions/account'
 
 import './account.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount,
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void,
+  logout: () => void,
+  logoutSuccess: () => void,
+  logoutError: () => void
+}
 
 type PageOwnProps = {}
 
 type PageState = {
   history: number,
-  auth: boolean,
-  account: IAccount,
   logoutConfirmModal: boolean
 }
 
@@ -26,6 +34,23 @@ interface Account {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  },
+  logout() {
+    dispatch(logout())
+  },
+  logoutSuccess() {
+    dispatch(logoutSuccess())
+  },
+  logoutError() {
+    dispatch(logoutError())
+  }
+}))
 class Account extends Component {
   config: Config = {
     navigationBarTitleText: '我的'
@@ -33,17 +58,6 @@ class Account extends Component {
 
   state = {
     history: 0,
-    auth: false,
-    account: {
-      uid: 0,
-      username: '',
-      email: '',
-      avatar: '',
-      groupid: 0,
-      createdAt: '',
-      UpdatedAt: '',
-      accessToken: ''
-    },
     logoutConfirmModal: false
   }
 
@@ -60,28 +74,7 @@ class Account extends Component {
       })
     })
 
-    Taro.getStorage({
-      key: 'auth'
-    }).then(res => {
-      const auth = res.data
-      if (auth) {
-        Taro.getStorage({
-          key: 'account'
-        }).then(res => {
-          const account = res.data
-          this.setState({
-            auth,
-            account
-          })
-        })
-      } else {
-        this.setState({
-          auth
-        })
-      }
-    }, () => {
-      Taro.setStorageSync('auth', false)
-    })
+    this.props.initCredential()
   }
 
   navigator(addr: string) {
@@ -91,7 +84,7 @@ class Account extends Component {
   }
 
   handleProfile() {
-    if (this.state.auth) {
+    if (this.props.auth) {
       // this.navigator('profile')
     } else {
       this.navigator('login')
@@ -102,6 +95,7 @@ class Account extends Component {
     this.setState({
       logoutConfirmModal: true
     })
+    this.props.logout()
   }
 
   closeLogoutModal() {
@@ -122,7 +116,7 @@ class Account extends Component {
       url: 'https://vnext.steamcn.com/v1/auth/logout',
       data: {},
       header: {
-        authorization: this.state.account.accessToken
+        authorization: this.props.account.accessToken
       },
       method: 'POST',
       dataType: 'json',
@@ -131,16 +125,7 @@ class Account extends Component {
       if (res.statusCode === 200) {
         const isSuccessful = res.data.success
         if (isSuccessful) {
-          this.setState({
-            auth: false
-          })
-          Taro.setStorage({
-            key: 'auth',
-            data: false
-          })
-          Taro.removeStorage({
-            key: 'account'
-          })
+          this.props.logoutSuccess()
           Taro.atMessage({
             message: '已退出登录ヾ(•ω•`)o',
             type: 'success',
@@ -148,7 +133,8 @@ class Account extends Component {
           })
         }
       } else {
-        const data = res.data
+        this.props.logoutError()
+        const data = res.data.message
         Taro.atMessage({
           message: `登出失败😱，${data}`,
           type: 'error',
@@ -156,6 +142,7 @@ class Account extends Component {
         })
       }
     }, () => {
+      this.props.logoutError()
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
@@ -173,6 +160,7 @@ class Account extends Component {
   }
 
   render() {
+    const { auth, account } = this.props
     return (
       <View className='wrapper'>
         <AtMessage />
@@ -181,12 +169,12 @@ class Account extends Component {
             <AtAvatar
               className='avatar'
               circle
-              image={this.state.auth ? this.state.account.avatar : 'cloud://steamcn.7374-steamcn/assets/img/empty_avatar_user.png'}
+              image={auth ? account.avatar : 'cloud://steamcn.7374-steamcn/assets/img/empty_avatar_user.png'}
               size='normal'
             ></AtAvatar>
             <View className='text'>
-              <View className='name'>{this.state.auth ? this.state.account.username : '登录'}</View>
-              {this.state.auth
+              <View className='name'>{auth ? account.username : '登录'}</View>
+              {auth
                 ? <View>充满抛瓦！(๑•̀ㅂ•́)و✧</View>
                 : <View>一直未登录你怎么变强？w(ﾟДﾟ)w</View>}
             </View>
@@ -232,7 +220,7 @@ class Account extends Component {
           </AtList>
         </View>
 
-        {this.state.auth &&
+        {auth &&
           <AtButton
             className='logout'
             type='secondary'
@@ -241,9 +229,9 @@ class Account extends Component {
 
         <AtModal
           isOpened={this.state.logoutConfirmModal}
-          cancelText='我再想想'
-          confirmText='不需要了'
-          content='少年，你真的不渴望力量么？'
+          cancelText='点错啦 QAQ'
+          confirmText='不渴望了'
+          content='少年，你真的不渴望抛瓦么？'
           onClose={this.closeLogoutModal.bind(this)}
           onCancel={this.closeLogoutModal.bind(this)}
           onConfirm={this.closeLogoutModalConfirm.bind(this)}
