@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtDivider, AtIcon, AtAvatar, AtMessage } from 'taro-ui'
+import { AtDivider, AtIcon, AtAvatar, AtMessage, AtLoadMore } from 'taro-ui'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -32,7 +32,9 @@ type PageOwnProps = {
 type PageState = {
   pageNum: number,
   loadedPosition: number,
-  thread: IThread
+  thread: IThread,
+  loadMoreVisibility: boolean,
+  loadMoreStatus: 'more' | 'loading' | 'noMore' | undefined
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -61,6 +63,8 @@ class Thread extends Component {
   state = {
     pageNum: 1,
     loadedPosition: 0,
+    loadMoreVisibility: false,
+    loadMoreStatus: 'loading',
     thread: {
       title: '',
       tid: 0,
@@ -116,9 +120,16 @@ class Thread extends Component {
     console.log('Reach Bottom')
     if (this.state.loadedPosition < this.state.thread.maxPosition) {
       this.setState({
-        pageNum: this.state.pageNum + 1
+        pageNum: this.state.pageNum + 1,
+        loadMoreVisibility: true,
+        loadMoreStatus: 'loading'
       }, () => {
         this.fetchThread(this.props.tid, this.state.pageNum)
+      })
+    } else {
+      this.setState({
+        loadMoreVisibility: true,
+        loadMoreStatus: 'noMore'
       })
     }
   }
@@ -216,6 +227,8 @@ class Thread extends Component {
           }
           this.setState({
             loadedPosition: this.state.loadedPosition + floors.length,
+            loadMoreVisibility: false,
+            loadMoreStatus: 'more',
             thread: {
               ...this.state.thread,
               replies: this.state.thread.replies.concat(replies)
@@ -281,6 +294,13 @@ class Thread extends Component {
         </AtDivider>
 
         {repliesArea}
+
+        {this.state.loadMoreVisibility &&
+          <AtLoadMore
+            status={this.state.loadMoreStatus as "loading" | "more" | "noMore" | undefined}
+            loadingText='捕获更多回复中~🤩'
+            noMoreText='下面真的没有啦~😳'
+          />}
       </View>
     )
   }
