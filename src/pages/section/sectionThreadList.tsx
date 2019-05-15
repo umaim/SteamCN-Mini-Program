@@ -1,17 +1,25 @@
 import { ComponentClass } from 'react'
+import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtMessage } from 'taro-ui'
 
-import { IThreadMeta } from '../../interfaces/thread'
-import { ISectionThreadListItem } from '../../interfaces/respond'
 import ThreadCard from '../../components/ThreadCard/threadCard'
+import { IThreadMeta } from '../../interfaces/thread'
+import { IAccount } from '../../interfaces/account'
+import { ISectionThreadListItem } from '../../interfaces/respond'
+import { initCredential } from '../../actions/account'
 
 import './sectionThreadList.scss'
 
-type PageStateProps = {}
+type PageStateProps = {
+  auth: boolean,
+  account: IAccount
+}
 
-type PageDispatchProps = {}
+type PageDispatchProps = {
+  initCredential: () => void
+}
 
 type PageOwnProps = {
   fid: number,
@@ -29,16 +37,19 @@ interface SectionThreadList {
   props: IProps;
 }
 
+@connect(({ account }) => ({
+  auth: account.auth,
+  account: account.account
+}), (dispatch) => ({
+  initCredential() {
+    dispatch(initCredential())
+  }
+}))
 class SectionThreadList extends Component {
   config: Config = {
     navigationBarTitleText: '板块',
     enablePullDownRefresh: true,
     onReachBottomDistance: 150
-  }
-
-  static defaultProps = {
-    fid: 0,
-    title: ''
   }
 
   state = {
@@ -85,7 +96,9 @@ class SectionThreadList extends Component {
     Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/thread?fid=${fid}&page=${page}&orderby=dateline`,
       data: {},
-      header: {},
+      header: {
+        authorization: this.props.account.accessToken
+      },
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
@@ -143,8 +156,20 @@ class SectionThreadList extends Component {
             duration: 1500
           })
         })
+      } else {
+        Taro.hideLoading()
+        Taro.stopPullDownRefresh()
+        let message = res.data.message as string
+        message = message.replace('</p></div><div><p>', '')
+        Taro.atMessage({
+          message: `无法查看本板块😱，${message}`,
+          type: 'error',
+          duration: 3000
+        })
       }
     }, () => {
+      Taro.hideLoading()
+      Taro.stopPullDownRefresh()
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
