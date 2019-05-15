@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtMessage } from 'taro-ui'
+import { AtMessage, AtLoadMore } from 'taro-ui'
 
 import ThreadCard from '../../components/ThreadCard/threadCard'
 import { IThreadMeta } from '../../interfaces/thread'
@@ -28,7 +28,9 @@ type PageOwnProps = {
 
 type PageState = {
   sectionThreadList: IThreadMeta[],
-  pageNum: number
+  pageNum: number,
+  loadMoreVisibility: boolean,
+  loadMoreStatus: 'more' | 'loading' | 'noMore' | undefined
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -49,12 +51,14 @@ class SectionThreadList extends Component {
   config: Config = {
     navigationBarTitleText: '板块',
     enablePullDownRefresh: true,
-    onReachBottomDistance: 150
+    onReachBottomDistance: 300
   }
 
   state = {
     sectionThreadList: Array<IThreadMeta>(),
-    pageNum: 1
+    pageNum: 1,
+    loadMoreVisibility: false,
+    loadMoreStatus: 'loading'
   }
 
   constructor(props) {
@@ -83,11 +87,9 @@ class SectionThreadList extends Component {
   onReachBottom() {
     console.log('Reach Bottom')
     this.setState({
-      pageNum: this.state.pageNum + 1
+      pageNum: this.state.pageNum + 1,
+      loadMoreVisibility: true
     }, () => {
-      Taro.showLoading({
-        title: '正在加载'
-      })
       this.fetchSection(this.props.fid, this.state.pageNum)
     })
   }
@@ -146,15 +148,11 @@ class SectionThreadList extends Component {
           })
         }
         this.setState({
-          sectionThreadList: this.state.sectionThreadList.concat(threadList)
+          sectionThreadList: this.state.sectionThreadList.concat(threadList),
+          loadMoreVisibility: false
         }, () => {
           Taro.hideLoading()
           Taro.stopPullDownRefresh()
-          Taro.atMessage({
-            message: '刷新成功😀',
-            type: 'success',
-            duration: 1500
-          })
         })
       } else {
         Taro.hideLoading()
@@ -187,6 +185,12 @@ class SectionThreadList extends Component {
       <View className='thread-list'>
         <AtMessage />
         {threadCards}
+        {this.state.loadMoreVisibility &&
+          <AtLoadMore
+            status={this.state.loadMoreStatus as "loading" | "more" | "noMore" | undefined}
+            loadingText='捕获更多帖子中~🤩'
+            noMoreText='下面真的没有啦~😳'
+          />}
       </View>
     )
   }
