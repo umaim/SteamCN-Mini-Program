@@ -60,7 +60,7 @@
 		"babel-preset-env": "^1.6.1",
 		"eslint": "^4.19.1",
 		"eslint-config-taro": "1.2.26",
-		"eslint-plugin-import": "^2.12.0",
+		"eslint-plugin-import": "^2.17.2",
 		"eslint-plugin-react": "^7.8.2",
 		"eslint-plugin-taro": "1.2.26",
 		"eslint-plugin-typescript": "^0.14.0",
