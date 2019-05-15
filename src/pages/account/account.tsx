@@ -6,6 +6,7 @@ import { AtList, AtListItem, AtAvatar, AtButton, AtModal, AtMessage } from 'taro
 
 import { IAccount } from '../../interfaces/account'
 import { initCredential, logout, logoutSuccess, logoutError } from '../../actions/account'
+import empty_avatar_user from './assets/empty_avatar_user.png'
 
 import './account.scss'
 
@@ -170,7 +171,7 @@ class Account extends Component {
             <AtAvatar
               className='avatar'
               circle
-              image={auth ? account.avatar : 'cloud://steamcn.7374-steamcn/assets/img/empty_avatar_user.png'}
+              image={auth ? account.avatar : empty_avatar_user}
               size='normal'
             ></AtAvatar>
             <View className='text'>
