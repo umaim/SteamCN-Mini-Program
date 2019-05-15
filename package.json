@@ -1,8 +1,8 @@
 {
 	"name": "steamcn-mini-program",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"private": true,
-	"description": "An Unofficial SteamCN Forum Mini Program",
+	"description": "SteamCN Forum Official Mini Program",
 	"scripts": {
 		"build:weapp": "taro build --type weapp",
 		"build:swan": "taro build --type swan",
