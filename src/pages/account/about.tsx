@@ -39,7 +39,7 @@ class About extends Component {
         <View className='item header'>
           <Image src='cloud://steamcn.7374-steamcn/assets/img/logo.jpg' className='logo'></Image>
           <View style='text-align: center;'>蒸汽动力 SteamCN.com</View>
-          <View style='text-align: center;'>Version 0.1.0</View>
+          <View style='text-align: center;'>Version 0.2.0</View>
         </View>
 
         <View className='item'>
