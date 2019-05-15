@@ -64,6 +64,6 @@
 		"eslint-plugin-react": "^7.8.2",
 		"eslint-plugin-taro": "1.2.26",
 		"eslint-plugin-typescript": "^0.14.0",
-		"typescript": "^3.0.1"
+		"typescript": "^3.4.5"
 	}
 }
