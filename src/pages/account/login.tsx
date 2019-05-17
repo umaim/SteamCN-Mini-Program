@@ -1,12 +1,13 @@
 import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Picker } from '@tarojs/components'
 import { AtInput, AtButton, AtMessage } from 'taro-ui'
 
 import './login.scss'
 import { initCredential, login, loginSuccess, loginError } from '../../actions/account'
 import { IAccount } from 'src/interfaces/account';
+import { string } from 'prop-types';
 
 type PageStateProps = {}
 
@@ -53,7 +54,10 @@ class Login extends Component {
   state = {
     username: '',
     password: '',
-    background: ''
+    background: '',
+    questions: ['未设置', '母亲的名字', '爷爷的名字', '父亲出生的城市', '您其中一位老师的名字', '您个人计算机的型号', '您最喜欢的餐馆名称', '驾驶执照最后四位数字'],
+    questionid: 0,
+    answer: ''
   }
 
   componentDidShow() {
@@ -68,19 +72,37 @@ class Login extends Component {
     this.setState({
       username: value
     })
+    return value
   }
 
   handlePasswordChange(value: string) {
     this.setState({
       password: value
     })
+    return value
+  }
+
+  handleQuestionsChange(e) {
+    this.setState({
+      questionid: parseInt(e.detail.value)
+    })
+  }
+
+  handleAnswerChange(value: string) {
+    this.setState({
+      answer: value
+    })
+    return value
   }
 
   login() {
     this.props.login()
-
-    const username = this.state.username
-    const password = this.state.password
+    const {
+      username,
+      password,
+      questionid,
+      answer
+    } = this.state
 
     if (username.length === 0) {
       Taro.atMessage({
@@ -96,6 +118,13 @@ class Login extends Component {
         duration: 1500
       })
       return
+    } else if (questionid !== 0 && answer.trim() === '') {
+      Taro.atMessage({
+        message: `请输入安全问题答案😟`,
+        type: 'error',
+        duration: 1500
+      })
+      return
     }
 
     Taro.request({
@@ -103,7 +132,9 @@ class Login extends Component {
       data: {
         username: username,
         password: password,
-        loginfield: username
+        loginfield: username,
+        questionid: questionid === 0 ? '' : questionid,
+        answer: questionid === 0 ? '' : answer
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
@@ -139,6 +170,13 @@ class Login extends Component {
   }
 
   render() {
+    const {
+      username,
+      password,
+      questions,
+      questionid,
+      answer
+    } = this.state
     return (
       <View className='wrapper'>
         <AtMessage />
@@ -155,7 +193,7 @@ class Login extends Component {
           title='用户名：'
           type='text'
           placeholder='请输入用户名'
-          value={this.state.username}
+          value={username}
           onChange={this.handleUsernameChange.bind(this)}
         />
         <AtInput
@@ -164,9 +202,26 @@ class Login extends Component {
           title='密码：'
           type='password'
           placeholder='请输入密码'
-          value={this.state.password}
+          value={password}
           onChange={this.handlePasswordChange.bind(this)}
         />
+        <Picker mode='selector' range={questions} value={questionid} onChange={this.handleQuestionsChange}>
+          <View className='list-item'>
+            <View className='list-item__label'>安全问题：</View>
+            <View className='list-item__value'>{questions[questionid]}</View>
+          </View>
+        </Picker>
+        {this.state.questionid !== 0 &&
+          <AtInput
+            clear
+            name='answer'
+            title='答案：'
+            type='text'
+            placeholder='安全问题答案'
+            value={answer}
+            onChange={this.handleAnswerChange.bind(this)}
+          />
+        }
         <AtButton
           className='login'
           type='primary'
