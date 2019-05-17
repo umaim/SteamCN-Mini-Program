@@ -76,6 +76,9 @@ class SectionThreadList extends Component {
   }
 
   onPullDownRefresh() {
+    Taro.showLoading({
+      title: '正在加载'
+    })
     this.setState({
       sectionThreadList: Array<IThreadMeta>(),
       pageNum: 1
