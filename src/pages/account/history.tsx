@@ -1,6 +1,6 @@
 import { ComponentClass } from 'react'
 import Taro, { Component, Config } from '@tarojs/taro'
-import { Text, View, Image } from '@tarojs/components'
+import { View } from '@tarojs/components'
 
 import './history.scss'
 import ThreadCard from '../../components/ThreadCard/threadCard'
@@ -14,7 +14,9 @@ type PageDispatchProps = {}
 type PageOwnProps = {}
 
 type PageState = {
-  historyThreadList: IThreadMeta[]
+  historyThreadList: IThreadMeta[],
+  history: IThreadMeta[],
+  page: number
 }
 
 type IProps = PageStateProps & PageDispatchProps & PageOwnProps
@@ -25,19 +27,25 @@ interface History {
 
 class History extends Component {
   config: Config = {
-    navigationBarTitleText: '历史记录'
+    navigationBarTitleText: '历史记录',
+    onReachBottomDistance: 300
   }
 
   state = {
-    historyThreadList: Array<IThreadMeta>()
+    historyThreadList: Array<IThreadMeta>(),
+    history: Array<IThreadMeta>(),
+    page: 1
   }
 
   componentDidMount() {
     Taro.getStorage({
       key: 'history'
     }).then((res) => {
+      const history = res.data as unknown as Array<IThreadMeta>
       this.setState({
-        historyThreadList: res.data
+        history: history.reverse()
+      }, () => {
+        this.showMoreHistory()
       })
     }, () => {
       Taro.atMessage({
@@ -48,9 +56,34 @@ class History extends Component {
     })
   }
 
+  onReachBottom() {
+    this.showMoreHistory()
+  }
+
+  showMoreHistory() {
+    const {
+      history,
+      historyThreadList,
+      page
+    } = this.state
+    if ((page - 1) * 10 >= history.length) {
+      return
+    } else if (page * 10 < history.length) {
+      this.setState({
+        historyThreadList: historyThreadList.concat(history.slice((page - 1) * 10, page * 10)),
+        page: page + 1
+      })
+    } else {
+      this.setState({
+        historyThreadList: historyThreadList.concat(history.slice((page - 1) * 10, history.length)),
+        page: page + 1
+      })
+    }
+  }
+
   render() {
     const { historyThreadList } = this.state
-    const threadCards = historyThreadList.reverse().map(item => {
+    const threadCards = historyThreadList.map(item => {
       return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
     })
     return (
