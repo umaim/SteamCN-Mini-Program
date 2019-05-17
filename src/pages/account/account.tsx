@@ -124,23 +124,20 @@ class Account extends Component {
       dataType: 'json',
       responseType: 'text'
     }).then(res => {
-      if (res.statusCode === 200) {
-        const isSuccessful = res.data.success
-        if (isSuccessful) {
-          this.props.logoutSuccess()
-          Taro.atMessage({
-            message: '已退出登录ヾ(•ω•`)o',
-            type: 'success',
-            duration: 2000
-          })
-        }
+      if (res.statusCode === 200 || res.statusCode === 401) {
+        this.props.logoutSuccess()
+        Taro.atMessage({
+          message: '已退出登录ヾ(•ω•`)o',
+          type: 'success',
+          duration: 2000
+        })
       } else {
         this.props.logoutError()
         const data = res.data.message
         Taro.atMessage({
           message: `登出失败😱，${data}`,
           type: 'error',
-          duration: 2000
+          duration: 3000
         })
       }
     }, () => {

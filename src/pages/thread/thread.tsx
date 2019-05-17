@@ -237,13 +237,21 @@ class Thread extends Component {
         }
       } else {
         Taro.hideLoading()
-        let message = res.data.message as string
-        message = message.replace('</p></div><div><p>', '')
-        Taro.atMessage({
-          message: `无法查看帖子😱，${message}`,
-          type: 'error',
-          duration: 3000
-        })
+        if (this.props.auth) {
+          Taro.atMessage({
+            message: `登录凭据过期，请重新登录🥀`,
+            type: 'error',
+            duration: 3000
+          })
+        } else {
+          let message = res.data.message as string
+          message = message.replace('</p></div><div><p>', '')
+          Taro.atMessage({
+            message: `无法查看帖子😱，${message}`,
+            type: 'error',
+            duration: 3000
+          })
+        }
       }
     }, () => {
       Taro.atMessage({
