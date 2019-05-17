@@ -68,7 +68,7 @@ class ThreadCard extends Component {
       let history = res.data as unknown as Array<IThreadMeta>
 
       history = history.filter(i => {
-        if (i.tid !== this.props.threadMeta.tid) {
+        if (i.tid === this.props.threadMeta.tid) {
           return false
         } else {
           return true
