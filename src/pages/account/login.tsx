@@ -7,7 +7,6 @@ import { AtInput, AtButton, AtMessage } from 'taro-ui'
 import './login.scss'
 import { initCredential, login, loginSuccess, loginError } from '../../actions/account'
 import { IAccount } from 'src/interfaces/account';
-import { string } from 'prop-types';
 
 type PageStateProps = {}
 
