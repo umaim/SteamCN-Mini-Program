@@ -71,6 +71,9 @@ class Hot extends Component {
   }
 
   initHot() {
+    Taro.showLoading({
+      title: '努力加载中 💦'
+    })
     this.requestHotThreadList()
   }
 
@@ -149,6 +152,7 @@ class Hot extends Component {
   isFinish() {
     if (this.state.hotThreadList.length > 0) {
       Taro.stopPullDownRefresh()
+      Taro.hideLoading()
       Taro.atMessage({
         message: `刷新成功😁`,
         type: 'success',

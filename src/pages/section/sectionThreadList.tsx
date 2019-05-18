@@ -70,14 +70,14 @@ class SectionThreadList extends Component {
 
   componentDidMount() {
     Taro.showLoading({
-      title: '正在加载'
+      title: '努力加载中 💦'
     })
     this.fetchSection(this.$router.params.fid, this.state.pageNum)
   }
 
   onPullDownRefresh() {
     Taro.showLoading({
-      title: '正在加载'
+      title: '努力加载中 💦'
     })
     this.setState({
       sectionThreadList: Array<IThreadMeta>(),

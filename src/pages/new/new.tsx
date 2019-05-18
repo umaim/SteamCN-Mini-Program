@@ -71,6 +71,9 @@ class New extends Component {
   }
 
   initNew() {
+    Taro.showLoading({
+      title: '努力加载中 💦'
+    })
     this.requestNewThreadList()
   }
 
@@ -149,6 +152,7 @@ class New extends Component {
   isFinish() {
     if (this.state.newThreadList.length > 0) {
       Taro.stopPullDownRefresh()
+      Taro.hideLoading()
       Taro.atMessage({
         message: `刷新成功😁`,
         type: 'success',
