@@ -95,7 +95,7 @@ class ThreadCard extends Component {
     return <View className='item' onClick={this.toThread}>
       <View className='header at-row at-row__justify--between'>
         <View className='author at-col'>
-          {author.avatar && <Image src={author.avatar} mode='aspectFill'></Image>}
+          {author.avatar && <Image src={author.avatar} className='header-avatar' mode='aspectFill'></Image>}
           <Text>{author.username}</Text>
         </View>
         <Text className='type'>{section}</Text>
@@ -108,9 +108,9 @@ class ThreadCard extends Component {
           <Text>{dayjs.unix(timestamp).fromNow()}</Text>
         </View>
         <View className='stats at-row at-row__justify--end at-row__align--center'>
-          <Image src={see}></Image>
+          <Image src={see} className='stats-image'></Image>
           <Text>{stats.viewed}</Text>
-          <Image src={reply}></Image>
+          <Image src={reply} className='stats-image'></Image>
           <Text>{stats.replied}</Text>
         </View>
       </View>
