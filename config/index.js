@@ -26,7 +26,7 @@ const config = {
   },
   copy: {
     patterns: [
-      { from: 'src/components/SectionGroupList/assets/', to: 'dist/components/SectionGroupList/assets/'}
+      { from: 'src/components/SectionGroupList/assets/', to: 'dist/weapp/components/SectionGroupList/assets/'}
     ],
     options: {
     }
