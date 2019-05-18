@@ -97,7 +97,6 @@ class Setting extends Component {
     this.setState({
       logoutConfirmModal: true
     })
-    this.props.logout()
   }
 
   closeLogoutModal() {
@@ -115,6 +114,9 @@ class Setting extends Component {
 
   doLogout() {
     this.props.logout()
+    Taro.showLoading({
+      title: '正在登出 💦'
+    })
     Taro.request({
       url: 'https://vnext.steamcn.com/v1/auth/logout',
       data: {},
@@ -127,6 +129,7 @@ class Setting extends Component {
     }).then(res => {
       if (res.statusCode === 200 || res.statusCode === 401) {
         this.props.logoutSuccess()
+        Taro.hideLoading()
         Taro.atMessage({
           message: '已退出登录ヾ(•ω•`)o',
           type: 'success',
@@ -135,6 +138,7 @@ class Setting extends Component {
       } else {
         this.props.logoutError()
         const data = res.data.message
+        Taro.hideLoading()
         Taro.atMessage({
           message: `登出失败😱，${data}`,
           type: 'error',
@@ -143,6 +147,7 @@ class Setting extends Component {
       }
     }, () => {
       this.props.logoutError()
+      Taro.hideLoading()
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
@@ -156,11 +161,12 @@ class Setting extends Component {
     return (
       <View>
         <AtMessage />
-        <View className='container' >
+        <View className='container'>
           <AtList>
             <AtListItem title='清除历史' extraText={`${this.state.size} KB`} onClick={this.clearHistory} />
           </AtList>
         </View>
+
         {auth &&
           <AtButton
             className='logout'
