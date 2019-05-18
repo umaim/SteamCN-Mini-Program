@@ -113,6 +113,7 @@ class Setting extends Component {
   }
 
   doLogout() {
+    const { account } = this.props
     this.props.logout()
     Taro.showLoading({
       title: '正在登出 💦'
@@ -121,7 +122,7 @@ class Setting extends Component {
       url: 'https://vnext.steamcn.com/v1/auth/logout',
       data: {},
       header: {
-        authorization: this.props.account.accessToken
+        authorization: account.accessToken
       },
       method: 'POST',
       dataType: 'json',
@@ -158,12 +159,16 @@ class Setting extends Component {
 
   render() {
     const { auth } = this.props
+    const {
+      size,
+      logoutConfirmModal
+    } = this.state
     return (
       <View>
         <AtMessage />
         <View className='container'>
           <AtList>
-            <AtListItem title='清除历史' extraText={`${this.state.size} KB`} onClick={this.clearHistory} />
+            <AtListItem title='清除历史' extraText={`${size} KB`} onClick={this.clearHistory} />
           </AtList>
         </View>
 
@@ -175,7 +180,7 @@ class Setting extends Component {
           >退出登录 ヾ(•ω•`)o</AtButton>}
 
         <AtModal
-          isOpened={this.state.logoutConfirmModal}
+          isOpened={logoutConfirmModal}
           cancelText='点错啦 QAQ'
           confirmText='不渴望了'
           content='少年，你真的不渴望抛瓦么？'

@@ -94,11 +94,12 @@ class Thread extends Component {
   componentWillReceiveProps() { }
 
   componentDidMount() {
+    const { pageNum } = this.state
     Taro.showLoading({
       title: '努力加载中 💦'
     })
     this.props.tid = this.$router.params.tid as number
-    this.fetchThread(this.props.tid, this.state.pageNum)
+    this.fetchThread(this.props.tid, pageNum)
   }
 
   componentDidShow() {
@@ -110,21 +111,24 @@ class Thread extends Component {
   componentWillUnmount() { }
 
   onShareAppMessage() {
+    const { thread } = this.state
     return {
-      title: `${this.state.thread.title} - SteamCN 蒸汽动力`,
+      title: `${thread.title} - SteamCN 蒸汽动力`,
       path: `/pages/thread/thread?tid=${this.$router.params.tid}`
     }
   }
 
   onReachBottom() {
-    console.log('Reach Bottom')
-    if (this.state.loadedPosition < this.state.thread.maxPosition) {
+    const { loadedPosition, thread, pageNum } = this.state
+    const { tid } = this.props
+    if (loadedPosition < thread.maxPosition) {
       this.setState({
-        pageNum: this.state.pageNum + 1,
+        pageNum: pageNum + 1,
         loadMoreVisibility: true,
         loadMoreStatus: 'loading'
       }, () => {
-        this.fetchThread(this.props.tid, this.state.pageNum)
+        const { pageNum } = this.state
+        this.fetchThread(tid, pageNum)
       })
     } else {
       this.setState({
@@ -135,11 +139,12 @@ class Thread extends Component {
   }
 
   fetchThread(tid: number, pageNum: number) {
+    const { account } = this.props
     Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/thread/${tid}?page=${pageNum}`,
       data: {},
       header: {
-        authorization: this.props.account.accessToken
+        authorization: account.accessToken
       },
       method: 'GET',
       dataType: 'json',
@@ -147,8 +152,9 @@ class Thread extends Component {
     }).then(res => {
       if (res.statusCode === 200) {
         const threadData = res.data as IThreadRespond
-
-        if (this.state.pageNum === 1) {
+        const { pageNum } = this.state
+        if (pageNum === 1) {
+          const { loadedPosition } = this.state
           const floors = threadData.floors
           const title = threadData.thread.subject
           const tid = parseInt(threadData.thread.tid)
@@ -161,7 +167,7 @@ class Thread extends Component {
           const uid = parseInt(threadData.thread.authorid)
           const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
 
-          console.log(content)
+          // console.log(content) // 打印主贴 HTML 代码
 
           let replies = Array<IReply>()
           for (let i = 1; i < floors.length; i++) {
@@ -184,7 +190,7 @@ class Thread extends Component {
             })
           }
           this.setState({
-            loadedPosition: this.state.loadedPosition + floors.length,
+            loadedPosition: loadedPosition + floors.length,
             thread: {
               title,
               tid,
@@ -203,6 +209,7 @@ class Thread extends Component {
           })
           Taro.hideLoading()
         } else {
+          const { loadedPosition, thread } = this.state
           const floors = threadData.floors
 
           let replies = Array<IReply>()
@@ -226,18 +233,19 @@ class Thread extends Component {
             })
           }
           this.setState({
-            loadedPosition: this.state.loadedPosition + floors.length,
+            loadedPosition: loadedPosition + floors.length,
             loadMoreVisibility: false,
             loadMoreStatus: 'more',
             thread: {
-              ...this.state.thread,
-              replies: this.state.thread.replies.concat(replies)
+              ...thread,
+              replies: thread.replies.concat(replies)
             }
           })
         }
       } else {
+        const { auth } = this.props
         Taro.hideLoading()
-        if (this.props.auth) {
+        if (auth) {
           Taro.atMessage({
             message: `登录凭据过期，请重新登录🥀`,
             type: 'error',
@@ -265,7 +273,13 @@ class Thread extends Component {
   render() {
     dayjs.locale('zh-cn')
     dayjs.extend(relativeTime)
-    const repliesArea = this.state.thread.replies.map(reply => {
+
+    const {
+      thread,
+      loadMoreStatus,
+      loadMoreVisibility
+    } = this.state
+    const repliesArea = thread.replies.map(reply => {
       return (
         <View key={reply.position}>
           <ReplyCard reply={reply}></ReplyCard>
@@ -273,28 +287,28 @@ class Thread extends Component {
       )
     })
     return (
-      // <WxmlifyRichText html={this.state.thread.content}></WxmlifyRichText> // 组件报错，不可用
-      // <WxparseRichText html={this.state.thread.content}></WxparseRichText> // 效果挺好
-      // <RichText nodes={this.state.thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
+      // <WxmlifyRichText html={thread.content}></WxmlifyRichText> // 组件报错，不可用
+      // <WxparseRichText html={thread.content}></WxparseRichText> // 效果挺好
+      // <RichText nodes={thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
       <View>
         <AtMessage />
         <View className='header'>
-          <Text className='title'>{this.state.thread.title}</Text>
+          <Text className='title'>{thread.title}</Text>
         </View>
 
         <View className='author'>
-          <AtAvatar circle image={this.state.thread.author.avatar} size='small' className='avatar'></AtAvatar>
+          <AtAvatar circle image={thread.author.avatar} size='small' className='avatar'></AtAvatar>
           <View className='info'>
-            <Text className='name'>{this.state.thread.author.username}</Text>
+            <Text className='name'>{thread.author.username}</Text>
             <View className='others'>
-              <Text className='time'>{dayjs.unix(this.state.thread.timestamp as number).fromNow()}</Text>
-              <Text>阅读 {this.state.thread.viewed} · 回复 {this.state.thread.replied}</Text>
+              <Text className='time'>{dayjs.unix(thread.timestamp as number).fromNow()}</Text>
+              <Text>阅读 {thread.viewed} · 回复 {thread.replied}</Text>
             </View>
           </View>
         </View>
 
         <View className='content'>
-          <wxparse data={this.state.thread.content} type='html' padding='15'></wxparse>
+          <wxparse data={thread.content} type='html' padding='15'></wxparse>
         </View>
 
         <AtDivider>
@@ -303,9 +317,9 @@ class Thread extends Component {
 
         {repliesArea}
 
-        {this.state.loadMoreVisibility &&
+        {loadMoreVisibility &&
           <AtLoadMore
-            status={this.state.loadMoreStatus as "loading" | "more" | "noMore" | undefined}
+            status={loadMoreStatus as "loading" | "more" | "noMore" | undefined}
             loadingText='捕获更多回复中~🤩'
             noMoreText='下面真的没有啦~😳'
           />}

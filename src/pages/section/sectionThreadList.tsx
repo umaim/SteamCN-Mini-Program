@@ -63,19 +63,23 @@ class SectionThreadList extends Component {
 
   constructor(props) {
     super(props)
-    this.state.pageNum = 1
+    this.setState({
+      pageNum: 1
+    })
     this.props.fid = this.$router.params.fid
     this.props.title = this.$router.params.title
   }
 
   componentDidMount() {
+    const { pageNum } = this.state
     Taro.showLoading({
       title: '努力加载中 💦'
     })
-    this.fetchSection(this.$router.params.fid, this.state.pageNum)
+    this.fetchSection(this.$router.params.fid, pageNum)
   }
 
   onPullDownRefresh() {
+    const { fid } = this.props
     Taro.showLoading({
       title: '努力加载中 💦'
     })
@@ -83,26 +87,30 @@ class SectionThreadList extends Component {
       sectionThreadList: Array<IThreadMeta>(),
       pageNum: 1
     }, () => {
-      this.fetchSection(this.props.fid, this.state.pageNum)
+      const { pageNum } = this.state
+      this.fetchSection(fid, pageNum)
     })
   }
 
   onReachBottom() {
-    console.log('Reach Bottom')
+    const { pageNum } = this.state
+    const { fid } = this.props
     this.setState({
-      pageNum: this.state.pageNum + 1,
+      pageNum: pageNum + 1,
       loadMoreVisibility: true
     }, () => {
-      this.fetchSection(this.props.fid, this.state.pageNum)
+      const { pageNum } = this.state
+      this.fetchSection(fid, pageNum)
     })
   }
 
   fetchSection(fid: number, page: number) {
+    const { account } = this.props
     Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/thread?fid=${fid}&page=${page}&orderby=dateline`,
       data: {},
       header: {
-        authorization: this.props.account.accessToken
+        authorization: account.accessToken
       },
       method: 'GET',
       dataType: 'json',
@@ -150,17 +158,19 @@ class SectionThreadList extends Component {
             }
           })
         }
+        const { sectionThreadList } = this.state
         this.setState({
-          sectionThreadList: this.state.sectionThreadList.concat(threadList),
+          sectionThreadList: sectionThreadList.concat(threadList),
           loadMoreVisibility: false
         }, () => {
           Taro.hideLoading()
           Taro.stopPullDownRefresh()
         })
       } else {
+        const { auth } = this.props
         Taro.hideLoading()
         Taro.stopPullDownRefresh()
-        if (this.props.auth) {
+        if (auth) {
           Taro.atMessage({
             message: `登录凭据过期，请重新登录🥀`,
             type: 'error',
@@ -188,7 +198,7 @@ class SectionThreadList extends Component {
   }
 
   render() {
-    const { sectionThreadList } = this.state
+    const { sectionThreadList, loadMoreStatus, loadMoreVisibility } = this.state
     const threadCards = sectionThreadList.map(item => {
       return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
     })
@@ -196,9 +206,9 @@ class SectionThreadList extends Component {
       <View className='thread-list'>
         <AtMessage />
         {threadCards}
-        {this.state.loadMoreVisibility &&
+        {loadMoreVisibility &&
           <AtLoadMore
-            status={this.state.loadMoreStatus as "loading" | "more" | "noMore" | undefined}
+            status={loadMoreStatus as "loading" | "more" | "noMore" | undefined}
             loadingText='捕获更多帖子中~🤩'
             noMoreText='下面真的没有啦~😳'
           />}

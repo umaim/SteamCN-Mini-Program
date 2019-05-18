@@ -88,11 +88,12 @@ class Hot extends Component {
   }
 
   requestHot(bid: number) {
+    const { account } = this.props
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
       header: {
-        authorization: this.props.account.accessToken
+        authorization: account.accessToken
       },
       method: 'GET',
       dataType: 'json',
@@ -150,7 +151,8 @@ class Hot extends Component {
   }
 
   isFinish() {
-    if (this.state.hotThreadList.length > 0) {
+    const { hotThreadList } = this.state
+    if (hotThreadList.length > 0) {
       Taro.stopPullDownRefresh()
       Taro.hideLoading()
       Taro.atMessage({
