@@ -132,8 +132,8 @@ class Login extends Component {
         username: username,
         password: password,
         loginfield: username,
-        questionid: questionid === 0 ? '' : questionid,
-        answer: questionid === 0 ? '' : answer
+        questionid: questionid,
+        answer: answer
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded'
