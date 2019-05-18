@@ -74,6 +74,13 @@ class Login extends Component {
     return value
   }
 
+  handleUsernameBlur(value: string) {
+    this.setState({
+      username: value
+    })
+    return value
+  }
+
   handlePasswordChange(value: string) {
     this.setState({
       password: value
@@ -88,6 +95,13 @@ class Login extends Component {
   }
 
   handleAnswerChange(value: string) {
+    this.setState({
+      answer: value
+    })
+    return value
+  }
+
+  handleAnswerBlur(value: string) {
     this.setState({
       answer: value
     })
@@ -199,6 +213,7 @@ class Login extends Component {
             placeholder='请输入用户名'
             value={username}
             onChange={this.handleUsernameChange.bind(this)}
+            onBlur={this.handleUsernameBlur.bind(this)}
           />
           <AtInput
             clear
@@ -224,6 +239,7 @@ class Login extends Component {
               placeholder='安全问题答案'
               value={answer}
               onChange={this.handleAnswerChange.bind(this)}
+              onBlur={this.handleAnswerBlur.bind(this)}
             />
           }
           <AtButton
