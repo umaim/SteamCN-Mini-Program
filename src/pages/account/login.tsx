@@ -179,56 +179,57 @@ class Login extends Component {
     return (
       <View className='wrapper'>
         <AtMessage />
-        <View className='background'>
-          <Image
-            className='backgroundImage'
-            src={this.state.background}
-            mode='aspectFill'
-          ></Image>
-        </View>
-        <AtInput
-          clear
-          name='username'
-          title='用户名：'
-          type='text'
-          placeholder='请输入用户名'
-          value={username}
-          onChange={this.handleUsernameChange.bind(this)}
-        />
-        <AtInput
-          clear
-          name='password'
-          title='密码：'
-          type='password'
-          placeholder='请输入密码'
-          value={password}
-          onChange={this.handlePasswordChange.bind(this)}
-        />
-        <Picker mode='selector' range={questions} value={questionid} onChange={this.handleQuestionsChange}>
-          <View className='list-item'>
-            <View className='list-item__label'>安全问题：</View>
-            <View className='list-item__value'>{questions[questionid]}</View>
+        <View className='content'>
+          <View className='background'>
+            <Image
+              className='backgroundImage'
+              src={this.state.background}
+              mode='aspectFill'
+            ></Image>
           </View>
-        </Picker>
-        {this.state.questionid !== 0 &&
           <AtInput
             clear
-            name='answer'
-            title='答案：'
+            name='username'
+            title='用户名：'
             type='text'
-            placeholder='安全问题答案'
-            value={answer}
-            onChange={this.handleAnswerChange.bind(this)}
+            placeholder='请输入用户名'
+            value={username}
+            onChange={this.handleUsernameChange.bind(this)}
           />
-        }
-        <AtButton
-          className='login'
-          type='primary'
-          size='normal'
-          circle={true}
-          onClick={this.login.bind(this)}
-        >登录</AtButton>
-
+          <AtInput
+            clear
+            name='password'
+            title='密码：'
+            type='password'
+            placeholder='请输入密码'
+            value={password}
+            onChange={this.handlePasswordChange.bind(this)}
+          />
+          <Picker mode='selector' range={questions} value={questionid} onChange={this.handleQuestionsChange}>
+            <View className='list-item'>
+              <View className='list-item__label'>安全问题：</View>
+              <View className='list-item__value'>{questions[questionid]}</View>
+            </View>
+          </Picker>
+          {this.state.questionid !== 0 &&
+            <AtInput
+              clear
+              name='answer'
+              title='答案：'
+              type='text'
+              placeholder='安全问题答案'
+              value={answer}
+              onChange={this.handleAnswerChange.bind(this)}
+            />
+          }
+          <AtButton
+            className='login'
+            type='primary'
+            size='normal'
+            circle={true}
+            onClick={this.login.bind(this)}
+          >登录</AtButton>
+        </View>
         <View className='footer'>蒸汽动力 · SteamCN.com</View>
       </View>
     )
