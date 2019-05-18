@@ -95,7 +95,6 @@ class Login extends Component {
   }
 
   login() {
-    this.props.login()
     const {
       username,
       password,
@@ -126,6 +125,11 @@ class Login extends Component {
       return
     }
 
+    this.props.login()
+    Taro.showLoading({
+      title: '正在登录 💦'
+    })
+
     Taro.request({
       url: 'https://vnext.steamcn.com/v1/auth/login',
       data: {
@@ -144,14 +148,13 @@ class Login extends Component {
     }).then(res => {
       if (res.statusCode === 200) {
         const account: IAccount = res.data
-        console.log(account)
-
         this.props.loginSuccess(account)
-
+        Taro.hideLoading()
         Taro.navigateBack()
       } else {
         const data = res.data
         this.props.loginError()
+        Taro.hideLoading()
         Taro.atMessage({
           message: `登录失败😱，${data.message}`,
           type: 'error',
@@ -160,6 +163,7 @@ class Login extends Component {
       }
     }, () => {
       this.props.loginError()
+      Taro.hideLoading()
       Taro.atMessage({
         message: '网络连接中断😭',
         type: 'error',
