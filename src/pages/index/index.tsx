@@ -66,6 +66,9 @@ class Index extends Component {
   }
 
   initHome() {
+    Taro.showLoading({
+      title: '努力加载中 💦'
+    })
     this.requestBannerThreadList()
     this.requestIndexThreadList()
   }
@@ -156,6 +159,7 @@ class Index extends Component {
     if (this.state.bannerThreadList.length > 0
       && this.state.indexThreadList.length > 0) {
       Taro.stopPullDownRefresh()
+      Taro.hideLoading()
       Taro.atMessage({
         message: `刷新成功😁`,
         type: 'success',

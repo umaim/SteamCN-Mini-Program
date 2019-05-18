@@ -95,7 +95,7 @@ class Thread extends Component {
 
   componentDidMount() {
     Taro.showLoading({
-      title: '正在加载'
+      title: '努力加载中 💦'
     })
     this.props.tid = this.$router.params.tid as number
     this.fetchThread(this.props.tid, this.state.pageNum)
