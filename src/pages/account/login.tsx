@@ -190,6 +190,7 @@ class Login extends Component {
     const {
       username,
       password,
+      background,
       questions,
       questionid,
       answer
@@ -201,7 +202,7 @@ class Login extends Component {
           <View className='background'>
             <Image
               className='backgroundImage'
-              src={this.state.background}
+              src={background}
               mode='aspectFill'
             ></Image>
           </View>
@@ -230,7 +231,7 @@ class Login extends Component {
               <View className='list-item__value'>{questions[questionid]}</View>
             </View>
           </Picker>
-          {this.state.questionid !== 0 &&
+          {questionid !== 0 &&
             <AtInput
               clear
               name='answer'

@@ -73,7 +73,8 @@ class Account extends Component {
   }
 
   handleProfile() {
-    if (this.props.auth) {
+    const { auth } = this.props
+    if (auth) {
       // this.navigator('profile')
     } else {
       this.navigator('login')
@@ -90,6 +91,7 @@ class Account extends Component {
 
   render() {
     const { auth, account } = this.props
+    const { history } = this.state
     return (
       <View className='wrapper'>
         <View className='profile' onClick={this.handleProfile}>
@@ -126,7 +128,7 @@ class Account extends Component {
             />
             <AtListItem
               title='浏览历史'
-              extraText={`${this.state.history} 篇`}
+              extraText={`${history} 篇`}
               iconInfo={{ value: 'clock', color: '#ABB4BF' }}
               onClick={this.navigator.bind(this, 'history')}
             />

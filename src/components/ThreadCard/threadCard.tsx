@@ -62,27 +62,28 @@ class ThreadCard extends Component {
   }
 
   addToHistory() {
+    const { threadMeta } = this.props
     Taro.getStorage({
       key: 'history'
     }).then((res) => {
       let history = res.data as unknown as Array<IThreadMeta>
 
       history = history.filter(i => {
-        if (i.tid === this.props.threadMeta.tid) {
+        if (i.tid === threadMeta.tid) {
           return false
         } else {
           return true
         }
       })
 
-      history.push(this.props.threadMeta)
+      history.push(threadMeta)
       Taro.setStorage({
         key: 'history',
         data: history
       })
     }, () => {
       let history = Array<IThreadMeta>()
-      history.push(this.props.threadMeta)
+      history.push(threadMeta)
       Taro.setStorage({
         key: 'history',
         data: history

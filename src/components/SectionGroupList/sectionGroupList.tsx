@@ -40,7 +40,8 @@ class SectionGroupList extends Component {
   }
 
   render() {
-    const sections = this.props.list.map(item => {
+    const { list } = this.props
+    const sections = list.map(item => {
       return (
         <View key={item.fid} onClick={this.toSectionThreadList.bind(this, item.fid, item.title)}>
           <View className='section at-row at-row__align--center'>
