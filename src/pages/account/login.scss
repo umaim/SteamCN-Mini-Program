@@ -1,8 +1,11 @@
 .wrapper {
+  height: 100%;
+  margin: 0;
   background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+}
+
+.content {
+  min-height: calc(100vh - 50rpx)
 }
 
 .backgroundImage {
@@ -10,17 +13,15 @@
 }
 
 .login {
-  width: 80%;
-  margin-top: 25rpx
+  width: 70%;
+  margin-top: 20rpx;
 }
 
 .footer {
-  display: flex;
-  margin-top: 350rpx;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  height: 35rpx;
+  text-align: center;
   font-size: 24rpx;
+  color: #333;
 }
 
 .list-item {
