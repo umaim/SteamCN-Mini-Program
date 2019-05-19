@@ -83,12 +83,8 @@ class Setting extends Component {
     Taro.removeStorage({
       key: 'history'
     }).then(() => {
-      Taro.getStorageInfo({
-        success: () => {
-          this.setState({
-            size: 0
-          })
-        }
+      this.setState({
+        size: 0
       })
     })
   }
