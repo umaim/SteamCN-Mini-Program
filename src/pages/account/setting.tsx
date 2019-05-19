@@ -2,7 +2,7 @@ import { ComponentClass } from 'react'
 import { connect } from '@tarojs/redux'
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtList, AtListItem, AtMessage, AtButton, AtModal } from 'taro-ui'
+import { AtList, AtListItem, AtMessage, AtButton } from 'taro-ui'
 
 import { IAccount } from '../../interfaces/account'
 import { initCredential, logout, logoutSuccess, logoutError } from '../../actions/account'
@@ -90,22 +90,17 @@ class Setting extends Component {
   }
 
   logout() {
-    this.setState({
-      logoutConfirmModal: true
+    Taro.showModal({
+      title: '提示',
+      content: '确认退出登录？',
+      cancelText: '取消',
+      confirmText: '确定',
+      confirmColor: '#E64340'
+    }).then(res => {
+      if (res.confirm) {
+        this.doLogout()
+      }
     })
-  }
-
-  closeLogoutModal() {
-    this.setState({
-      logoutConfirmModal: false
-    })
-  }
-
-  closeLogoutModalConfirm() {
-    this.setState({
-      logoutConfirmModal: false
-    })
-    this.doLogout()
   }
 
   doLogout() {
@@ -155,10 +150,7 @@ class Setting extends Component {
 
   render() {
     const { auth } = this.props
-    const {
-      size,
-      logoutConfirmModal
-    } = this.state
+    const { size } = this.state
     return (
       <View>
         <AtMessage />
@@ -174,16 +166,6 @@ class Setting extends Component {
             type='secondary'
             onClick={this.logout}
           >退出登录 ヾ(•ω•`)o</AtButton>}
-
-        <AtModal
-          isOpened={logoutConfirmModal}
-          cancelText='点错啦 QAQ'
-          confirmText='不渴望了'
-          content='少年，你真的不渴望抛瓦么？'
-          onClose={this.closeLogoutModal.bind(this)}
-          onCancel={this.closeLogoutModal.bind(this)}
-          onConfirm={this.closeLogoutModalConfirm.bind(this)}
-        />
       </View>
     )
   }
