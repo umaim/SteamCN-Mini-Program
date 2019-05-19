@@ -1,7 +1,7 @@
 {
   "miniprogramRoot": "./dist",
   "projectname": "SteamCN-Mini-Program",
-  "description": "An Unofficial SteamCN Forum Mini Program",
+  "description": "SteamCN Forum Official Mini Program",
   "appid": "wx55a5a0eab124806d",
   "setting": {
     "urlCheck": true,
