@@ -1,12 +1,18 @@
 {
-  "extends": ["taro"],
+  "extends": [
+    "taro"
+  ],
   "rules": {
-    "no-unused-vars": ["error", {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", {
       "varsIgnorePattern": "Taro"
     }],
+    "taro/this-props-function": "off",
     "react/jsx-filename-extension": [1, {
       "extensions": [".js", ".jsx", ".tsx"]
-    }]
+    }],
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": "error"
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -15,5 +21,6 @@
     },
     "useJSXTextNode": true,
     "project": "./tsconfig.json"
-  }
+  },
+  "plugins": ["@typescript-eslint"]
 }
