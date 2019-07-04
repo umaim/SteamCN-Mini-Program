@@ -2,17 +2,15 @@ import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { ComponentClass } from 'react';
 
-var WxParse = require('./wxParse/wxParse');
+import './WxparseRichText.scss'
 
-import './wxparseRichText.scss'
+var WxParse = require('./wxParse/wxParse');
 
 type PageStateProps = {}
 
 type PageDispatchProps = {}
 
-type PageOwnProps = {
-  html: string
-}
+type PageOwnProps = {}
 
 type PageState = {}
 
@@ -23,31 +21,28 @@ interface WxparseRichText {
 }
 
 class WxparseRichText extends Component {
-  static defaultProps = {
-    html: ''
-  }
-
   state = {
     html: ''
   }
 
   constructor(props) {
     super(props)
-    this.props.html = props.html
+    this.state = {
+      html: ''
+    }
   }
 
   componentWillReceiveProps(nextProps: { html: string; }) {
     this.setState({
       html: nextProps.html
-    }, () => {
-      const article = this.state.html
-      WxParse.wxParse('article', 'html', article, this.$scope, 15)
     })
   }
 
-  componentDidMount() {
-    const article = this.props.html
-    WxParse.wxParse('article', 'html', article, this.$scope, 15)
+  componentDidUpdate() {
+    if(this.state.html) {
+      const article = this.state.html
+      WxParse.wxParse('article', 'html', article, this.$scope, 15)
+    }
   }
 
   render() {
