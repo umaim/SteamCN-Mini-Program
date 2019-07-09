@@ -2,9 +2,7 @@ import { ComponentType } from 'react';
 import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import dayjs from 'dayjs';
 
 import './replyCard.scss'
 import { IReply } from '../../interfaces/thread'
@@ -31,12 +29,6 @@ class ReplyCard extends Taro.Component<Props, {}> {
       timestamp: 0,
       position: 0
     }
-  }
-
-  public constructor(args) {
-    super(args)
-    dayjs.locale('zh-cn')
-    dayjs.extend(relativeTime)
   }
 
   public render(): JSX.Element {
