@@ -265,9 +265,6 @@ class Thread extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    dayjs.locale('zh-cn');
-    dayjs.extend(relativeTime);
-
     const { thread, loadMoreStatus, loadMoreVisibility } = this.state;
     const repliesArea = thread.replies.map(
       (reply): JSX.Element => {

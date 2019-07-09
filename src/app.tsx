@@ -89,6 +89,7 @@ class App extends Component {
   };
 
   public componentDidMount(): void {
+    dayjs.locale('zh-cn')
     dayjs.extend(relativeTime);
     this.updateApp();
   }
