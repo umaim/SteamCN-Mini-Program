@@ -1,6 +1,9 @@
 import '@tarojs/async-await';
 import Taro, { Component, Config } from '@tarojs/taro';
 import { Provider } from '@tarojs/redux';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 import Index from './pages/index';
 
@@ -86,6 +89,7 @@ class App extends Component {
   };
 
   public componentDidMount(): void {
+    dayjs.extend(relativeTime);
     this.updateApp();
   }
 

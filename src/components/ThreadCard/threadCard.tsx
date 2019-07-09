@@ -2,8 +2,6 @@ import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 import dayjs from 'dayjs';
-import 'dayjs/locale/zh-cn';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { IThreadMeta } from '../../interfaces/thread';
 
@@ -34,12 +32,6 @@ class ThreadCard extends Taro.Component<Props> {
       }
     }
   };
-
-  public constructor(args) {
-    super(args);
-    dayjs.locale('zh-cn');
-    dayjs.extend(relativeTime);
-  }
 
   private toThread(): void {
     this.addToHistory();
