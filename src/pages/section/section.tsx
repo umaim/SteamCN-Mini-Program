@@ -1,32 +1,19 @@
-import { ComponentClass } from 'react'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { Text, View } from '@tarojs/components'
+import { ComponentType } from 'react';
+import Taro from '@tarojs/taro';
+import { Text, View } from '@tarojs/components';
 
-import SectionGroupList from '../../components/SectionGroupList/sectionGroupList'
+import SectionGroupList from '../../components/SectionGroupList/sectionGroupList';
 
-import './section.scss'
+import './section.scss';
 
-type PageStateProps = {}
-
-type PageDispatchProps = {}
-
-type PageOwnProps = {}
-
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface Section {
-  props: IProps;
-}
-
-class Section extends Component {
-  config: Config = {
+class Section extends Taro.Component {
+  public config: Taro.Config = {
     navigationBarTitleText: '板块'
-  }
+  };
 
   private _sectionMeta = {
-    forum: [ //平台周边
+    forum: [
+      //平台周边
       {
         title: '热点聚焦',
         desc: '周边热门话题讨论',
@@ -83,7 +70,8 @@ class Section extends Component {
         fid: 189
       }
     ],
-    problem: [ //问题互助
+    problem: [
+      //问题互助
       {
         title: '技术问题',
         desc: '异常故障和账户帮助',
@@ -120,7 +108,8 @@ class Section extends Component {
         fid: 311
       }
     ],
-    discussion: [ //游戏讨论
+    discussion: [
+      //游戏讨论
       {
         title: '综合讨论',
         desc: '一般游戏交流区',
@@ -167,7 +156,8 @@ class Section extends Component {
         fid: 248
       }
     ],
-    peripheral: [ //论坛周边
+    peripheral: [
+      //论坛周边
       {
         title: '谈天说地',
         desc: '论坛指定水区',
@@ -194,7 +184,8 @@ class Section extends Component {
         fid: 330
       }
     ],
-    platform: [ //友商平台
+    platform: [
+      //友商平台
       {
         title: 'Origin',
         desc: '艺电旗下游戏平台',
@@ -251,7 +242,8 @@ class Section extends Component {
         fid: 328
       }
     ],
-    official: [ //社区服务
+    official: [
+      //社区服务
       {
         title: '公告发布',
         desc: '社区告示和动态',
@@ -268,60 +260,58 @@ class Section extends Component {
         fid: 238
       }
     ]
-  }
+  };
 
-  componentWillReceiveProps(nextProps) {
-    console.log(this.props, nextProps)
-  }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
-  render() {
+  public render(): JSX.Element {
     return (
-      <View className='container'>
-        <View className='group'>
-          <View className='groupTitle'>
+      <View className="container">
+        <View className="group">
+          <View className="groupTitle">
             <Text>平台周边</Text>
           </View>
           <SectionGroupList list={this._sectionMeta.forum}></SectionGroupList>
         </View>
-        <View className='group'>
-          <View className='groupTitle'>
+        <View className="group">
+          <View className="groupTitle">
             <Text>问题互助</Text>
           </View>
           <SectionGroupList list={this._sectionMeta.problem}></SectionGroupList>
         </View>
-        <View className='group'>
-          <View className='groupTitle'>
+        <View className="group">
+          <View className="groupTitle">
             <Text>游戏讨论</Text>
           </View>
-          <SectionGroupList list={this._sectionMeta.discussion}></SectionGroupList>
+          <SectionGroupList
+            list={this._sectionMeta.discussion}
+          ></SectionGroupList>
         </View>
-        <View className='group'>
-          <View className='groupTitle'>
+        <View className="group">
+          <View className="groupTitle">
             <Text>论坛周边</Text>
           </View>
-          <SectionGroupList list={this._sectionMeta.peripheral}></SectionGroupList>
+          <SectionGroupList
+            list={this._sectionMeta.peripheral}
+          ></SectionGroupList>
         </View>
-        <View className='group'>
-          <View className='groupTitle'>
+        <View className="group">
+          <View className="groupTitle">
             <Text>友商平台</Text>
           </View>
-          <SectionGroupList list={this._sectionMeta.platform}></SectionGroupList>
+          <SectionGroupList
+            list={this._sectionMeta.platform}
+          ></SectionGroupList>
         </View>
-        <View className='group'>
-          <View className='groupTitle'>
+        <View className="group">
+          <View className="groupTitle">
             <Text>社区服务</Text>
           </View>
-          <SectionGroupList list={this._sectionMeta.official}></SectionGroupList>
+          <SectionGroupList
+            list={this._sectionMeta.official}
+          ></SectionGroupList>
         </View>
       </View>
-    )
+    );
   }
 }
 
-export default Section as ComponentClass<PageOwnProps, PageState>
+export default Section as ComponentType;

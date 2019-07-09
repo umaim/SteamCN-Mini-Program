@@ -1,100 +1,98 @@
-import { ComponentClass } from 'react'
-import { connect } from '@tarojs/redux'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components'
-import { AtMessage } from 'taro-ui'
+import { ComponentType } from 'react';
+import { connect } from '@tarojs/redux';
+import Taro from '@tarojs/taro';
+import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components';
+import { AtMessage } from 'taro-ui';
 
-import ThreadCard from '../../components/ThreadCard/threadCard'
-import { IThreadMeta } from '../../interfaces/thread'
-import { IHotThreadItemRespond } from '../../interfaces/respond'
-import { IAccount } from '../../interfaces/account'
-import { initCredential } from '../../actions/account'
+import ThreadCard from '../../components/ThreadCard/threadCard';
+import { IThreadMeta } from '../../interfaces/thread';
+import { IHotThreadItemRespond } from '../../interfaces/respond';
+import { IAccount } from '../../interfaces/account';
+import { initCredential } from '../../actions/account';
 
-import './index.scss'
+import './index.scss';
 
-type PageStateProps = {
-  auth: boolean,
-  account: IAccount
+interface Props {
+  auth: boolean;
+  account: IAccount;
+  initCredential: () => void;
 }
 
-type PageDispatchProps = {
-  initCredential: () => void
+interface State {
+  bannerThreadList: IThreadMeta[];
+  indexThreadList: IThreadMeta[];
 }
 
-type PageOwnProps = {}
-
-type PageState = {
-  bannerThreadList: IThreadMeta[]
-  indexThreadList: IThreadMeta[]
-}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface Index {
-  props: IProps;
-}
-
-@connect(({ account }) => ({
-  auth: account.auth,
-  account: account.account
-}), (dispatch) => ({
-  initCredential() {
-    dispatch(initCredential())
-  }
-}))
-class Index extends Component {
-  config: Config = {
+@connect(
+  ({ account }) => ({
+    auth: account.auth,
+    account: account.account
+  }),
+  dispatch => ({
+    initCredential() {
+      dispatch(initCredential());
+    }
+  })
+)
+class Index extends Taro.Component<Props, State> {
+  public config: Taro.Config = {
     navigationBarTitleText: 'SteamCN 蒸汽动力',
     enablePullDownRefresh: true
-  }
+  };
 
-  state = {
+  public state = {
     bannerThreadList: Array<IThreadMeta>(),
     indexThreadList: Array<IThreadMeta>()
+  };
+
+  public componentDidShow(): void {
+    this.props.initCredential();
   }
 
-  componentDidShow() {
-    this.props.initCredential()
+  public componentDidMount(): void {
+    this.initHome();
   }
 
-  componentDidMount() {
-    this.initHome()
+  public onPullDownRefresh(): void {
+    this.initHome();
   }
 
-  onPullDownRefresh() {
-    this.initHome()
-  }
-
-  initHome() {
+  private initHome(): void {
     Taro.showLoading({
       title: '努力加载中 💦'
-    })
-    this.requestBannerThreadList()
-    this.requestIndexThreadList()
+    });
+    this.requestBannerThreadList();
+    this.requestIndexThreadList();
   }
 
-  requestBannerThreadList() {
-    this.requestHot(431).then(res => {
+  private requestBannerThreadList(): void {
+    this.requestHot(431).then((res): void => {
       if (res) {
-        this.setState({
-          bannerThreadList: res
-        }, this.isFinish)
+        this.setState(
+          {
+            bannerThreadList: res
+          },
+          this.isFinish
+        );
       }
-    })
+    });
   }
 
-  requestIndexThreadList() {
-    this.requestHot(432).then(res => {
+  public requestIndexThreadList(): void {
+    this.requestHot(432).then((res): void => {
       if (res) {
-        this.setState({
-          indexThreadList: res
-        }, this.isFinish)
+        this.setState(
+          {
+            indexThreadList: res
+          },
+          this.isFinish
+        );
       }
-    })
+    });
   }
 
-  requestHot(bid: number) {
-    const { account } = this.props
+  private requestHot(bid: number): Promise<void | IThreadMeta[] | undefined> {
+    const { account } = this.props;
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
@@ -104,102 +102,120 @@ class Index extends Component {
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
-    }).then(res => {
-      if (res.statusCode === 200) {
-        console.log(res.data)
-        const itemlist = res.data.itemlist as Array<IHotThreadItemRespond>
-        let thraedList = Array<IThreadMeta>()
-        itemlist.forEach(item => {
-          const title = item.title
-          const tid = parseInt(item.id)
-          const url = `https://steamcn.com/t${tid}-1-1`
-          const image = `https://blob.steamcn.com/${item.pic}`
-          const section = item.fields.forumname
-          const timestamp = parseInt(item.fields.dateline)
-          const username = item.fields.author
-          const uid = parseInt(item.fields.authorid)
-          const avatar = item.fields.avatar_middle
-          const viewed = parseInt(item.fields.views)
-          const replied = parseInt(item.fields.replies)
-          thraedList.push({
-            title,
-            tid,
-            url,
-            image,
-            section,
-            timestamp,
-            author: {
-              username,
-              uid,
-              avatar
-            },
-            stats: {
-              viewed,
-              replied
-            }
-          })
-        })
-        return thraedList
-      } else {
+    }).then(
+      (res): IThreadMeta[] | undefined => {
+        if (res.statusCode === 200) {
+          console.log(res.data);
+          const itemlist = res.data.itemlist as IHotThreadItemRespond[];
+          let thraedList = Array<IThreadMeta>();
+          itemlist.forEach((item): void => {
+            const title = item.title;
+            const tid = parseInt(item.id);
+            const url = `https://steamcn.com/t${tid}-1-1`;
+            const image = `https://blob.steamcn.com/${item.pic}`;
+            const section = item.fields.forumname;
+            const timestamp = parseInt(item.fields.dateline);
+            const username = item.fields.author;
+            const uid = parseInt(item.fields.authorid);
+            const avatar = item.fields.avatar_middle;
+            const viewed = parseInt(item.fields.views);
+            const replied = parseInt(item.fields.replies);
+            thraedList.push({
+              title,
+              tid,
+              url,
+              image,
+              section,
+              timestamp,
+              author: {
+                username,
+                uid,
+                avatar
+              },
+              stats: {
+                viewed,
+                replied
+              }
+            });
+          });
+          return thraedList;
+        } else {
+          Taro.atMessage({
+            message: `刷新失败😱`,
+            type: 'error',
+            duration: 2000
+          });
+        }
+      },
+      (): void => {
         Taro.atMessage({
-          message: `刷新失败😱`,
+          message: '网络连接中断😭',
           type: 'error',
           duration: 2000
-        })
+        });
       }
-    }, () => {
-      Taro.atMessage({
-        message: '网络连接中断😭',
-        type: 'error',
-        duration: 2000
-      })
-    })
+    );
   }
 
-  isFinish() {
-    const { bannerThreadList, indexThreadList } = this.state
-    if (bannerThreadList.length > 0
-      && indexThreadList.length > 0) {
-      Taro.stopPullDownRefresh()
-      Taro.hideLoading()
+  private isFinish(): void {
+    const { bannerThreadList, indexThreadList } = this.state;
+    if (bannerThreadList.length > 0 && indexThreadList.length > 0) {
+      Taro.stopPullDownRefresh();
+      Taro.hideLoading();
       Taro.atMessage({
         message: `刷新成功😁`,
         type: 'success',
         duration: 1500
-      })
+      });
     }
   }
 
-  onShareAppMessage() {
+  public onShareAppMessage(): {
+    title: string;
+    path: string;
+  } {
     return {
       title: 'SteamCN 蒸汽动力',
       path: '/pages/index/index'
-    }
+    };
   }
 
-  toThread(tid: number) {
+  private toThread(tid: number): void {
     Taro.navigateTo({
       url: `/pages/thread/thread?tid=${tid}`
-    })
+    });
   }
 
-  render() {
-    const { bannerThreadList, indexThreadList } = this.state
-    const swiperItems = bannerThreadList.map(item => {
-      return <SwiperItem key={item.tid} onClick={this.toThread.bind(this, item.tid)}>
-        <Image src={item.image || ''} className='swiper-item-image' mode='scaleToFill'></Image>
-        <Text className='swiper-item-title'>{item.title}</Text>
-      </SwiperItem>
-    })
-    const threadCards = indexThreadList.map(item => {
-      return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
-    })
+  public render(): JSX.Element {
+    const { bannerThreadList, indexThreadList } = this.state;
+    const swiperItems = bannerThreadList.map(
+      (item): JSX.Element => {
+        return (
+          <SwiperItem
+            key={item.tid}
+            onClick={this.toThread.bind(this, item.tid)}
+          >
+            <Image
+              src={item.image || ''}
+              className="swiper-item-image"
+              mode="scaleToFill"
+            ></Image>
+            <Text className="swiper-item-title">{item.title}</Text>
+          </SwiperItem>
+        );
+      }
+    );
+    const threadCards = indexThreadList.map(
+      (item): JSX.Element => {
+        return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;
+      }
+    );
 
     return (
-      <View className='index'>
+      <View className="index">
         <AtMessage />
         <Swiper
-          className='index-swiper'
+          className="index-swiper"
           autoplay
           interval={2500}
           duration={500}
@@ -207,12 +223,10 @@ class Index extends Component {
         >
           {swiperItems}
         </Swiper>
-        <View className='thread-list'>
-          {threadCards}
-        </View>
+        <View className="thread-list">{threadCards}</View>
       </View>
-    )
+    );
   }
 }
 
-export default Index as ComponentClass<PageOwnProps, PageState>
+export default Index as ComponentType;

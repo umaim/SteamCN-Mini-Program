@@ -75,7 +75,7 @@ export interface IThread {
     uid: number,
     avatar: string
   },
-  replies: Array<IReply>
+  replies: IReply[]
 }
 
 export interface IReply {
