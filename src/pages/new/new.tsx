@@ -1,94 +1,92 @@
-import { ComponentClass } from 'react'
-import { connect } from '@tarojs/redux'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtMessage } from 'taro-ui'
+import { ComponentType } from 'react';
+import { connect } from '@tarojs/redux';
+import Taro from '@tarojs/taro';
+import { View } from '@tarojs/components';
+import { AtMessage } from 'taro-ui';
 
-import ThreadCard from '../../components/ThreadCard/threadCard'
-import { IThreadMeta } from '../../interfaces/thread'
-import { IHotThreadItemRespond } from '../../interfaces/respond'
-import { IAccount } from '../../interfaces/account'
-import { initCredential } from '../../actions/account'
+import ThreadCard from '../../components/ThreadCard/threadCard';
+import { IThreadMeta } from '../../interfaces/thread';
+import { IHotThreadItemRespond } from '../../interfaces/respond';
+import { IAccount } from '../../interfaces/account';
+import { initCredential } from '../../actions/account';
 
-import './new.scss'
+import './new.scss';
 
-type PageStateProps = {
-  auth: boolean,
-  account: IAccount
+interface Props {
+  auth: boolean;
+  account: IAccount;
+  initCredential: () => void;
 }
 
-type PageDispatchProps = {
-  initCredential: () => void
+interface State {
+  newThreadList: IThreadMeta[];
 }
 
-type PageOwnProps = {}
-
-type PageState = {
-  newThreadList: IThreadMeta[]
-}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface New {
-  props: IProps;
-}
-
-@connect(({ account }) => ({
-  auth: account.auth,
-  account: account.account
-}), (dispatch) => ({
-  initCredential() {
-    dispatch(initCredential())
-  }
-}))
-class New extends Component {
-  config: Config = {
+@connect(
+  ({ account }) => ({
+    auth: account.auth,
+    account: account.account
+  }),
+  dispatch => ({
+    initCredential() {
+      dispatch(initCredential());
+    }
+  })
+)
+class New extends Taro.Component<Props, State> {
+  public config: Taro.Config = {
     navigationBarTitleText: '最新回复',
     enablePullDownRefresh: true
-  }
+  };
 
-  state = {
+  public state = {
     newThreadList: Array<IThreadMeta>()
-  }
+  };
 
-  onShareAppMessage() {
+  public onShareAppMessage(): {
+    title: string;
+    path: string;
+  } {
     return {
       title: 'SteamCN 蒸汽动力 - 最新回复',
       path: 'pages/new/new'
-    }
+    };
   }
 
-  componentDidShow() {
-    this.props.initCredential()
+  public componentDidShow(): void {
+    this.props.initCredential();
   }
 
-  componentDidMount() {
-    this.initNew()
+  public componentDidMount(): void {
+    this.initNew();
   }
 
-  onPullDownRefresh() {
-    this.initNew()
+  public onPullDownRefresh(): void {
+    this.initNew();
   }
 
-  initNew() {
+  private initNew(): void {
     Taro.showLoading({
       title: '努力加载中 💦'
-    })
-    this.requestNewThreadList()
+    });
+    this.requestNewThreadList();
   }
 
-  requestNewThreadList() {
-    this.requestHot(433).then(res => {
+  private requestNewThreadList(): void {
+    this.requestHot(433).then((res): void => {
       if (res) {
-        this.setState({
-          newThreadList: res
-        }, this.isFinish)
+        this.setState(
+          {
+            newThreadList: res
+          },
+          this.isFinish
+        );
       }
-    })
+    });
   }
 
-  requestHot(bid: number) {
-    const { account } = this.props
+  private requestHot(bid: number): Promise<void | IThreadMeta[] | undefined> {
+    const { account } = this.props;
     return Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/hot/${bid}`,
       data: {},
@@ -98,85 +96,88 @@ class New extends Component {
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
-    }).then(res => {
-      if (res.statusCode === 200) {
-        console.log(res.data)
-        const itemlist = res.data.itemlist as Array<IHotThreadItemRespond>
-        let thraedList = Array<IThreadMeta>()
-        itemlist.forEach(item => {
-          const title = item.title
-          const tid = parseInt(item.id)
-          const url = `https://steamcn.com/t${tid}-1-1`
-          const image = item.coverpath
-          const section = item.fields.forumname
-          const timestamp = parseInt(item.fields.dateline)
-          const username = item.fields.author
-          const uid = parseInt(item.fields.authorid)
-          const avatar = item.fields.avatar_middle
-          const viewed = parseInt(item.fields.views)
-          const replied = parseInt(item.fields.replies)
-          thraedList.push({
-            title,
-            tid,
-            url,
-            image,
-            section,
-            timestamp,
-            author: {
-              username,
-              uid,
-              avatar
-            },
-            stats: {
-              viewed,
-              replied
-            }
-          })
-        })
-        return thraedList
-      } else {
+    }).then(
+      (res): IThreadMeta[] | undefined => {
+        if (res.statusCode === 200) {
+          console.log(res.data);
+          const itemlist = res.data.itemlist as IHotThreadItemRespond[];
+          let thraedList = Array<IThreadMeta>();
+          itemlist.forEach((item): void => {
+            const title = item.title;
+            const tid = parseInt(item.id);
+            const url = `https://steamcn.com/t${tid}-1-1`;
+            const image = item.coverpath;
+            const section = item.fields.forumname;
+            const timestamp = parseInt(item.fields.dateline);
+            const username = item.fields.author;
+            const uid = parseInt(item.fields.authorid);
+            const avatar = item.fields.avatar_middle;
+            const viewed = parseInt(item.fields.views);
+            const replied = parseInt(item.fields.replies);
+            thraedList.push({
+              title,
+              tid,
+              url,
+              image,
+              section,
+              timestamp,
+              author: {
+                username,
+                uid,
+                avatar
+              },
+              stats: {
+                viewed,
+                replied
+              }
+            });
+          });
+          return thraedList;
+        } else {
+          Taro.atMessage({
+            message: `刷新失败😱`,
+            type: 'error',
+            duration: 2000
+          });
+        }
+      },
+      (): void => {
         Taro.atMessage({
-          message: `刷新失败😱`,
+          message: '网络连接中断😭',
           type: 'error',
           duration: 2000
-        })
+        });
       }
-    }, () => {
-      Taro.atMessage({
-        message: '网络连接中断😭',
-        type: 'error',
-        duration: 2000
-      })
-    })
+    );
   }
 
-  isFinish() {
-    const { newThreadList } = this.state
+  private isFinish(): void {
+    const { newThreadList } = this.state;
     if (newThreadList.length > 0) {
-      Taro.stopPullDownRefresh()
-      Taro.hideLoading()
+      Taro.stopPullDownRefresh();
+      Taro.hideLoading();
       Taro.atMessage({
         message: `刷新成功😁`,
         type: 'success',
         duration: 1500
-      })
+      });
     }
   }
 
-  render() {
-    const { newThreadList } = this.state
-    const threadCards = newThreadList.map(item => {
-      return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>
-    })
+  public render(): JSX.Element {
+    const { newThreadList } = this.state;
+    const threadCards = newThreadList.map(
+      (item): JSX.Element => {
+        return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;
+      }
+    );
     return (
       <View>
         <AtMessage />
-        <View className='thread-list'>
-          {threadCards}
-        </View>
+        <View className="thread-list">{threadCards}</View>
       </View>
-    )
+    );
   }
 }
 
-export default New as ComponentClass<PageOwnProps, PageState>
+export default New as ComponentType;

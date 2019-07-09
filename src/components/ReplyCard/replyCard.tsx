@@ -1,5 +1,5 @@
-import { ComponentClass } from 'react';
-import Taro, { Component, Config } from '@tarojs/taro'
+import { ComponentType } from 'react';
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtAvatar } from 'taro-ui'
 import dayjs from 'dayjs'
@@ -7,32 +7,20 @@ import 'dayjs/locale/zh-cn'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 import './replyCard.scss'
-import { IReply } from 'src/interfaces/thread'
+import { IReply } from '../../interfaces/thread'
 
-type PageStateProps = {}
-
-type PageDispatchProps = {}
-
-type PageOwnProps = {
+interface Props {
   reply: IReply
 }
 
-type PageState = {}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface ReplyCard {
-  props: IProps;
-}
-
-class ReplyCard extends Component {
-  config: Config = {
+class ReplyCard extends Taro.Component<Props, {}> {
+  public config: Taro.Config = {
     usingComponents: {
       wxparse: '../wxParse/wxParse'
     }
   }
 
-  static defaultProps = {
+  public static defaultProps = {
     reply: {
       user: {
         username: '',
@@ -45,13 +33,13 @@ class ReplyCard extends Component {
     }
   }
 
-  constructor(args) {
+  public constructor(args) {
     super(args)
     dayjs.locale('zh-cn')
     dayjs.extend(relativeTime)
   }
 
-  render() {
+  public render(): JSX.Element {
     const { user, content, timestamp, position } = this.props.reply
     return (
       <View className='reply'>
@@ -73,4 +61,4 @@ class ReplyCard extends Component {
   }
 }
 
-export default ReplyCard as ComponentClass<PageOwnProps, PageState>
+export default ReplyCard as ComponentType<Props>;

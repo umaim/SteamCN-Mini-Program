@@ -41,7 +41,7 @@ export interface IHotThreadItemRespond {
 }
 
 export interface IThreadRespond {
-  floors: Array<{
+  floors: {
     pid: string,
     fid: string,
     tid: string,
@@ -65,7 +65,7 @@ export interface IThreadRespond {
       '4'?: number
     },
     totalrate: string[]
-  }>,
+  }[],
   thread: {
     tid: string,
     fid: string,

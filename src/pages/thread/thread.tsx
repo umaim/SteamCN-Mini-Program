@@ -1,70 +1,60 @@
-import { ComponentClass } from 'react'
-import { connect } from '@tarojs/redux'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtDivider, AtIcon, AtAvatar, AtMessage, AtLoadMore } from 'taro-ui'
-import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import { ComponentType } from 'react';
+import { connect } from '@tarojs/redux';
+import Taro from '@tarojs/taro';
+import { View, Text } from '@tarojs/components';
+import { AtDivider, AtIcon, AtAvatar, AtMessage, AtLoadMore } from 'taro-ui';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { IThread, IReply } from '../../interfaces/thread'
-import { IThreadRespond } from '../../interfaces/respond'
-import { IAccount } from '../../interfaces/account'
-import ReplyCard from '../../components/ReplyCard/replyCard'
-import { contentCleaner } from '../../utils/cleaner'
-import { initCredential } from '../../actions/account'
+import { IThread, IReply } from '../../interfaces/thread';
+import { IThreadRespond } from '../../interfaces/respond';
+import { IAccount } from '../../interfaces/account';
+import ReplyCard from '../../components/ReplyCard/replyCard';
+import contentCleaner from '../../utils/cleaner';
+import { initCredential } from '../../actions/account';
 
-import './thread.scss'
+import './thread.scss';
 
-type PageStateProps = {
-  auth: boolean,
-  account: IAccount
+interface Props {
+  auth: boolean;
+  account: IAccount;
+  initCredential: () => void;
 }
 
-type PageDispatchProps = {
-  initCredential: () => void
+interface State {
+  pageNum: number;
+  loadedPosition: number;
+  thread: IThread;
+  loadMoreVisibility: boolean;
+  loadMoreStatus: 'more' | 'loading' | 'noMore';
 }
 
-type PageOwnProps = {
-  tid: number
-}
-
-type PageState = {
-  pageNum: number,
-  loadedPosition: number,
-  thread: IThread,
-  loadMoreVisibility: boolean,
-  loadMoreStatus: 'more' | 'loading' | 'noMore' | undefined
-}
-
-type IProps = PageStateProps & PageDispatchProps & PageOwnProps
-
-interface Thread {
-  props: IProps;
-}
-
-@connect(({ account }) => ({
-  auth: account.auth,
-  account: account.account
-}), (dispatch) => ({
-  initCredential() {
-    dispatch(initCredential())
-  }
-}))
-class Thread extends Component {
-  config: Config = {
+@connect(
+  ({ account }) => ({
+    auth: account.auth,
+    account: account.account
+  }),
+  dispatch => ({
+    initCredential() {
+      dispatch(initCredential());
+    }
+  })
+)
+class Thread extends Taro.Component<Props, State> {
+  public config: Taro.Config = {
     navigationBarTitleText: '主题',
     usingComponents: {
       wxparse: '../../components/wxParse/wxParse'
     },
     onReachBottomDistance: 300
-  }
+  };
 
-  state = {
+  public state = {
     pageNum: 1,
     loadedPosition: 0,
     loadMoreVisibility: false,
-    loadMoreStatus: 'loading',
+    loadMoreStatus: 'loading' as 'more' | 'loading' | 'noMore',
     thread: {
       title: '',
       tid: 0,
@@ -78,68 +68,69 @@ class Thread extends Component {
         uid: 0,
         avatar: ''
       },
-      replies: [{
-        user: {
-          username: '',
-          uid: 0,
-          avatar: ''
-        },
-        content: '',
-        timestamp: 0,
-        position: 0
-      }]
+      replies: [
+        {
+          user: {
+            username: '',
+            uid: 0,
+            avatar: ''
+          },
+          content: '',
+          timestamp: 0,
+          position: 0
+        }
+      ]
     }
-  }
+  };
 
-  componentWillReceiveProps() { }
-
-  componentDidMount() {
-    const { pageNum } = this.state
+  public componentDidMount(): void {
+    const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'
-    })
-    this.props.tid = this.$router.params.tid as number
-    this.fetchThread(this.props.tid, pageNum)
+    });
+    this.fetchThread(parseInt(this.$router.params.tid), pageNum);
   }
 
-  componentDidShow() {
-    this.props.initCredential()
+  public componentDidShow(): void {
+    this.props.initCredential();
   }
 
-  componentDidHide() { }
-
-  componentWillUnmount() { }
-
-  onShareAppMessage() {
-    const { thread } = this.state
+  public onShareAppMessage(): {
+    title: string;
+    path: string;
+  } {
+    const { thread } = this.state;
     return {
       title: `${thread.title} - SteamCN 蒸汽动力`,
       path: `/pages/thread/thread?tid=${this.$router.params.tid}`
-    }
+    };
   }
 
-  onReachBottom() {
-    const { loadedPosition, thread, pageNum } = this.state
-    const { tid } = this.props
+  public onReachBottom(): void {
+    const { loadedPosition, thread } = this.state;
+    const currentPageNum = this.state.pageNum;
     if (loadedPosition < thread.maxPosition) {
-      this.setState({
-        pageNum: pageNum + 1,
-        loadMoreVisibility: true,
-        loadMoreStatus: 'loading'
-      }, () => {
-        const { pageNum } = this.state
-        this.fetchThread(tid, pageNum)
-      })
+      this.setState(
+        {
+          pageNum: currentPageNum + 1,
+          loadMoreVisibility: true,
+          loadMoreStatus: 'loading'
+        },
+        (): void => {
+          const { pageNum } = this.state;
+          this.fetchThread(parseInt(this.$router.params.tid), pageNum);
+        }
+      );
     } else {
       this.setState({
         loadMoreVisibility: true,
         loadMoreStatus: 'noMore'
-      })
+      });
     }
   }
 
-  fetchThread(tid: number, pageNum: number) {
-    const { account } = this.props
+  private fetchThread(tid: number, pageNum: number): void {
+    const { account } = this.props;
     Taro.request({
       url: `https://vnext.steamcn.com/v1/forum/thread/${tid}?page=${pageNum}`,
       data: {},
@@ -149,183 +140,194 @@ class Thread extends Component {
       method: 'GET',
       dataType: 'json',
       responseType: 'text'
-    }).then(res => {
-      if (res.statusCode === 200) {
-        const threadData = res.data as IThreadRespond
-        const { pageNum } = this.state
-        if (pageNum === 1) {
-          const { loadedPosition } = this.state
-          const floors = threadData.floors
-          const title = threadData.thread.subject
-          const tid = parseInt(threadData.thread.tid)
-          const timestamp = parseInt(threadData.thread.dateline)
-          const viewed = threadData.thread.views
-          const replied = threadData.thread.replies
-          const content = contentCleaner(threadData.floors[0].message)
-          const maxPosition = parseInt(threadData.thread.maxposition)
-          const username = threadData.thread.author
-          const uid = parseInt(threadData.thread.authorid)
-          const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
+    }).then(
+      (res): void => {
+        if (res.statusCode === 200) {
+          const threadData = res.data as IThreadRespond;
+          const currentPageNum = this.state.pageNum;
+          if (currentPageNum === 1) {
+            const { loadedPosition } = this.state;
+            const floors = threadData.floors;
+            const title = threadData.thread.subject;
+            const tid = parseInt(threadData.thread.tid);
+            const timestamp = parseInt(threadData.thread.dateline);
+            const viewed = threadData.thread.views;
+            const replied = threadData.thread.replies;
+            const content = contentCleaner(threadData.floors[0].message);
+            const maxPosition = parseInt(threadData.thread.maxposition);
+            const username = threadData.thread.author;
+            const uid = parseInt(threadData.thread.authorid);
+            const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`;
 
-          // console.log(content) // 打印主贴 HTML 代码
+            // console.log(content) // 打印主贴 HTML 代码
 
-          let replies = Array<IReply>()
-          for (let i = 1; i < floors.length; i++) {
-            const floor = floors[i]
-            const username = floor.author
-            const uid = parseInt(floor.authorid)
-            const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
-            const content = contentCleaner(floor.message)
-            const timestamp = parseInt(floor.dbdateline)
-            const position = parseInt(floor.position)
-            replies.push({
-              user: {
-                username,
-                uid,
-                avatar
-              },
-              content,
-              timestamp,
-              position
-            })
-          }
-          this.setState({
-            loadedPosition: loadedPosition + floors.length,
-            thread: {
-              title,
-              tid,
-              timestamp,
-              viewed,
-              replied,
-              content,
-              maxPosition,
-              author: {
-                username,
-                uid,
-                avatar
-              },
-              replies
+            let replies = Array<IReply>();
+            for (let i = 1; i < floors.length; i++) {
+              const floor = floors[i];
+              const username = floor.author;
+              const uid = parseInt(floor.authorid);
+              const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`;
+              const content = contentCleaner(floor.message);
+              const timestamp = parseInt(floor.dbdateline);
+              const position = parseInt(floor.position);
+              replies.push({
+                user: {
+                  username,
+                  uid,
+                  avatar
+                },
+                content,
+                timestamp,
+                position
+              });
             }
-          })
-          Taro.hideLoading()
-        } else {
-          const { loadedPosition, thread } = this.state
-          const floors = threadData.floors
+            this.setState({
+              loadedPosition: loadedPosition + floors.length,
+              thread: {
+                title,
+                tid,
+                timestamp,
+                viewed,
+                replied,
+                content,
+                maxPosition,
+                author: {
+                  username,
+                  uid,
+                  avatar
+                },
+                replies
+              }
+            });
+            Taro.hideLoading();
+          } else {
+            const { loadedPosition, thread } = this.state;
+            const floors = threadData.floors;
 
-          let replies = Array<IReply>()
-          for (let i = 0; i < floors.length; i++) {
-            const floor = floors[i]
-            const username = floor.author
-            const uid = parseInt(floor.authorid)
-            const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`
-            const content = contentCleaner(floor.message)
-            const timestamp = parseInt(floor.dbdateline)
-            const position = parseInt(floor.position)
-            replies.push({
-              user: {
-                username,
-                uid,
-                avatar
-              },
-              content,
-              timestamp,
-              position
-            })
-          }
-          this.setState({
-            loadedPosition: loadedPosition + floors.length,
-            loadMoreVisibility: false,
-            loadMoreStatus: 'more',
-            thread: {
-              ...thread,
-              replies: thread.replies.concat(replies)
+            let replies = Array<IReply>();
+            for (let i = 0; i < floors.length; i++) {
+              const floor = floors[i];
+              const username = floor.author;
+              const uid = parseInt(floor.authorid);
+              const avatar = `https://steamcn.com/uc_server/avatar.php?uid=${uid}&size=middle`;
+              const content = contentCleaner(floor.message);
+              const timestamp = parseInt(floor.dbdateline);
+              const position = parseInt(floor.position);
+              replies.push({
+                user: {
+                  username,
+                  uid,
+                  avatar
+                },
+                content,
+                timestamp,
+                position
+              });
             }
-          })
-        }
-      } else {
-        const { auth } = this.props
-        Taro.hideLoading()
-        if (auth) {
-          Taro.atMessage({
-            message: `登录凭据过期，请重新登录🥀`,
-            type: 'error',
-            duration: 3000
-          })
+            this.setState({
+              loadedPosition: loadedPosition + floors.length,
+              loadMoreVisibility: false,
+              loadMoreStatus: 'more',
+              thread: {
+                ...thread,
+                replies: thread.replies.concat(replies)
+              }
+            });
+          }
         } else {
-          let message = res.data.message as string
-          message = message.replace('</p></div><div><p>', '')
-          Taro.atMessage({
-            message: `无法查看帖子😱，${message}`,
-            type: 'error',
-            duration: 3000
-          })
+          const { auth } = this.props;
+          Taro.hideLoading();
+          if (auth) {
+            Taro.atMessage({
+              message: `登录凭据过期，请重新登录🥀`,
+              type: 'error',
+              duration: 3000
+            });
+          } else {
+            let message = res.data.message as string;
+            message = message.replace('</p></div><div><p>', '');
+            Taro.atMessage({
+              message: `无法查看帖子😱，${message}`,
+              type: 'error',
+              duration: 3000
+            });
+          }
         }
+      },
+      () => {
+        Taro.atMessage({
+          message: '网络连接中断😭',
+          type: 'error',
+          duration: 2000
+        });
       }
-    }, () => {
-      Taro.atMessage({
-        message: '网络连接中断😭',
-        type: 'error',
-        duration: 2000
-      })
-    })
+    );
   }
 
-  render() {
-    dayjs.locale('zh-cn')
-    dayjs.extend(relativeTime)
+  public render(): JSX.Element {
+    dayjs.locale('zh-cn');
+    dayjs.extend(relativeTime);
 
-    const {
-      thread,
-      loadMoreStatus,
-      loadMoreVisibility
-    } = this.state
-    const repliesArea = thread.replies.map(reply => {
-      return (
-        <View key={reply.position}>
-          <ReplyCard reply={reply}></ReplyCard>
-        </View>
-      )
-    })
+    const { thread, loadMoreStatus, loadMoreVisibility } = this.state;
+    const repliesArea = thread.replies.map(
+      (reply): JSX.Element => {
+        return (
+          <View key={reply.position}>
+            <ReplyCard reply={reply}></ReplyCard>
+          </View>
+        );
+      }
+    );
     return (
       // <WxmlifyRichText html={thread.content}></WxmlifyRichText> // 组件报错，不可用
       // <WxparseRichText html={thread.content}></WxparseRichText> // 效果挺好
       // <RichText nodes={thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
       <View>
         <AtMessage />
-        <View className='header'>
-          <Text className='title'>{thread.title}</Text>
+        <View className="header">
+          <Text className="title">{thread.title}</Text>
         </View>
 
-        <View className='author'>
-          <AtAvatar circle image={thread.author.avatar} size='small' className='avatar'></AtAvatar>
-          <View className='info'>
-            <Text className='name'>{thread.author.username}</Text>
-            <View className='others'>
-              <Text className='time'>{dayjs.unix(thread.timestamp as number).fromNow()}</Text>
-              <Text>阅读 {thread.viewed} · 回复 {thread.replied}</Text>
+        <View className="author">
+          <AtAvatar
+            circle
+            image={thread.author.avatar}
+            size="small"
+            className="avatar"
+          ></AtAvatar>
+          <View className="info">
+            <Text className="name">{thread.author.username}</Text>
+            <View className="others">
+              <Text className="time">
+                {dayjs.unix(thread.timestamp as number).fromNow()}
+              </Text>
+              <Text>
+                阅读 {thread.viewed} · 回复 {thread.replied}
+              </Text>
             </View>
           </View>
         </View>
 
-        <View className='content'>
-          <wxparse data={thread.content} type='html' padding='15'></wxparse>
+        <View className="content">
+          <wxparse data={thread.content} type="html" padding="15"></wxparse>
         </View>
 
         <AtDivider>
-          <AtIcon value='check-circle'></AtIcon>
+          <AtIcon value="check-circle"></AtIcon>
         </AtDivider>
 
         {repliesArea}
 
-        {loadMoreVisibility &&
+        {loadMoreVisibility && (
           <AtLoadMore
-            status={loadMoreStatus as "loading" | "more" | "noMore" | undefined}
-            loadingText='捕获更多回复中~🤩'
-            noMoreText='下面真的没有啦~😳'
-          />}
+            status={loadMoreStatus as 'loading' | 'more' | 'noMore' | undefined}
+            loadingText="捕获更多回复中~🤩"
+            noMoreText="下面真的没有啦~😳"
+          />
+        )}
       </View>
-    )
+    );
   }
 }
 
-export default Thread as ComponentClass<PageOwnProps, PageState>
+export default Thread as ComponentType;

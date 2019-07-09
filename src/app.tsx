@@ -1,12 +1,12 @@
-import '@tarojs/async-await'
-import Taro, { Component, Config } from '@tarojs/taro'
-import { Provider } from '@tarojs/redux'
+import '@tarojs/async-await';
+import Taro, { Component, Config } from '@tarojs/taro';
+import { Provider } from '@tarojs/redux';
 
-import Index from './pages/index'
+import Index from './pages/index';
 
-import configStore from './store'
+import configStore from './store';
 
-import './app.scss'
+import './app.scss';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -14,10 +14,9 @@ import './app.scss'
 //   require('nerv-devtools')
 // }
 
-const store = configStore()
+const store = configStore();
 
 class App extends Component {
-
   /**
    * 指定config的类型声明为: Taro.Config
    *
@@ -25,7 +24,7 @@ class App extends Component {
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
-  config: Config = {
+  public config: Config = {
     window: {
       backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#57bae8',
@@ -50,7 +49,7 @@ class App extends Component {
       color: '#abb4bf',
       selectedColor: '#57bae8',
       borderStyle: 'white',
-      backgroundColor: "#fff",
+      backgroundColor: '#fff',
       list: [
         {
           pagePath: 'pages/index/index',
@@ -84,57 +83,49 @@ class App extends Component {
         }
       ]
     }
+  };
+
+  public componentDidMount(): void {
+    this.updateApp();
   }
-
-  componentDidMount() {
-    this.updateApp()
-  }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
-  componentCatchError() { }
-
-  componentDidCatchError() { }
 
   /*更新小程序*/
-  updateApp() {
+  private updateApp(): void {
     if (Taro.canIUse('getUpdateManager')) {
-      const updateManager = Taro.getUpdateManager()
+      const updateManager = Taro.getUpdateManager();
 
-      updateManager.onCheckForUpdate((res) => {
+      updateManager.onCheckForUpdate((res): void => {
         // 请求完新版本信息的回调
-        console.log('hasUpdate', res.hasUpdate)
-      })
+        console.log('是否有新版本：', res.hasUpdate);
+      });
 
-      updateManager.onUpdateReady(() => {
+      updateManager.onUpdateReady((): void => {
         Taro.showModal({
           title: '更新提示',
-          content: '新版本已经准备好，是否重启应用？',
-          success(res) {
+          content: '新版本已经准备好，是否重启小程序？',
+          success(res): void {
             if (res.confirm) {
-              updateManager.applyUpdate()
+              updateManager.applyUpdate();
             }
           }
-        })
-      })
+        });
+      });
 
-      updateManager.onUpdateFailed(() => {
+      updateManager.onUpdateFailed((): void => {
         // 新版本下载失败
-      })
+      });
     }
   }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数
-  render() {
+  public render(): JSX.Element {
     return (
       <Provider store={store}>
         <Index />
       </Provider>
-    )
+    );
   }
 }
 
-Taro.render(<App />, document.getElementById('app'))
+Taro.render(<App />, document.getElementById('app'));
