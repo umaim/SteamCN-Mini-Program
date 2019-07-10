@@ -5,6 +5,7 @@ import { AtAvatar } from 'taro-ui'
 import dayjs from 'dayjs';
 
 import './replyCard.scss'
+import ParserRichText from '../ParserRichText/parserRichText'
 import { IReply } from '../../interfaces/thread'
 
 interface Props {
@@ -12,11 +13,6 @@ interface Props {
 }
 
 class ReplyCard extends Taro.Component<Props, {}> {
-  public config: Taro.Config = {
-    usingComponents: {
-      wxparse: '../wxParse/wxParse'
-    }
-  }
 
   public static defaultProps = {
     reply: {
@@ -46,7 +42,7 @@ class ReplyCard extends Taro.Component<Props, {}> {
           <Text className='floor'>{`#${position}`}</Text>
         </View>
         <View className='content'>
-          <wxparse data={content} type='html' padding='5'></wxparse>
+          <ParserRichText html={content}></ParserRichText>
         </View>
       </View>
     )

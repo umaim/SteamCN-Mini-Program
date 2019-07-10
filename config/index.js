@@ -28,7 +28,8 @@ const config = {
   },
   copy: {
     patterns: [
-      { from: 'src/components/SectionGroupList/assets/', to: 'dist/components/SectionGroupList/assets/'}
+      { from: 'src/components/SectionGroupList/assets/', to: 'dist/components/SectionGroupList/assets/' },
+      { from: 'src/components/ParserRichText/Parser/', to: 'dist/components/ParserRichText/Parser/' }
     ],
     options: {
     }
