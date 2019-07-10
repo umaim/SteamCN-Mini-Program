@@ -4,12 +4,11 @@ import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { AtDivider, AtIcon, AtAvatar, AtMessage, AtLoadMore } from 'taro-ui';
 import dayjs from 'dayjs';
-import 'dayjs/locale/zh-cn';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { IThread, IReply } from '../../interfaces/thread';
 import { IThreadRespond } from '../../interfaces/respond';
 import { IAccount } from '../../interfaces/account';
+import ParserRichText from '../../components/ParserRichText/parserRichText';
 import ReplyCard from '../../components/ReplyCard/replyCard';
 import contentCleaner from '../../utils/cleaner';
 import { initCredential } from '../../actions/account';
@@ -44,9 +43,6 @@ interface State {
 class Thread extends Taro.Component<Props, State> {
   public config: Taro.Config = {
     navigationBarTitleText: '主题',
-    usingComponents: {
-      wxparse: '../../components/wxParse/wxParse'
-    },
     onReachBottomDistance: 300
   };
 
@@ -254,7 +250,7 @@ class Thread extends Taro.Component<Props, State> {
           }
         }
       },
-      () => {
+      (): void => {
         Taro.atMessage({
           message: '网络连接中断😭',
           type: 'error',
@@ -279,6 +275,7 @@ class Thread extends Taro.Component<Props, State> {
       // <WxmlifyRichText html={thread.content}></WxmlifyRichText> // 组件报错，不可用
       // <WxparseRichText html={thread.content}></WxparseRichText> // 效果挺好
       // <RichText nodes={thread.content}></RichText> //最方便，没有任何排版，样式原始，没有表格，图片不自适应
+      // <wxparse data={thread.content} type="html" padding="15"></wxparse>
       <View>
         <AtMessage />
         <View className="header">
@@ -306,7 +303,7 @@ class Thread extends Taro.Component<Props, State> {
         </View>
 
         <View className="content">
-          <wxparse data={thread.content} type="html" padding="15"></wxparse>
+          <ParserRichText html={thread.content}></ParserRichText>
         </View>
 
         <AtDivider>
