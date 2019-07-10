@@ -84,13 +84,6 @@ class Login extends Taro.Component<Props, State> {
     return value;
   }
 
-  private handleUsernameBlur(value: string): string {
-    this.setState({
-      username: value
-    });
-    return value;
-  }
-
   private handlePasswordChange(value: string): string {
     this.setState({
       password: value
@@ -222,7 +215,6 @@ class Login extends Taro.Component<Props, State> {
             placeholder="请输入用户名"
             value={username}
             onChange={this.handleUsernameChange.bind(this)}
-            onBlur={this.handleUsernameBlur.bind(this)}
           />
           <AtInput
             clear
