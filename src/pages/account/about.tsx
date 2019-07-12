@@ -18,7 +18,7 @@ class About extends Taro.Component {
             className="logo"
           ></Image>
           <View style="text-align: center;">蒸汽动力 SteamCN.com</View>
-          <View style="text-align: center;">Version 0.2.5</View>
+          <View style="text-align: center;">Version 0.2.6</View>
         </View>
 
         <View className="item">
