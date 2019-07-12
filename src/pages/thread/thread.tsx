@@ -4,7 +4,6 @@ import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import {
   AtDivider,
-  AtIcon,
   AtAvatar,
   AtMessage,
   AtLoadMore,
@@ -277,7 +276,6 @@ class Thread extends Taro.Component<Props, State> {
 
   public render(): JSX.Element {
     const pageDepth = Taro.getCurrentPages().length;
-    console.log('Page Depth::', pageDepth);
     const {
       thread,
       loadMoreStatus,
@@ -309,7 +307,6 @@ class Thread extends Taro.Component<Props, State> {
           onClickLeftIcon={
             pageDepth === 1
               ? (): void => {
-                  console.log('Home Icon Click!');
                   Taro.switchTab({ url: '/pages/index/index' });
                 }
               : (): void => {
@@ -327,7 +324,7 @@ class Thread extends Taro.Component<Props, State> {
             type="primary"
             size="normal"
           >
-            <Text className="at-icon at-icon-share"></Text>
+            <View className="at-icon at-icon-share"></View>
           </AtButton>
         </View>
 
@@ -360,7 +357,7 @@ class Thread extends Taro.Component<Props, State> {
         </View>
 
         <AtDivider>
-          <AtIcon value="check-circle"></AtIcon>
+          <View className="at-icon at-icon-check-circle"></View>
         </AtDivider>
 
         {repliesArea}
