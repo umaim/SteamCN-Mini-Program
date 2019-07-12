@@ -5,6 +5,6 @@ export interface IAccount {
   avatar: string,
   groupid: number,
   createdAt: string,
-  UpdatedAt: string,
+  updatedAt: string,
   accessToken: string
 }
