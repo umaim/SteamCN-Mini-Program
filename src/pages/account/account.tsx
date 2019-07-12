@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { AtList, AtListItem, AtAvatar } from 'taro-ui';
+import { AtList, AtListItem, AtAvatar, AtNavBar } from 'taro-ui';
 
 import { IAccount } from '../../interfaces/account';
 import { initCredential } from '../../actions/account';
@@ -18,6 +18,7 @@ interface Props {
 
 interface State {
   history: number;
+  statusBarHeight: number;
 }
 
 @connect(
@@ -37,7 +38,8 @@ class Account extends Taro.Component<Props, State> {
   };
 
   public state = {
-    history: 0
+    history: 0,
+    statusBarHeight: 20
   };
 
   public componentDidShow(): void {
@@ -57,6 +59,12 @@ class Account extends Taro.Component<Props, State> {
     );
 
     this.props.initCredential();
+  }
+
+  public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
   }
 
   private navigator(addr: string): void {
@@ -84,65 +92,73 @@ class Account extends Taro.Component<Props, State> {
 
   public render(): JSX.Element {
     const { auth, account } = this.props;
-    const { history } = this.state;
+    const { history, statusBarHeight } = this.state;
     return (
-      <View className="wrapper">
-        <View className="profile" onClick={this.handleProfile}>
-          <View className="info">
-            <AtAvatar
-              className="avatar"
-              circle
-              image={auth ? account.avatar : EmptyAvatar}
-              size="normal"
-            ></AtAvatar>
-            <View className="text">
-              <View className="name">{auth ? account.username : '登录'}</View>
-              {auth ? (
-                <View>充满抛瓦！(๑•̀ㅂ•́)و✧</View>
-              ) : (
-                <View>一直未登录你怎么变强？w(ﾟДﾟ)w</View>
-              )}
+      <View>
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="我的"
+          border={false}
+        />
+
+        <View className="wrapper">
+          <View className="profile" onClick={this.handleProfile}>
+            <View className="info">
+              <AtAvatar
+                className="avatar"
+                circle
+                image={auth ? account.avatar : EmptyAvatar}
+                size="normal"
+              ></AtAvatar>
+              <View className="text">
+                <View className="name">{auth ? account.username : '登录'}</View>
+                {auth ? (
+                  <View>充满抛瓦！(๑•̀ㅂ•́)و✧</View>
+                ) : (
+                  <View>一直未登录你怎么变强？w(ﾟДﾟ)w</View>
+                )}
+              </View>
             </View>
+
+            <View className="more at-icon at-icon-chevron-right"></View>
           </View>
 
-          <View className="more at-icon at-icon-chevron-right"></View>
-        </View>
+          <View className="forum-area">
+            <AtList>
+              <AtListItem
+                title="消息中心"
+                iconInfo={{ value: 'bell', color: '#ABB4BF' }}
+                onClick={this.joking}
+              />
+              <AtListItem
+                title="我的收藏"
+                extraText="0 个"
+                iconInfo={{ value: 'star', color: '#ABB4BF' }}
+                onClick={this.joking}
+              />
+              <AtListItem
+                title="浏览历史"
+                extraText={`${history} 篇`}
+                iconInfo={{ value: 'clock', color: '#ABB4BF' }}
+                onClick={this.navigator.bind(this, 'history')}
+              />
+            </AtList>
+          </View>
 
-        <View className="forum-area">
-          <AtList>
-            <AtListItem
-              title="消息中心"
-              iconInfo={{ value: 'bell', color: '#ABB4BF' }}
-              onClick={this.joking}
-            />
-            <AtListItem
-              title="我的收藏"
-              extraText="0 个"
-              iconInfo={{ value: 'star', color: '#ABB4BF' }}
-              onClick={this.joking}
-            />
-            <AtListItem
-              title="浏览历史"
-              extraText={`${history} 篇`}
-              iconInfo={{ value: 'clock', color: '#ABB4BF' }}
-              onClick={this.navigator.bind(this, 'history')}
-            />
-          </AtList>
-        </View>
-
-        <View className="program-area">
-          <AtList>
-            <AtListItem
-              title="设置"
-              iconInfo={{ value: 'settings', color: '#ABB4BF' }}
-              onClick={this.navigator.bind(this, 'setting')}
-            />
-            <AtListItem
-              title="关于"
-              iconInfo={{ value: 'lightning-bolt', color: '#ABB4BF' }}
-              onClick={this.navigator.bind(this, 'about')}
-            />
-          </AtList>
+          <View className="program-area">
+            <AtList>
+              <AtListItem
+                title="设置"
+                iconInfo={{ value: 'settings', color: '#ABB4BF' }}
+                onClick={this.navigator.bind(this, 'setting')}
+              />
+              <AtListItem
+                title="关于"
+                iconInfo={{ value: 'lightning-bolt', color: '#ABB4BF' }}
+                onClick={this.navigator.bind(this, 'about')}
+              />
+            </AtList>
+          </View>
         </View>
       </View>
     );

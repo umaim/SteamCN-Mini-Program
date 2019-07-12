@@ -1,7 +1,7 @@
 import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { AtMessage } from 'taro-ui';
+import { AtMessage, AtNavBar } from 'taro-ui';
 
 import './history.scss';
 import ThreadCard from '../../components/ThreadCard/threadCard';
@@ -11,6 +11,7 @@ interface State {
   historyThreadList: IThreadMeta[];
   history: IThreadMeta[];
   page: number;
+  statusBarHeight: number;
 }
 
 class History extends Taro.Component<{}, State> {
@@ -22,10 +23,15 @@ class History extends Taro.Component<{}, State> {
   public state = {
     historyThreadList: Array<IThreadMeta>(),
     history: Array<IThreadMeta>(),
-    page: 1
+    page: 1,
+    statusBarHeight: 20
   };
 
   public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+
     Taro.getStorage({
       key: 'history'
     }).then(
@@ -76,16 +82,29 @@ class History extends Taro.Component<{}, State> {
   }
 
   public render(): JSX.Element {
-    const { historyThreadList } = this.state;
+    const { historyThreadList, statusBarHeight } = this.state;
     const threadCards = historyThreadList.map(
       (item): JSX.Element => {
         return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;
       }
     );
     return (
-      <View className="thread-list">
-        <AtMessage />
-        {threadCards}
+      <View>
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="浏览历史"
+          color="#FFF"
+          leftIconType="chevron-left"
+          onClickLeftIcon={(): void => {
+            Taro.navigateBack({ delta: 1 });
+          }}
+          border={false}
+        />
+
+        <View className="thread-list">
+          <AtMessage />
+          {threadCards}
+        </View>
       </View>
     );
   }

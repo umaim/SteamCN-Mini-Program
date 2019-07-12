@@ -1,14 +1,23 @@
 import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { Text, View } from '@tarojs/components';
+import { AtNavBar } from 'taro-ui';
 
 import SectionGroupList from '../../components/SectionGroupList/sectionGroupList';
 
 import './section.scss';
 
-class Section extends Taro.Component {
+interface State {
+  statusBarHeight: number;
+}
+
+class Section extends Taro.Component<{}, State> {
   public config: Taro.Config = {
     navigationBarTitleText: '板块'
+  };
+
+  public state = {
+    statusBarHeight: 20
   };
 
   private _sectionMeta = {
@@ -262,52 +271,69 @@ class Section extends Taro.Component {
     ]
   };
 
+  public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+  }
+
   public render(): JSX.Element {
+    const { statusBarHeight } = this.state;
     return (
-      <View className="container">
-        <View className="group">
-          <View className="groupTitle">
-            <Text>平台周边</Text>
+      <View>
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="论坛版块"
+          border={false}
+        />
+
+        <View className="container">
+          <View className="group">
+            <View className="groupTitle">
+              <Text>平台周边</Text>
+            </View>
+            <SectionGroupList list={this._sectionMeta.forum}></SectionGroupList>
           </View>
-          <SectionGroupList list={this._sectionMeta.forum}></SectionGroupList>
-        </View>
-        <View className="group">
-          <View className="groupTitle">
-            <Text>问题互助</Text>
+          <View className="group">
+            <View className="groupTitle">
+              <Text>问题互助</Text>
+            </View>
+            <SectionGroupList
+              list={this._sectionMeta.problem}
+            ></SectionGroupList>
           </View>
-          <SectionGroupList list={this._sectionMeta.problem}></SectionGroupList>
-        </View>
-        <View className="group">
-          <View className="groupTitle">
-            <Text>游戏讨论</Text>
+          <View className="group">
+            <View className="groupTitle">
+              <Text>游戏讨论</Text>
+            </View>
+            <SectionGroupList
+              list={this._sectionMeta.discussion}
+            ></SectionGroupList>
           </View>
-          <SectionGroupList
-            list={this._sectionMeta.discussion}
-          ></SectionGroupList>
-        </View>
-        <View className="group">
-          <View className="groupTitle">
-            <Text>论坛周边</Text>
+          <View className="group">
+            <View className="groupTitle">
+              <Text>论坛周边</Text>
+            </View>
+            <SectionGroupList
+              list={this._sectionMeta.peripheral}
+            ></SectionGroupList>
           </View>
-          <SectionGroupList
-            list={this._sectionMeta.peripheral}
-          ></SectionGroupList>
-        </View>
-        <View className="group">
-          <View className="groupTitle">
-            <Text>友商平台</Text>
+          <View className="group">
+            <View className="groupTitle">
+              <Text>友商平台</Text>
+            </View>
+            <SectionGroupList
+              list={this._sectionMeta.platform}
+            ></SectionGroupList>
           </View>
-          <SectionGroupList
-            list={this._sectionMeta.platform}
-          ></SectionGroupList>
-        </View>
-        <View className="group">
-          <View className="groupTitle">
-            <Text>社区服务</Text>
+          <View className="group">
+            <View className="groupTitle">
+              <Text>社区服务</Text>
+            </View>
+            <SectionGroupList
+              list={this._sectionMeta.official}
+            ></SectionGroupList>
           </View>
-          <SectionGroupList
-            list={this._sectionMeta.official}
-          ></SectionGroupList>
         </View>
       </View>
     );

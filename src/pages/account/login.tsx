@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Image, Picker } from '@tarojs/components';
-import { AtInput, AtButton, AtMessage } from 'taro-ui';
+import { AtInput, AtButton, AtMessage, AtNavBar } from 'taro-ui';
 
 import './login.scss';
 import {
@@ -27,6 +27,7 @@ interface State {
   questions: string[];
   questionid: number;
   answer: string;
+  statusBarHeight: number;
 }
 
 @connect(
@@ -66,7 +67,8 @@ class Login extends Taro.Component<Props, State> {
       '驾驶执照最后四位数字'
     ],
     questionid: 0,
-    answer: ''
+    answer: '',
+    statusBarHeight: 20
   };
 
   public componentDidShow(): void {
@@ -74,6 +76,12 @@ class Login extends Taro.Component<Props, State> {
       background: `cloud://steamcn.7374-steamcn/assets/img/login/background${Math.floor(
         Math.random() * 9
       )}.jpg`
+    });
+  }
+
+  public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
   }
 
@@ -194,71 +202,87 @@ class Login extends Taro.Component<Props, State> {
       background,
       questions,
       questionid,
-      answer
+      answer,
+      statusBarHeight
     } = this.state;
     return (
-      <View className="wrapper">
-        <AtMessage />
-        <View className="content">
-          <View className="background">
-            <Image
-              className="backgroundImage"
-              src={background}
-              mode="aspectFill"
-            ></Image>
-          </View>
-          <AtInput
-            clear
-            name="username"
-            title="用户名："
-            type="text"
-            placeholder="请输入用户名"
-            value={username}
-            onChange={this.handleUsernameChange.bind(this)}
-          />
-          <AtInput
-            clear
-            name="password"
-            title="密码："
-            type="password"
-            placeholder="请输入密码"
-            value={password}
-            onChange={this.handlePasswordChange.bind(this)}
-          />
-          <Picker
-            mode="selector"
-            range={questions}
-            value={questionid}
-            onChange={this.handleQuestionsChange}
-          >
-            <View className="list-item">
-              <View className="list-item__label">安全问题：</View>
-              <View className="list-item__value">{questions[questionid]}</View>
+      <View>
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="登录"
+          color="#FFF"
+          leftIconType="chevron-left"
+          onClickLeftIcon={(): void => {
+            Taro.navigateBack({ delta: 1 });
+          }}
+          border={false}
+        />
+
+        <View className="wrapper">
+          <AtMessage />
+          <View className="content">
+            <View className="background">
+              <Image
+                className="backgroundImage"
+                src={background}
+                mode="aspectFill"
+              ></Image>
             </View>
-          </Picker>
-          {questionid !== 0 && (
             <AtInput
               clear
-              name="answer"
-              title="答案："
+              name="username"
+              title="用户名："
               type="text"
-              placeholder="安全问题答案"
-              value={answer}
-              onChange={this.handleAnswerChange.bind(this)}
-              onBlur={this.handleAnswerBlur.bind(this)}
+              placeholder="请输入用户名"
+              value={username}
+              onChange={this.handleUsernameChange.bind(this)}
             />
-          )}
-          <AtButton
-            className="login"
-            type="primary"
-            size="normal"
-            circle
-            onClick={this.login.bind(this)}
-          >
-            登录
-          </AtButton>
+            <AtInput
+              clear
+              name="password"
+              title="密码："
+              type="password"
+              placeholder="请输入密码"
+              value={password}
+              onChange={this.handlePasswordChange.bind(this)}
+            />
+            <Picker
+              mode="selector"
+              range={questions}
+              value={questionid}
+              onChange={this.handleQuestionsChange}
+            >
+              <View className="list-item">
+                <View className="list-item__label">安全问题：</View>
+                <View className="list-item__value">
+                  {questions[questionid]}
+                </View>
+              </View>
+            </Picker>
+            {questionid !== 0 && (
+              <AtInput
+                clear
+                name="answer"
+                title="答案："
+                type="text"
+                placeholder="安全问题答案"
+                value={answer}
+                onChange={this.handleAnswerChange.bind(this)}
+                onBlur={this.handleAnswerBlur.bind(this)}
+              />
+            )}
+            <AtButton
+              className="login"
+              type="primary"
+              size="normal"
+              circle
+              onClick={this.login.bind(this)}
+            >
+              登录
+            </AtButton>
+          </View>
+          <View className="footer">蒸汽动力 · SteamCN.com</View>
         </View>
-        <View className="footer">蒸汽动力 · SteamCN.com</View>
       </View>
     );
   }

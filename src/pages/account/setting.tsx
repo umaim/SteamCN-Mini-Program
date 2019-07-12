@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { AtList, AtListItem, AtMessage, AtButton } from 'taro-ui';
+import { AtList, AtListItem, AtMessage, AtButton, AtNavBar } from 'taro-ui';
 
 import { IAccount } from '../../interfaces/account';
 import {
@@ -25,6 +25,7 @@ interface Props {
 
 interface State {
   size: number;
+  statusBarHeight: number;
 }
 
 @connect(
@@ -53,7 +54,8 @@ class Setting extends Taro.Component<Props, State> {
   };
 
   public state = {
-    size: 0
+    size: 0,
+    statusBarHeight: 20
   };
 
   public componentDidMount(): void {
@@ -69,6 +71,10 @@ class Setting extends Taro.Component<Props, State> {
           });
         }
       }
+    });
+
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
 
     this.props.initCredential();
@@ -148,22 +154,38 @@ class Setting extends Taro.Component<Props, State> {
 
   public render(): JSX.Element {
     const { auth } = this.props;
-    const { size } = this.state;
+    const { size, statusBarHeight } = this.state;
     return (
       <View>
         <AtMessage />
+
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="设置"
+          color="#FFF"
+          leftIconType="chevron-left"
+          onClickLeftIcon={(): void => {
+            Taro.navigateBack({ delta: 1 });
+          }}
+          border={false}
+        />
+
         <View className="container">
           <AtList>
             <AtListItem
               title="清除历史"
               extraText={`${size} KB`}
-              onClick={this.clearHistory}
+              onClick={this.clearHistory.bind(this)}
             />
           </AtList>
         </View>
 
         {auth && (
-          <AtButton className="logout" type="secondary" onClick={this.logout}>
+          <AtButton
+            className="logout"
+            type="secondary"
+            onClick={this.logout.bind(this)}
+          >
             退出登录 ヾ(•ω•`)o
           </AtButton>
         )}
