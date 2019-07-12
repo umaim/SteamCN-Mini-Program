@@ -2,7 +2,15 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import { AtDivider, AtIcon, AtAvatar, AtMessage, AtLoadMore } from 'taro-ui';
+import {
+  AtDivider,
+  AtIcon,
+  AtAvatar,
+  AtMessage,
+  AtLoadMore,
+  AtFab,
+  AtButton
+} from 'taro-ui';
 import dayjs from 'dayjs';
 
 import { IThread, IReply } from '../../interfaces/thread';
@@ -278,6 +286,13 @@ class Thread extends Taro.Component<Props, State> {
       // <wxparse data={thread.content} type="html" padding="15"></wxparse>
       <View>
         <AtMessage />
+
+        <View className="fab">
+          <AtButton className='fab-bottom' circle openType="share" type="primary" size='normal'>
+            <Text className="at-icon at-icon-share"></Text>
+          </AtButton>
+        </View>
+
         <View className="header">
           <Text className="title">{thread.title}</Text>
         </View>
