@@ -29,6 +29,7 @@ class App extends Component {
    */
   public config: Config = {
     window: {
+      navigationStyle: 'custom',
       backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#57bae8',
       navigationBarTitleText: 'SteamCN 蒸汽动力',
@@ -89,7 +90,7 @@ class App extends Component {
   };
 
   public componentDidMount(): void {
-    dayjs.locale('zh-cn')
+    dayjs.locale('zh-cn');
     dayjs.extend(relativeTime);
     this.updateApp();
   }
@@ -117,7 +118,7 @@ class App extends Component {
       });
 
       updateManager.onUpdateFailed((): void => {
-        // 新版本下载失败
+        console.error('App Update Failed!');
       });
     }
   }

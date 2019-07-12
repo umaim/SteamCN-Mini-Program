@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components';
-import { AtMessage } from 'taro-ui';
+import { AtMessage, AtNavBar } from 'taro-ui';
 
 import ThreadCard from '../../components/ThreadCard/threadCard';
 import { IThreadMeta } from '../../interfaces/thread';
@@ -21,6 +21,7 @@ interface Props {
 interface State {
   bannerThreadList: IThreadMeta[];
   indexThreadList: IThreadMeta[];
+  statusBarHeight: number;
 }
 
 @connect(
@@ -42,7 +43,8 @@ class Index extends Taro.Component<Props, State> {
 
   public state = {
     bannerThreadList: Array<IThreadMeta>(),
-    indexThreadList: Array<IThreadMeta>()
+    indexThreadList: Array<IThreadMeta>(),
+    statusBarHeight: 20
   };
 
   public componentDidShow(): void {
@@ -50,6 +52,9 @@ class Index extends Taro.Component<Props, State> {
   }
 
   public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
     this.initHome();
   }
 
@@ -187,7 +192,7 @@ class Index extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { bannerThreadList, indexThreadList } = this.state;
+    const { bannerThreadList, indexThreadList, statusBarHeight } = this.state;
     const swiperItems = bannerThreadList.map(
       (item): JSX.Element => {
         return (
@@ -214,6 +219,13 @@ class Index extends Taro.Component<Props, State> {
     return (
       <View className="index">
         <AtMessage />
+
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="SteamCN 蒸汽动力"
+          border={false}
+        />
+
         <Swiper
           className="index-swiper"
           autoplay

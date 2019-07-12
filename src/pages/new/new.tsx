@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { AtMessage } from 'taro-ui';
+import { AtMessage, AtNavBar } from 'taro-ui';
 
 import ThreadCard from '../../components/ThreadCard/threadCard';
 import { IThreadMeta } from '../../interfaces/thread';
@@ -20,6 +20,7 @@ interface Props {
 
 interface State {
   newThreadList: IThreadMeta[];
+  statusBarHeight: number;
 }
 
 @connect(
@@ -40,7 +41,8 @@ class New extends Taro.Component<Props, State> {
   };
 
   public state = {
-    newThreadList: Array<IThreadMeta>()
+    newThreadList: Array<IThreadMeta>(),
+    statusBarHeight: 20
   };
 
   public onShareAppMessage(): {
@@ -58,6 +60,9 @@ class New extends Taro.Component<Props, State> {
   }
 
   public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
     this.initNew();
   }
 
@@ -165,7 +170,7 @@ class New extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { newThreadList } = this.state;
+    const { newThreadList, statusBarHeight } = this.state;
     const threadCards = newThreadList.map(
       (item): JSX.Element => {
         return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;
@@ -174,6 +179,13 @@ class New extends Taro.Component<Props, State> {
     return (
       <View>
         <AtMessage />
+
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title="最新回复"
+          border={false}
+        />
+
         <View className="thread-list">{threadCards}</View>
       </View>
     );

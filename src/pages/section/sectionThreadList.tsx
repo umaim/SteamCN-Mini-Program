@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
-import { AtMessage, AtLoadMore } from 'taro-ui';
+import { AtMessage, AtLoadMore, AtNavBar } from 'taro-ui';
 
 import ThreadCard from '../../components/ThreadCard/threadCard';
 import { IThreadMeta } from '../../interfaces/thread';
@@ -23,6 +23,7 @@ interface State {
   pageNum: number;
   loadMoreVisibility: boolean;
   loadMoreStatus: 'more' | 'loading' | 'noMore';
+  statusBarHeight;
 }
 
 @connect(
@@ -47,10 +48,14 @@ class SectionThreadList extends Taro.Component<Props, State> {
     sectionThreadList: Array<IThreadMeta>(),
     pageNum: 1,
     loadMoreVisibility: false,
-    loadMoreStatus: 'loading' as 'more' | 'loading' | 'noMore'
+    loadMoreStatus: 'loading' as 'more' | 'loading' | 'noMore',
+    statusBarHeight: 20
   };
 
   public componentDidMount(): void {
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
     const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'
@@ -191,7 +196,8 @@ class SectionThreadList extends Taro.Component<Props, State> {
     const {
       sectionThreadList,
       loadMoreStatus,
-      loadMoreVisibility
+      loadMoreVisibility,
+      statusBarHeight
     } = this.state;
     const threadCards = sectionThreadList.map(
       (item): JSX.Element => {
@@ -201,6 +207,18 @@ class SectionThreadList extends Taro.Component<Props, State> {
     return (
       <View className="thread-list">
         <AtMessage />
+
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
+          title={this.$router.params.title ? this.$router.params.title : '板块'}
+          color="#FFF"
+          leftIconType="chevron-left"
+          onClickLeftIcon={(): void => {
+            Taro.navigateBack({ delta: 1 });
+          }}
+          border={false}
+        />
+
         {threadCards}
         {loadMoreVisibility && (
           <AtLoadMore

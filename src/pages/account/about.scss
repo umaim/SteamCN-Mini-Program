@@ -2,12 +2,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-size: 28rpx;
+  padding-top: 180px;
+  font-size: 28px;
 }
 
 .logo {
-  width: 128rpx;
-  height: 128rpx;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
   display: block;
   margin: auto;
@@ -16,15 +17,15 @@
 .item {
   line-height: 2.2em;
   background: #fff;
-  padding: 10rpx 30rpx 20rpx;
+  padding: 10px 30px 20px;
   box-sizing: border-box;
-  margin-bottom: 20rpx;
+  margin-bottom: 20px;
 }
 
 .item .title {
-  font-size: 32rpx;
+  font-size: 32px;
   color: #57bae8;
-  margin: 26rpx 0;
+  margin: 26px 0;
 }
 
 .item .i {
@@ -33,7 +34,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   position: relative;
-  padding-bottom: 16rpx;
+  padding-bottom: 16px;
 }
 
 .i .icon {
@@ -44,9 +45,9 @@
 }
 
 .i image {
-  width: 32rpx;
-  height: 32rpx;
-  margin-right: 20rpx;
+  width: 32px;
+  height: 32px;
+  margin-right: 20px;
 }
 
 .item .text {
@@ -57,18 +58,18 @@
 }
 
 .qrcode {
-  width: 420rpx;
-  height: 420rpx;
+  width: 420px;
+  height: 420px;
   display: block;
   margin: auto;
 }
 
 .footer {
-  height: 80rpx;
-  margin-top: 30rpx;
+  height: 80px;
+  margin-top: 30px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 24rpx;
+  font-size: 24px;
   color: #333;
 }

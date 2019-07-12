@@ -8,8 +8,8 @@ import {
   AtAvatar,
   AtMessage,
   AtLoadMore,
-  AtFab,
-  AtButton
+  AtButton,
+  AtNavBar
 } from 'taro-ui';
 import dayjs from 'dayjs';
 
@@ -35,6 +35,7 @@ interface State {
   thread: IThread;
   loadMoreVisibility: boolean;
   loadMoreStatus: 'more' | 'loading' | 'noMore';
+  statusBarHeight: number;
 }
 
 @connect(
@@ -84,10 +85,16 @@ class Thread extends Taro.Component<Props, State> {
           position: 0
         }
       ]
-    }
+    },
+    statusBarHeight: 20
   };
 
   public componentDidMount(): void {
+    console.log('Current Pages::', Taro.getCurrentPages());
+
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
     const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'
@@ -269,7 +276,14 @@ class Thread extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { thread, loadMoreStatus, loadMoreVisibility } = this.state;
+    const pageDepth = Taro.getCurrentPages().length;
+    console.log('Page Depth::', pageDepth);
+    const {
+      thread,
+      loadMoreStatus,
+      loadMoreVisibility,
+      statusBarHeight
+    } = this.state;
     const repliesArea = thread.replies.map(
       (reply): JSX.Element => {
         return (
@@ -287,8 +301,32 @@ class Thread extends Taro.Component<Props, State> {
       <View>
         <AtMessage />
 
+        <AtNavBar
+          customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px;`}
+          title="主题"
+          color="#FFF"
+          leftIconType={pageDepth === 1 ? 'home' : 'chevron-left'}
+          onClickLeftIcon={
+            pageDepth === 1
+              ? (): void => {
+                  console.log('Home Icon Click!');
+                  Taro.switchTab({ url: '/pages/index/index' });
+                }
+              : (): void => {
+                  Taro.navigateBack({ delta: 1 });
+                }
+          }
+          border={false}
+        />
+
         <View className="fab">
-          <AtButton className='fab-bottom' circle openType="share" type="primary" size='normal'>
+          <AtButton
+            className="fab-bottom"
+            circle
+            openType="share"
+            type="primary"
+            size="normal"
+          >
             <Text className="at-icon at-icon-share"></Text>
           </AtButton>
         </View>
