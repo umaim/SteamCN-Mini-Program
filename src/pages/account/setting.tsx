@@ -172,7 +172,7 @@ class Setting extends Taro.Component<Props, State> {
           border={false}
         />
 
-        <View className="container">
+        <View className="content">
           <AtList>
             <AtListItem
               title="清除历史"
@@ -184,8 +184,9 @@ class Setting extends Taro.Component<Props, State> {
 
         {auth && (
           <AtButton
-            className="logout"
+            className="logout-button"
             type="secondary"
+            circle
             onClick={this.logout.bind(this)}
           >
             退出登录 ヾ(•ω•`)o

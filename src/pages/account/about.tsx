@@ -16,13 +16,13 @@ class About extends Taro.Component {
             src="cloud://steamcn.7374-steamcn/assets/img/logo.jpg"
             className="logo"
           ></Image>
-          <View style="text-align: center;">蒸汽动力 SteamCN.com</View>
-          <View style="text-align: center;">Version 0.2.6</View>
+          <View>蒸汽动力 SteamCN.com</View>
+          <View>Version 0.2.6</View>
         </View>
 
         <View className="item">
           <View className="title">项目地址</View>
-          <View className="i">
+          <View className="content">
             <View className="icon">
               <Image src="cloud://steamcn.7374-steamcn/assets/img/github.png"></Image>
             </View>
@@ -36,7 +36,7 @@ class About extends Taro.Component {
         <View className="item">
           <View className="title">反馈建议</View>
 
-          <View className="i">
+          <View className="content">
             <View className="icon">
               <Image src="cloud://steamcn.7374-steamcn/assets/img/steamcn.png"></Image>
             </View>
@@ -46,7 +46,7 @@ class About extends Taro.Component {
             </View>
           </View>
 
-          <View className="i">
+          <View className="content">
             <View className="icon">
               <Image src="cloud://steamcn.7374-steamcn/assets/img/steam.png"></Image>
             </View>

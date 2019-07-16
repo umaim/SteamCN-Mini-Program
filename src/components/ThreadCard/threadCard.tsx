@@ -76,19 +76,19 @@ class ThreadCard extends Taro.Component<Props> {
   public render(): JSX.Element {
     const { title, section, timestamp, author, stats } = this.props.threadMeta;
     return (
-      <View className="item" onClick={this.toThread}>
+      <View className="wrapper" onClick={this.toThread}>
         <View className="header at-row at-row__justify--between">
           <View className="author at-col">
             {author.avatar && (
               <Image
                 src={author.avatar}
-                className="header-avatar"
+                className="avatar"
                 mode="aspectFill"
               ></Image>
             )}
             <Text>{author.username}</Text>
           </View>
-          <Text className="type">{section}</Text>
+          <Text className="section">{section}</Text>
         </View>
         <View className="at-row">
           <Text className="title at-col--wrap">{title}</Text>
@@ -98,9 +98,9 @@ class ThreadCard extends Taro.Component<Props> {
             <Text>{dayjs.unix(timestamp).fromNow()}</Text>
           </View>
           <View className="stats at-row at-row__justify--end at-row__align--center">
-            <Image src={see} className="stats-image"></Image>
+            <Image src={see} className="icon"></Image>
             <Text>{stats.viewed}</Text>
-            <Image src={reply} className="stats-image"></Image>
+            <Image src={reply} className="icon"></Image>
             <Text>{stats.replied}</Text>
           </View>
         </View>

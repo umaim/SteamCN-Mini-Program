@@ -1,6 +1,6 @@
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import { AtList, AtListItem, AtAvatar, AtNavBar } from 'taro-ui';
 
 import { IAccount } from '../../interfaces/account';
@@ -120,7 +120,7 @@ class Account extends Taro.Component<Props, State> {
               </View>
             </View>
 
-            <View className="more at-icon at-icon-chevron-right"></View>
+            <Text className="more at-icon at-icon-chevron-right"></Text>
           </View>
 
           <View className="forum-area">

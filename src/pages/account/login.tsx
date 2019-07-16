@@ -207,6 +207,8 @@ class Login extends Taro.Component<Props, State> {
     } = this.state;
     return (
       <View>
+        <AtMessage />
+
         <AtNavBar
           customStyle={`background-color: #57bae8; padding-top: ${statusBarHeight}px`}
           title="登录"
@@ -219,7 +221,6 @@ class Login extends Taro.Component<Props, State> {
         />
 
         <View className="wrapper">
-          <AtMessage />
           <View className="content">
             <View className="background">
               <Image
@@ -272,7 +273,7 @@ class Login extends Taro.Component<Props, State> {
               />
             )}
             <AtButton
-              className="login"
+              className="login-button"
               type="primary"
               size="normal"
               circle
