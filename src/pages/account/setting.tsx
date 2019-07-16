@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
@@ -194,4 +193,4 @@ class Setting extends Taro.Component<Props, State> {
   }
 }
 
-export default Setting as ComponentType;
+export default Setting as Taro.ComponentClass;

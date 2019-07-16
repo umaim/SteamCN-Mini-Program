@@ -1,19 +1,17 @@
-import { ComponentType } from 'react';
-import Taro from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
-import { AtAvatar } from 'taro-ui'
+import Taro from '@tarojs/taro';
+import { View, Text } from '@tarojs/components';
+import { AtAvatar } from 'taro-ui';
 import dayjs from 'dayjs';
 
-import './replyCard.scss'
-import ParserRichText from '../ParserRichText/parserRichText'
-import { IReply } from '../../interfaces/thread'
+import './replyCard.scss';
+import ParserRichText from '../ParserRichText/parserRichText';
+import { IReply } from '../../interfaces/thread';
 
 interface Props {
-  reply: IReply
+  reply: IReply;
 }
 
 class ReplyCard extends Taro.Component<Props, {}> {
-
   public static defaultProps = {
     reply: {
       user: {
@@ -25,28 +23,28 @@ class ReplyCard extends Taro.Component<Props, {}> {
       timestamp: 0,
       position: 0
     }
-  }
+  };
 
   public render(): JSX.Element {
-    const { user, content, timestamp, position } = this.props.reply
+    const { user, content, timestamp, position } = this.props.reply;
     return (
-      <View className='reply'>
-        <View className='at-row at-row__justify--between'>
-          <View className='user'>
-            <AtAvatar circle image={user.avatar} size='small'></AtAvatar>
-            <View className='info'>
-              <Text className='name'>{user.username}</Text>
-              <Text className='time'>{dayjs.unix(timestamp).fromNow()}</Text>
+      <View className="reply">
+        <View className="at-row at-row__justify--between">
+          <View className="user">
+            <AtAvatar circle image={user.avatar} size="small"></AtAvatar>
+            <View className="info">
+              <Text className="name">{user.username}</Text>
+              <Text className="time">{dayjs.unix(timestamp).fromNow()}</Text>
             </View>
           </View>
-          <Text className='floor'>{`#${position}`}</Text>
+          <Text className="floor">{`#${position}`}</Text>
         </View>
-        <View className='content'>
+        <View className="content">
           <ParserRichText html={content}></ParserRichText>
         </View>
       </View>
-    )
+    );
   }
 }
 
-export default ReplyCard as ComponentType<Props>;
+export default ReplyCard as Taro.ComponentClass<Props>;

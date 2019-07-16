@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 import dayjs from 'dayjs';
@@ -110,4 +109,4 @@ class ThreadCard extends Taro.Component<Props> {
   }
 }
 
-export default ThreadCard as ComponentType<Props>;
+export default ThreadCard as Taro.ComponentClass<Props>;

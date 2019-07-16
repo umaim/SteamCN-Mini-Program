@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { AtMessage, AtNavBar } from 'taro-ui';
@@ -110,4 +109,4 @@ class History extends Taro.Component<{}, State> {
   }
 }
 
-export default History as ComponentType;
+export default History as Taro.ComponentClass;

@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { Text, View } from '@tarojs/components';
 import { AtNavBar } from 'taro-ui';
@@ -340,4 +339,4 @@ class Section extends Taro.Component<{}, State> {
   }
 }
 
-export default Section as ComponentType;
+export default Section as Taro.ComponentClass;

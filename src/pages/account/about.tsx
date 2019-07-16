@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image } from '@tarojs/components';
 
@@ -71,4 +70,4 @@ class About extends Taro.Component {
   }
 }
 
-export default About as ComponentType;
+export default About as Taro.ComponentClass;

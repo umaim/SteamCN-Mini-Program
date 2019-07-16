@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
@@ -374,4 +373,4 @@ class Thread extends Taro.Component<Props, State> {
   }
 }
 
-export default Thread as ComponentType;
+export default Thread as Taro.ComponentClass;

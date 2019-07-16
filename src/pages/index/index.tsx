@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Swiper, SwiperItem, Text, Image } from '@tarojs/components';
@@ -241,4 +240,4 @@ class Index extends Taro.Component<Props, State> {
   }
 }
 
-export default Index as ComponentType;
+export default Index as Taro.ComponentClass;

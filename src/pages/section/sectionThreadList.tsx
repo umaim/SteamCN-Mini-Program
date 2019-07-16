@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
@@ -232,4 +231,4 @@ class SectionThreadList extends Taro.Component<Props, State> {
   }
 }
 
-export default SectionThreadList as ComponentType;
+export default SectionThreadList as Taro.ComponentClass;
