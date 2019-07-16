@@ -91,7 +91,9 @@ class ThreadCard extends Taro.Component<Props> {
           <Text className="section">{section}</Text>
         </View>
         <View className="at-row">
-          <Text className="title at-col--wrap">{title}</Text>
+          <Text decode className="title at-col--wrap">
+            {title}
+          </Text>
         </View>
         <View className="footer at-row at-row__justify--between at-row__align--center">
           <View className="timestamp at-row">
