@@ -70,17 +70,18 @@ class Login extends Taro.Component<Props, State> {
     statusBarHeight: 20
   };
 
+  public constructor(props: Props | undefined) {
+    super(props);
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+  }
+
   public componentDidShow(): void {
     this.setState({
       background: `cloud://steamcn.7374-steamcn/assets/img/login/background${Math.floor(
         Math.random() * 9
       )}.jpg`
-    });
-  }
-
-  public componentDidMount(): void {
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
   }
 

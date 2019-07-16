@@ -26,11 +26,14 @@ class History extends Taro.Component<{}, State> {
     statusBarHeight: 20
   };
 
-  public componentDidMount(): void {
+  public constructor(props: undefined) {
+    super(props);
     this.setState({
       statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
+  }
 
+  public componentDidMount(): void {
     Taro.getStorage({
       key: 'history'
     }).then(

@@ -46,14 +46,18 @@ class Index extends Taro.Component<Props, State> {
     statusBarHeight: 20
   };
 
+  public constructor(props: Props | undefined) {
+    super(props);
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+  }
+
   public componentDidShow(): void {
     this.props.initCredential();
   }
 
   public componentDidMount(): void {
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
     this.initHome();
   }
 
