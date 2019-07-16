@@ -1,38 +1,37 @@
 .wrapper {
-  padding-top: 20rpx;
+  padding-top: 20px;
 }
 
 .profile {
   display: flex;
-  height: 180rpx;
-  margin-bottom: 20rpx;
-  padding: 0 40rpx;
-  background: #fff;
+  height: 180px;
+  margin-bottom: 20px;
+  padding: 0 40px;
   justify-content: space-between;
   align-items: center;
-}
 
-.profile .avatar {
-  margin-right: 40rpx;
-}
+  .avatar {
+    margin-right: 40px;
+  }
 
-.profile .info {
-  display: flex;
-  font-size: 24rpx;
-  color: #abb4bf;
-}
+  .info {
+    display: flex;
+    font-size: 24px;
+    color: #abb4bf;
 
-.profile .name {
-  margin-bottom: 8rpx;
-  font-size: 40rpx;
-  color: #333;
-}
+    .text {
+      flex-direction: column;
+      justify-content: space-around;
+    }
+  }
 
-.profile .info .text {
-  flex-direction: column;
-  justify-content: space-around;
+  .name {
+    margin-bottom: 8px;
+    font-size: 40px;
+    color: #333;
+  }
 }
 
 .forum-area {
-  margin-bottom: 20rpx;
+  margin-bottom: 20px;
 }

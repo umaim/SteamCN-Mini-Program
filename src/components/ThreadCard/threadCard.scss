@@ -1,50 +1,50 @@
 @import '~taro-ui/dist/style/components/flex.scss';
 
-.item {
-  padding: 0 30rpx;
-  margin: 0rpx 10rpx 20rpx;
-  border-radius: 5rpx;
-  box-shadow: 2rpx 2rpx 2rpx 2rpx rgba(136, 136, 136, 0.3);
+.wrapper {
+  padding: 0 30px;
+  margin: 0px 10px 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 2px rgba(136, 136, 136, 0.3);
   box-sizing: border-box;
-}
 
-.header {
-  align-items: center;
-  height: 65rpx;
-}
+  .header {
+    align-items: center;
+    height: 65px;
 
-.header-avatar {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-  margin-right: 10rpx;
-}
+    .author {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      color: #333;
 
-.author {
-  display: flex;
-  align-items: center;
-  font-size: 22rpx;
-  color: #333;
-}
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+    }
 
-.type {
-  font-size: 22rpx;
-  color: #abb4bf;
+    .section {
+      font-size: 22px;
+      color: #abb4bf;
+    }
+  }
 }
 
 .title {
-  font-size: 28rpx;
+  font-size: 28px;
 }
 
 .footer {
-  height: 60rpx;
-  font-size: 22rpx;
+  height: 60px;
+  font-size: 22px;
   color: #abb4bf;
-}
 
-.stats-image {
-  width: 30rpx;
-  height: 30rpx;
-  margin-right: 8rpx;
-  margin-left: 15rpx;
+  .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    margin-left: 15px;
+  }
 }
