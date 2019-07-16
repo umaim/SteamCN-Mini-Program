@@ -332,7 +332,9 @@ class Thread extends Taro.Component<Props, State> {
         </View>
 
         <View className="header">
-          <Text className="title">{thread.title}</Text>
+          <Text decode className="title">
+            {thread.title}
+          </Text>
         </View>
 
         <View className="author">
