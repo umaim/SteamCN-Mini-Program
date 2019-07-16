@@ -41,7 +41,7 @@ export default function contentCleaner(html: string): string {
       '<div align="center"><font color="#808080"><i class="pstatus">$1</i></font></div>'
     ) //改变编辑提示样式
     .replace(
-      /<div class="modact">.+(分类|移动|合并|关闭|提升|限时高亮|加入精华)<\/a><\/div>/g,
+      /<div class="modact">.+(分类|移动|合并|关闭|提升|限时高亮|加入精华|审核通过)<\/a><\/div>/g,
       ''
     ); // 去除版务操作提示
 
