@@ -1,7 +1,9 @@
 # SteamCN 蒸汽动力论坛 微信小程序
-这是 SteamCN 蒸汽动力论坛官方微信小程序。您可以使用本小程序查看 SteamCN 论坛上的帖子。当然前提是您拥有能正常使用的微信。（难道你们都没有手机嘛？😏）
 
-## 小程序核心功能
+这是 SteamCN 蒸汽动力论坛微信小程序。您可以使用本小程序查看 SteamCN 论坛上的帖子。当然前提是您有能正常使用的微信~
+
+## 小程序功能
+
 - 浏览 SteamCN 论坛中帖子的内容及坛友回复
 - 登录论坛账号，访问有阅读权限的帖子
 - 查看最新有价值的帖子
@@ -13,20 +15,25 @@
 更多开发计划见：https://github.com/xPixv/SteamCN-Mini-Program/projects/1
 
 ## 现在就扫码体验吧~
+
 ![QRCode](resources/qrcode.jpg)
 
 ## 部分截图展示
 
 ### 主页
+
 ![Home](resources/Home.jpg)
 
 ### 查看帖子
+
 ![Thread Preview](resources/Thread.gif)
 
 ### 板块查看
+
 ![Section](resources/Section.gif)
 
 ### 微信分享
+
 ![Share](resources/Share.jpg)
 
 ## 更新日志
@@ -44,6 +51,8 @@
 ## Open Source Credit ❤
 
 - [Taro](https://github.com/NervJS/taro) —— MIT
-- [wxParse](https://github.com/icindy/wxParse) —— MIT
+- [Taro UI](https://github.com/NervJS/taro-ui) —— MIT
+- [Parser](https://github.com/jin-yufeng/Parser) —— Unlicensed
+- [dayjs](https://github.com/iamkun/dayjs) —— MIT
 - [node-html-parser](https://github.com/taoqf/node-html-parser) —— Unlicensed
-- SteamCN 论坛及 SteamCN 论坛 App 资源
+- [SteamCN 论坛](https://steamcn.com)及 SteamCN 论坛 App 资源
