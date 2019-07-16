@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
 
@@ -29,4 +28,4 @@ class ParserRichText extends Taro.Component<Props, {}> {
   }
 }
 
-export default ParserRichText as ComponentType<Props>;
+export default ParserRichText as Taro.ComponentClass<Props>;

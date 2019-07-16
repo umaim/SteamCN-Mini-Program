@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import Taro from '@tarojs/taro';
 import { View, Image, Text } from '@tarojs/components';
 
@@ -58,4 +57,4 @@ class SectionGroupList extends Taro.Component<Props, {}> {
   }
 }
 
-export default SectionGroupList as ComponentType<Props>;
+export default SectionGroupList as Taro.ComponentClass<Props>;

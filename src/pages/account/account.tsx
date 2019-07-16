@@ -1,4 +1,3 @@
-import { ComponentType } from 'react';
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View } from '@tarojs/components';
@@ -165,4 +164,4 @@ class Account extends Taro.Component<Props, State> {
   }
 }
 
-export default Account as ComponentType;
+export default Account as Taro.ComponentClass;
