@@ -87,12 +87,16 @@ class Thread extends Taro.Component<Props, State> {
     statusBarHeight: 20
   };
 
-  public componentDidMount(): void {
-    console.log('Current Pages::', Taro.getCurrentPages());
-
+  public constructor(props: Props | undefined) {
+    super(props);
     this.setState({
       statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
+  }
+
+  public componentDidMount(): void {
+    console.log('Current Pages::', Taro.getCurrentPages());
+
     const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'

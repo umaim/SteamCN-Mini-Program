@@ -57,6 +57,13 @@ class Setting extends Taro.Component<Props, State> {
     statusBarHeight: 20
   };
 
+  public constructor(props: Props | undefined) {
+    super(props);
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+  }
+
   public componentDidMount(): void {
     Taro.getStorageInfo({
       success: (res): void => {
@@ -70,10 +77,6 @@ class Setting extends Taro.Component<Props, State> {
           });
         }
       }
-    });
-
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
 
     this.props.initCredential();

@@ -44,6 +44,21 @@ class New extends Taro.Component<Props, State> {
     statusBarHeight: 20
   };
 
+  public constructor(props: Props | undefined) {
+    super(props);
+    this.setState({
+      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
+    });
+  }
+
+  public componentDidShow(): void {
+    this.props.initCredential();
+  }
+
+  public componentDidMount(): void {
+    this.initNew();
+  }
+
   public onShareAppMessage(): {
     title: string;
     path: string;
@@ -52,17 +67,6 @@ class New extends Taro.Component<Props, State> {
       title: 'SteamCN 蒸汽动力 - 最新回复',
       path: 'pages/new/new'
     };
-  }
-
-  public componentDidShow(): void {
-    this.props.initCredential();
-  }
-
-  public componentDidMount(): void {
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
-    this.initNew();
   }
 
   public onPullDownRefresh(): void {

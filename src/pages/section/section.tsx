@@ -270,7 +270,8 @@ class Section extends Taro.Component<{}, State> {
     ]
   };
 
-  public componentDidMount(): void {
+  public constructor(props: undefined) {
+    super(props);
     this.setState({
       statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
     });
