@@ -44,6 +44,17 @@
 
 在 issue 中进行反馈：https://github.com/xPixv/SteamCN-Mini-Program/issues
 
+## 开发步骤
+
+开发环境：
+- [Node.js](https://nodejs.org) (>=8.0.0)
+- [微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+
+1. Clone 仓库 `master` 分支到本地
+2. 安装项目，执行 `npm install` 或者 `yarn install` (推荐使用 yarn)，等待安装完成
+3. 进入项目目录，运行 `npm run dev:weapp` 或者 `yarn dev:weapp`，等待 Taro 编译项目为微信小程序
+4. 使用微信开发者工具，打开项目目录下的 `dist` 文件夹即可预览和调试
+
 ## 开源许可
 
 本小程序使用 [MIT](https://github.com/xPixv/SteamCN-Mini-Program/blob/master/LICENSE) 许可发布源代码
