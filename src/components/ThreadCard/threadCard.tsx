@@ -5,8 +5,6 @@ import dayjs from 'dayjs';
 import { IThreadMeta } from '../../interfaces/thread';
 
 import './threadCard.scss';
-import see from './assets/see.png';
-import reply from './assets/reply.png';
 
 interface Props {
   threadMeta: IThreadMeta;
@@ -100,9 +98,9 @@ class ThreadCard extends Taro.Component<Props> {
             <Text>{dayjs.unix(timestamp).fromNow()}</Text>
           </View>
           <View className="stats at-row at-row__justify--end at-row__align--center">
-            <Image src={see} className="icon"></Image>
+            <Text className="icon at-icon at-icon-eye"></Text>
             <Text>{stats.viewed}</Text>
-            <Image src={reply} className="icon"></Image>
+            <Text className="icon at-icon at-icon-edit"></Text>
             <Text>{stats.replied}</Text>
           </View>
         </View>
