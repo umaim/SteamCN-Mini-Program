@@ -120,7 +120,10 @@ class Index extends Taro.Component<Props, State> {
             const title = item.title;
             const tid = parseInt(item.id);
             const url = `https://steamcn.com/t${tid}-1-1`;
-            const image = `https://blob.steamcn.com/${item.pic}`;
+            const image =
+              item.pic.indexOf('https://blob.steamcn.com') === -1
+                ? `https://blob.steamcn.com/${item.pic}`
+                : item.pic;
             const section = item.fields.forumname;
             const timestamp = parseInt(item.fields.dateline);
             const username = item.fields.author;
