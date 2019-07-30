@@ -30,6 +30,10 @@ class ThreadCard extends Taro.Component<Props> {
     }
   };
 
+  public static options = {
+    addGlobalClass: true
+  };
+
   private toThread(): void {
     this.addToHistory();
     const { tid } = this.props.threadMeta;
