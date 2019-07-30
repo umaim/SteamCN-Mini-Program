@@ -25,6 +25,10 @@ class ReplyCard extends Taro.Component<Props, {}> {
     }
   };
 
+  public static options = {
+    addGlobalClass: true
+  };
+
   public render(): JSX.Element {
     const { user, content, timestamp, position } = this.props.reply;
     return (
@@ -40,7 +44,7 @@ class ReplyCard extends Taro.Component<Props, {}> {
           <Text className="floor">{`#${position}`}</Text>
         </View>
         <View className="content">
-          <ParserRichText html={content}></ParserRichText>
+          <ParserRichText html={content} selectable></ParserRichText>
         </View>
       </View>
     );
