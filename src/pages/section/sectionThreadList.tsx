@@ -7,14 +7,13 @@ import ThreadCard from '../../components/ThreadCard/threadCard';
 import { IThreadMeta } from '../../interfaces/thread';
 import { IAccount } from '../../interfaces/account';
 import { ISectionThreadListItem } from '../../interfaces/respond';
-import { initCredential } from '../../actions/account';
 
 import './sectionThreadList.scss';
 
 interface Props {
   auth: boolean;
   account: IAccount;
-  initCredential: () => void;
+  statusBarHeight: number;
 }
 
 interface State {
@@ -22,20 +21,13 @@ interface State {
   pageNum: number;
   loadMoreVisibility: boolean;
   loadMoreStatus: 'more' | 'loading' | 'noMore';
-  statusBarHeight;
 }
 
-@connect(
-  ({ account }) => ({
-    auth: account.auth,
-    account: account.account
-  }),
-  dispatch => ({
-    initCredential() {
-      dispatch(initCredential());
-    }
-  })
-)
+@connect(({ account, system }) => ({
+  auth: account.auth,
+  account: account.account,
+  statusBarHeight: system.statusBarHeight
+}))
 class SectionThreadList extends Taro.Component<Props, State> {
   public config: Taro.Config = {
     navigationBarTitleText: '板块',
@@ -47,21 +39,10 @@ class SectionThreadList extends Taro.Component<Props, State> {
     sectionThreadList: Array<IThreadMeta>(),
     pageNum: 1,
     loadMoreVisibility: false,
-    loadMoreStatus: 'loading' as 'more' | 'loading' | 'noMore',
-    statusBarHeight: 20
+    loadMoreStatus: 'loading' as 'more' | 'loading' | 'noMore'
   };
 
-  public constructor(props: Props | undefined) {
-    super(props);
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
-  }
-
   public componentDidMount(): void {
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
     const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'
@@ -202,9 +183,9 @@ class SectionThreadList extends Taro.Component<Props, State> {
     const {
       sectionThreadList,
       loadMoreStatus,
-      loadMoreVisibility,
-      statusBarHeight
+      loadMoreVisibility
     } = this.state;
+    const { statusBarHeight } = this.props;
     const threadCards = sectionThreadList.map(
       (item): JSX.Element => {
         return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;

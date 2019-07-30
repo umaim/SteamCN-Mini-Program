@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro';
+import { connect } from '@tarojs/redux';
 import { Text, View } from '@tarojs/components';
 import { AtNavBar } from 'taro-ui';
 
@@ -6,17 +7,16 @@ import SectionGroupList from '../../components/SectionGroupList/sectionGroupList
 
 import './section.scss';
 
-interface State {
+interface Props {
   statusBarHeight: number;
 }
 
-class Section extends Taro.Component<{}, State> {
+@connect(({ system }) => ({
+  statusBarHeight: system.statusBarHeight
+}))
+class Section extends Taro.Component<Props, {}> {
   public config: Taro.Config = {
     navigationBarTitleText: '板块'
-  };
-
-  public state = {
-    statusBarHeight: 20
   };
 
   private _sectionMeta = {
@@ -270,15 +270,8 @@ class Section extends Taro.Component<{}, State> {
     ]
   };
 
-  public constructor(props: undefined) {
-    super(props);
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
-  }
-
   public render(): JSX.Element {
-    const { statusBarHeight } = this.state;
+    const { statusBarHeight } = this.props;
     return (
       <View>
         <AtNavBar
