@@ -1,5 +1,6 @@
 //Parser组件
 const html2nodes = require('./Parser.js');
+
 const initData = function(Component) {
   setTimeout(() => {
     Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
@@ -53,7 +54,7 @@ Component({
               showAnimation,
               hideAnimation
             }, initData(this))
-            if (res.title) {
+            if (res.title && this.data.autosetTitle) {
               wx.setNavigationBarTitle({
                 title: res.title
               })
@@ -86,7 +87,7 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
-          if (html.title) {
+          if (html.title && this.data.autosetTitle) {
             wx.setNavigationBarTitle({
               title: html.title
             })
@@ -104,6 +105,10 @@ Component({
       value: true
     },
     'autopause': {
+      type: Boolean,
+      value: true
+    },
+    'autosetTitle':{
       type: Boolean,
       value: true
     },
