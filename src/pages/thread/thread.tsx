@@ -1,14 +1,7 @@
 import { connect } from '@tarojs/redux';
 import Taro from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
-import {
-  AtDivider,
-  AtAvatar,
-  AtMessage,
-  AtLoadMore,
-  AtButton,
-  AtNavBar
-} from 'taro-ui';
+import { AtDivider, AtAvatar, AtMessage, AtLoadMore, AtNavBar } from 'taro-ui';
 import dayjs from 'dayjs';
 
 import { IThread, IReply } from '../../interfaces/thread';
@@ -17,14 +10,13 @@ import { IAccount } from '../../interfaces/account';
 import ParserRichText from '../../components/ParserRichText/parserRichText';
 import ReplyCard from '../../components/ReplyCard/replyCard';
 import contentCleaner from '../../utils/cleaner';
-import { initCredential } from '../../actions/account';
 
 import './thread.scss';
 
 interface Props {
   auth: boolean;
   account: IAccount;
-  initCredential: () => void;
+  statusBarHeight: number;
 }
 
 interface State {
@@ -33,20 +25,13 @@ interface State {
   thread: IThread;
   loadMoreVisibility: boolean;
   loadMoreStatus: 'more' | 'loading' | 'noMore';
-  statusBarHeight: number;
 }
 
-@connect(
-  ({ account }) => ({
-    auth: account.auth,
-    account: account.account
-  }),
-  dispatch => ({
-    initCredential() {
-      dispatch(initCredential());
-    }
-  })
-)
+@connect(({ account, system }) => ({
+  auth: account.auth,
+  account: account.account,
+  statusBarHeight: system.statusBarHeight
+}))
 class Thread extends Taro.Component<Props, State> {
   public config: Taro.Config = {
     navigationBarTitleText: '主题',
@@ -83,29 +68,15 @@ class Thread extends Taro.Component<Props, State> {
           position: 0
         }
       ]
-    },
-    statusBarHeight: 20
+    }
   };
 
-  public constructor(props: Props | undefined) {
-    super(props);
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
-  }
-
   public componentDidMount(): void {
-    console.log('Current Pages::', Taro.getCurrentPages());
-
     const { pageNum } = this.state;
     Taro.showLoading({
       title: '努力加载中 💦'
     });
     this.fetchThread(parseInt(this.$router.params.tid), pageNum);
-  }
-
-  public componentDidShow(): void {
-    this.props.initCredential();
   }
 
   public onShareAppMessage(): {
@@ -279,12 +250,8 @@ class Thread extends Taro.Component<Props, State> {
 
   public render(): JSX.Element {
     const pageDepth = Taro.getCurrentPages().length;
-    const {
-      thread,
-      loadMoreStatus,
-      loadMoreVisibility,
-      statusBarHeight
-    } = this.state;
+    const { thread, loadMoreStatus, loadMoreVisibility } = this.state;
+    const { statusBarHeight } = this.props;
     const repliesArea = thread.replies.map(
       (reply): JSX.Element => {
         return (
@@ -319,18 +286,6 @@ class Thread extends Taro.Component<Props, State> {
           border={false}
         />
 
-        <View className="fab">
-          <AtButton
-            className="fab-bottom"
-            circle
-            openType="share"
-            type="primary"
-            size="normal"
-          >
-            <View className="at-icon at-icon-share"></View>
-          </AtButton>
-        </View>
-
         <View className="header">
           <Text decode className="title">
             {thread.title}
@@ -358,7 +313,7 @@ class Thread extends Taro.Component<Props, State> {
         </View>
 
         <View className="content">
-          <ParserRichText html={thread.content}></ParserRichText>
+          <ParserRichText html={thread.content} selectable></ParserRichText>
         </View>
 
         <AtDivider>

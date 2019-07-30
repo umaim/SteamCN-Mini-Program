@@ -7,32 +7,24 @@ import ThreadCard from '../../components/ThreadCard/threadCard';
 import { IAccount } from '../../interfaces/account';
 import { IThreadMeta } from '../../interfaces/thread';
 import { IHotThreadItemRespond } from '../../interfaces/respond';
-import { initCredential } from '../../actions/account';
 
 import './hot.scss';
 
 interface Props {
   auth: boolean;
   account: IAccount;
-  initCredential: () => void;
+  statusBarHeight: number;
 }
 
 interface State {
   hotThreadList: IThreadMeta[];
-  statusBarHeight: number;
 }
 
-@connect(
-  ({ account }) => ({
-    auth: account.auth,
-    account: account.account
-  }),
-  dispatch => ({
-    initCredential() {
-      dispatch(initCredential());
-    }
-  })
-)
+@connect(({ account, system }) => ({
+  auth: account.auth,
+  account: account.account,
+  statusBarHeight: system.statusBarHeight
+}))
 class Hot extends Taro.Component<Props, State> {
   public config: Taro.Config = {
     navigationBarTitleText: '热门主题',
@@ -40,20 +32,8 @@ class Hot extends Taro.Component<Props, State> {
   };
 
   public state = {
-    hotThreadList: Array<IThreadMeta>(),
-    statusBarHeight: 20
+    hotThreadList: Array<IThreadMeta>()
   };
-
-  public constructor(props: Props | undefined) {
-    super(props);
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
-  }
-
-  public componentDidShow(): void {
-    this.props.initCredential();
-  }
 
   public componentDidMount(): void {
     this.initHot();
@@ -173,7 +153,8 @@ class Hot extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { hotThreadList, statusBarHeight } = this.state;
+    const { hotThreadList } = this.state;
+    const { statusBarHeight } = this.props;
     const threadCards = hotThreadList.map(
       (item): JSX.Element => {
         return <ThreadCard threadMeta={item} key={item.tid}></ThreadCard>;

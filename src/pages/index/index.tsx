@@ -8,29 +8,35 @@ import { IThreadMeta } from '../../interfaces/thread';
 import { IHotThreadItemRespond } from '../../interfaces/respond';
 import { IAccount } from '../../interfaces/account';
 import { initCredential } from '../../actions/account';
+import { getSystemInfo } from '../../actions/system';
 
 import './index.scss';
 
 interface Props {
   auth: boolean;
   account: IAccount;
+  statusBarHeight: number;
   initCredential: () => void;
+  getSystemInfo: () => void;
 }
 
 interface State {
   bannerThreadList: IThreadMeta[];
   indexThreadList: IThreadMeta[];
-  statusBarHeight: number;
 }
 
 @connect(
-  ({ account }) => ({
+  ({ account, system }) => ({
     auth: account.auth,
-    account: account.account
+    account: account.account,
+    statusBarHeight: system.statusBarHeight
   }),
   dispatch => ({
     initCredential() {
       dispatch(initCredential());
+    },
+    getSystemInfo() {
+      dispatch(getSystemInfo());
     }
   })
 )
@@ -42,15 +48,12 @@ class Index extends Taro.Component<Props, State> {
 
   public state = {
     bannerThreadList: Array<IThreadMeta>(),
-    indexThreadList: Array<IThreadMeta>(),
-    statusBarHeight: 20
+    indexThreadList: Array<IThreadMeta>()
   };
 
-  public constructor(props: Props | undefined) {
+  public constructor(props: Props) {
     super(props);
-    this.setState({
-      statusBarHeight: Taro.getSystemInfoSync().statusBarHeight
-    });
+    this.props.getSystemInfo();
   }
 
   public componentDidShow(): void {
@@ -198,7 +201,8 @@ class Index extends Taro.Component<Props, State> {
   }
 
   public render(): JSX.Element {
-    const { bannerThreadList, indexThreadList, statusBarHeight } = this.state;
+    const { bannerThreadList, indexThreadList } = this.state;
+    const { statusBarHeight } = this.props;
     const swiperItems = bannerThreadList.map(
       (item): JSX.Element => {
         return (
