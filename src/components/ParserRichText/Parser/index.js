@@ -1,6 +1,5 @@
 //Parser组件
 const html2nodes = require('./Parser.js');
-
 const initData = function(Component) {
   setTimeout(() => {
     Component.createSelectorQuery().select('#contain').boundingClientRect(res => {
@@ -23,6 +22,12 @@ const initData = function(Component) {
   }, 10)
 }
 Component({
+  created() {
+    try {
+      const Document = require("./document.js");
+      this.document = new Document();
+    } catch (e) {}
+  },
   properties: {
     'html': {
       type: null,
@@ -54,6 +59,7 @@ Component({
               showAnimation,
               hideAnimation
             }, initData(this))
+            if (this.document) this.document.init("nodes", res.nodes, this);
             if (res.title && this.data.autosetTitle) {
               wx.setNavigationBarTitle({
                 title: res.title
@@ -62,7 +68,10 @@ Component({
             this.imgList = res.imgList;
             this.triggerEvent('parse', res);
           }).catch(err => {
-            this.triggerEvent('error', err);
+            this.triggerEvent('error', {
+              source: "parse",
+              errMsg: err
+            });
           })
         } else if (html.constructor == Array) {
           this.setData({
@@ -72,11 +81,15 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
+          if (this.document) this.document.init("html", html, this);
           this.imgList = [];
         } else if (typeof html == 'object') {
           if (!html.nodes || html.nodes.constructor != Array) {
+            if ((html.name && html.children && html.attrs) || (html.type == "text"))
+              return;
             this.triggerEvent('error', {
-              message: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是：" + typeof html.nodes
+              source: "parse",
+              errMsg: "传入的nodes数组格式不正确！应该传入的类型是array，实际传入的类型是：" + typeof html.nodes
             });
             return;
           }
@@ -87,15 +100,16 @@ Component({
             showAnimation,
             hideAnimation
           }, initData(this))
-          if (html.title && this.data.autosetTitle) {
+          if (this.document) this.document.init("html.nodes", html.nodes, this);
+          if (html.title && this.data.autosetTitle)
             wx.setNavigationBarTitle({
               title: html.title
             })
-          }
           this.imgList = html.imgList || [];
         } else {
           this.triggerEvent('error', {
-            message: "错误的html类型：" + typeof html
+            source: "parse",
+            errMsg: "错误的html类型：" + typeof html
           });
         }
       }
@@ -108,7 +122,11 @@ Component({
       type: Boolean,
       value: true
     },
-    'autosetTitle':{
+    'autopreview': {
+      type: Boolean,
+      value: true
+    },
+    'autosetTitle': {
       type: Boolean,
       value: true
     },
@@ -169,13 +187,16 @@ Component({
     errorEvent(e) {
       this.triggerEvent('error', e.detail);
     },
-    //内部方法
-    _previewImg(e) {
-      wx.previewImage({
-        current: e.detail,
-        urls: this.imgList.length ? this.imgList : [e.detail],
-      })
+    previewEvent(e) {
+      if (this.data.autopreview) {
+        wx.previewImage({
+          current: e.detail,
+          urls: this.imgList.length ? this.imgList : [e.detail],
+        })
+      }
+      this.triggerEvent('imgtap', e.detail);
     },
+    //内部方法
     _playVideo(e) {
       if (this.videoContext.length > 1 && this.data.autopause) {
         for (let video of this.videoContext) {
