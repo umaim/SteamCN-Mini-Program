@@ -1,57 +1,56 @@
 //DomHandler.js
 const CssTokenizer = require('./CssTokenizer.js');
 const CanIUse = require('./api.js').versionHigherThan('2.7.1');
-const Common = 1,
-  Rich = 2;
 const trustTag = {
-  a: Rich,
-  abbr: Common,
-  audio: Rich,
-  b: Common,
-  blockquote: Common,
-  br: Rich,
-  code: Common,
-  col: Rich,
-  colgroup: Rich,
-  dd: Common,
-  del: Common,
-  dl: Common,
-  dt: Common,
-  div: Common,
-  em: Common,
-  fieldset: Rich,
-  font: Common,
-  h1: Rich,
-  h2: Rich,
-  h3: Rich,
-  h4: Rich,
-  h5: Rich,
-  h6: Rich,
-  hr: Rich,
-  i: Common,
-  img: Common,
-  ins: Common,
-  label: Common,
-  legend: Rich,
-  li: Rich,
-  ol: Rich,
-  p: Common,
-  q: Common,
-  source: Rich,
-  span: Common,
-  strong: Common,
-  sub: Rich,
-  sup: Rich,
-  table: Rich,
-  tbody: Rich,
-  td: Rich,
-  tfoot: Rich,
-  th: Rich,
-  thead: Rich,
-  tr: Rich,
-  u: Common,
-  ul: Rich,
-  video: Common
+  a: 0,
+  abbr: 1,
+  ad: 0,
+  audio: 0,
+  b: 1,
+  blockquote: 1,
+  br: 0,
+  code: 1,
+  col: 0,
+  colgroup: 0,
+  dd: 1,
+  del: 1,
+  dl: 1,
+  dt: 1,
+  div: 1,
+  em: 1,
+  fieldset: 0,
+  font: 1,
+  h1: 0,
+  h2: 0,
+  h3: 0,
+  h4: 0,
+  h5: 0,
+  h6: 0,
+  hr: 0,
+  i: 1,
+  img: 1,
+  ins: 1,
+  label: 1,
+  legend: 0,
+  li: 0,
+  ol: 0,
+  p: 1,
+  q: 1,
+  source: 0,
+  span: 1,
+  strong: 1,
+  sub: 0,
+  sup: 0,
+  table: 0,
+  tbody: 0,
+  td: 0,
+  tfoot: 0,
+  th: 0,
+  thead: 0,
+  tr: 0,
+  u: 1,
+  ul: 0,
+  video: 1
 };
 const blockTag = {
   address: true,
@@ -120,25 +119,25 @@ const ignoreTag = {
   wbr: true
 };
 if (CanIUse) {
-  trustTag.bdi = Rich;
-  trustTag.bdo = Rich;
-  trustTag.caption = Rich;
-  trustTag.rt = Rich;
-  trustTag.ruby = Rich;
+  trustTag.bdi = 0;
+  trustTag.bdo = 0;
+  trustTag.caption = 0;
+  trustTag.rt = 0;
+  trustTag.ruby = 0;
   ignoreTag.rp = true;
-  trustTag.big = Common;
-  trustTag.small = Common;
-  trustTag.pre = Rich;
+  trustTag.big = 1;
+  trustTag.small = 1;
+  trustTag.pre = 0;
   delete blockTag.pre;
 }
 //添加默认值
 function initStyle(tagStyle) {
   tagStyle.a = "display:inline;color:#366092;word-break:break-all;" + (tagStyle.a || "");
   tagStyle.address = "font-style:italic;" + (tagStyle.address || "");
-  tagStyle.blockquote = tagStyle.blockquote || 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px';
+  tagStyle.blockquote = tagStyle.blockquote || 'background-color:#f6f6f6;border-left:3px solid #dbdbdb;color:#6c6c6c;padding:5px 0 5px 10px;';
   tagStyle.center = 'text-align:center;' + (tagStyle.center || "");
   tagStyle.cite = "font-style:italic;" + (tagStyle.cite || "");
-  tagStyle.code = tagStyle.code || 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px';
+  tagStyle.code = tagStyle.code || 'padding:0 1px 0 1px;margin-left:2px;margin-right:2px;background-color:#f8f8f8;border:1px solid #cccccc;border-radius:3px;';
   tagStyle.dd = "margin-left:40px;" + (tagStyle.dd || "");
   tagStyle.img = "max-width:100%;" + (tagStyle.img || "");
   tagStyle.mark = "display:inline;background-color:yellow;" + (tagStyle.mark || "");
@@ -157,22 +156,34 @@ function initStyle(tagStyle) {
 
 function DomHandler(style, tagStyle = {}) {
   this.imgList = [];
+  this.imgIndex = 0;
   this.nodes = [];
   this.title = "";
   this._videoNum = 0;
   this._audioNum = 0;
   this._style = new CssTokenizer(style, initStyle(tagStyle)).parse();
   this._tagStack = [];
+  this._whiteSpace = false;
 }
 DomHandler.prototype._addDomElement = function(element) {
+  if (element.name == 'pre' || (element.attrs && /white-space\s*:\s*pre/.test(element.attrs.style))) {
+    this._whiteSpace = true;
+    element.pre = true;
+  }
   let parent = this._tagStack[this._tagStack.length - 1];
   let siblings = parent ? parent.children : this.nodes;
   siblings.push(element);
 };
 DomHandler.prototype._bubbling = function() {
   for (let i = this._tagStack.length - 1; i >= 0; i--) {
-    if (trustTag[this._tagStack[i].name] == Common) this._tagStack[i].continue = true;
-    else return this._tagStack[i].name;
+    if (trustTag[this._tagStack[i].name]) {
+      this._tagStack[i].continue = true;
+      if (i == this._tagStack.length - 1) { // 同级标签中若有文本标签
+        for (var node of this._tagStack[i].children)
+          if (textTag[node.name])
+            node.continue = true;
+      }
+    } else return this._tagStack[i].name;
   }
 }
 DomHandler.prototype.onopentag = function(name, attrs) {
@@ -181,10 +192,8 @@ DomHandler.prototype.onopentag = function(name, attrs) {
   };
   //匹配样式
   let matched = this._style[name] ? (this._style[name] + ';') : '';
-  if (attrs.id) {
+  if (attrs.id)
     matched += (this._style['#' + attrs.id] ? (this._style['#' + attrs.id] + ';') : '');
-    delete attrs.id;
-  }
   if (attrs.class) {
     for (var Class of attrs.class.split(' ')) {
       matched += (this._style['.' + Class] ? (this._style['.' + Class] + ';') : '');
@@ -210,8 +219,10 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         delete attrs['data-src'];
       }
       if (!attrs.hasOwnProperty('ignore') && attrs.src) {
+        if (this.imgList.indexOf(attrs.src) != -1)
+          attrs.src = attrs.src + "?index=" + this.imgIndex++;
         this.imgList.push(attrs.src);
-        if (this._bubbling() == 'a') attrs.ignore = "";
+        if (this._bubbling() == 'a') attrs.ignore = ""; // 图片在链接中不可预览
       };
       break;
     case 'font':
@@ -228,34 +239,13 @@ DomHandler.prototype.onopentag = function(name, attrs) {
         var size = parseInt(attrs.size);
         if (size < 1) size = 1;
         else if (size > 7) size = 7;
-        switch (size) {
-          case 1:
-            size = 10;
-            break;
-          case 2:
-            size = 13;
-            break;
-          case 3:
-            size = 16;
-            break;
-          case 4:
-            size = 18;
-            break;
-          case 5:
-            size = 24;
-            break;
-          case 6:
-            size = 32;
-            break;
-          case 7:
-            size = 48;
-            break;
-        }
-        attrs.style += (";font-size:" + size + "px");
+        let map = [10, 13, 16, 18, 24, 32, 48];
+        attrs.style += (";font-size:" + map[size - 1] + "px");
         delete attrs.size;
       }
       break;
     case 'a':
+    case 'ad':
       this._bubbling();
       break;
     case 'video':
@@ -291,23 +281,28 @@ DomHandler.prototype.onopentag = function(name, attrs) {
       return;
   }
   attrs.style = matched + attrs.style;
-  if (textTag[name]) element.continue = true;
-  else if (blockTag[name]) name = 'div';
-  else if (!trustTag[name]) name = 'span';
+  if (textTag[name]) {
+    if (!this._tagStack.length || this._tagStack[this._tagStack.length - 1].continue)
+      element.continue = true;
+  } else if (blockTag[name]) name = 'div';
+  else if (!trustTag.hasOwnProperty(name)) name = 'span';
   element.name = name;
   element.attrs = attrs;
   this._addDomElement(element);
   this._tagStack.push(element);
 };
 DomHandler.prototype.ontext = function(data) {
-  if (/\S/.test(data)) {
-    let element = {
-      text: data.replace(/&nbsp;/g, '\u00A0'),
-      type: 'text'
-    };
-    if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
-    this._addDomElement(element);
+  if (!this._whiteSpace){
+    if(!/\S/.test(data))
+      return;
+    data = data.replace(/\s+/g, " ");
   }
+  let element = {
+    text: data.replace(/&nbsp;/g, '\u00A0'), // 解决连续&nbsp;失效问题
+    type: 'text'
+  };
+  if (/&#*((?!sp|lt|gt).){2,5};/.test(data)) element.decode = true;
+  this._addDomElement(element);
 };
 DomHandler.prototype.onclosetag = function(name) {
   let element = this._tagStack.pop();
@@ -320,6 +315,23 @@ DomHandler.prototype.onclosetag = function(name) {
     let parent = this._tagStack[this._tagStack.length - 1];
     let siblings = parent ? parent.children : this.nodes;
     siblings.pop();
+  }
+  // 合并一些不必要的层，减小节点深度
+  if (element.children.length == 1 && element.name == 'div' && element.children[0].name == 'div' && !(/padding/.test(element.attrs.style)) && !(/margin/.test(element.attrs.style) && /margin/.test(element.children[0].attrs.style)) && !(/display/.test(element.attrs.style)) && !(/display/.test(element.children[0].attrs.style)) && !(element.attrs.id && element.children[0].attrs.id)) {
+    let parent = this._tagStack.length ? this._tagStack[this._tagStack.length - 1].children : this.nodes;
+    let i = parent.indexOf(element);
+    if (/padding/.test(element.children[0].attrs.style))
+      element.children[0].attrs.style = ";box-sizing:border-box;" + element.children[0].attrs.style;
+    element.children[0].attrs.style = element.attrs.style + ";" + element.children[0].attrs.style;
+    element.children[0].attrs.id = (element.children[0].attrs.id || "") + (element.attrs.id || "");
+    parent[i] = element.children[0];
+  }
+  if (element.pre) {
+    this._whiteSpace = false;
+    for (var ele of this._tagStack)
+      if (ele.pre)
+        this._whiteSpace = true;
+    delete element.pre;
   }
 };
 module.exports = DomHandler;
